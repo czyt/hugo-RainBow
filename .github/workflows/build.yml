@@ -1,0 +1,25 @@
+name: Build and verify
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        hugo: ['0.165.0', '0.166.0']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: ${{ matrix.hugo }}
+          extended: true
+      - name: Verify with vendored modules, without network resolution
+        env:
+          HUGO_MODULE_PROXY: 'off'
+          GOPROXY: 'off'
+        run: bash scripts/verify.sh

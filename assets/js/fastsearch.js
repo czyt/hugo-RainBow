@@ -3,6 +3,7 @@ import * as params from '@params';
 const resList = document.getElementById('searchResults');
 const sInput = document.getElementById('searchInput');
 const searchBox = document.getElementById('searchbox');
+const searchStatus = document.getElementById('searchStatus');
 
 let fuse;
 let currentElement = null;
@@ -50,6 +51,7 @@ const reset = () => {
     lastResult = null;
     resList.innerHTML = '';
     sInput.value = '';
+    if (searchStatus) searchStatus.textContent = '';
     sInput.focus();
 };
 
@@ -69,9 +71,11 @@ const renderResults = (results) => {
     if (!Array.isArray(results) || results.length === 0) {
         resList.innerHTML = '';
         firstResult = lastResult = currentElement = null;
+        if (searchStatus) searchStatus.textContent = sInput.value.trim() ? searchStatus.dataset.empty : '';
         return;
     }
 
+    if (searchStatus) searchStatus.textContent = searchStatus.dataset.results.replace('{count}', results.length);
     const fragment = document.createDocumentFragment();
 
     for (const result of results) {
@@ -140,13 +144,15 @@ const initSearch = async () => {
         const data = await response.json();
         if (data) {
             fuse = new Fuse(data, buildFuseOptions());
+            performSearch();
         }
     } catch (error) {
         console.error(error);
+        if (searchStatus) searchStatus.textContent = searchStatus.dataset.error;
     }
 };
 
-window.addEventListener('load', initSearch);
+initSearch();
 
 sInput?.addEventListener('input', debounce(performSearch, 150));
 

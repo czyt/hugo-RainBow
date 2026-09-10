@@ -31,3 +31,48 @@
 
 - id: code_copied
   translation: "已复制！"
+
+- id: rainbow_skip
+  translation: "跳至正文"
+- id: rainbow_comments
+  translation: "评论"
+- id: rainbow_copy_error
+  translation: "复制失败，请选中代码手动复制"
+- id: rainbow_not_found
+  translation: "没有找到这个页面。"
+- id: rainbow_home
+  translation: "返回首页"
+
+- id: rainbow_search_empty
+  translation: "没有找到相关文章，试试其他关键词。"
+- id: rainbow_search_results
+  translation: "找到 {count} 篇文章"
+- id: rainbow_search_error
+  translation: "搜索索引加载失败，请刷新页面重试。"
+
+- id: rainbow_navigation
+  translation: "主导航"
+- id: rainbow_theme_toggle
+  translation: "切换明暗主题"
+
+- id: rainbow_tag_cloud
+  translation: "标签云"
+
+- id: rainbow_tags
+  translation: "标签"
+
+- id: rainbow_tag_view
+  translation: "标签显示方式"
+- id: rainbow_sphere_help
+  translation: "拖动旋转，点击标签阅读文章"
+- id: rainbow_pause
+  translation: "暂停旋转"
+- id: rainbow_resume
+  translation: "继续旋转"
+- id: rainbow_sphere_limit
+  translation: "球形视图展示热门标签，切换“标签”查看全部。"
+
+- id: rainbow_effects_on
+  translation: "关闭氛围"
+- id: rainbow_effects_off
+  translation: "开启氛围"

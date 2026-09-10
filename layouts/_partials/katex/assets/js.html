@@ -1,0 +1,4 @@
+{{- if .Store.Get "hasKaTeX" -}}
+{{- $js := partialCached "katex/assets/js-resource" . | minify | fingerprint -}}
+<script defer src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}" crossorigin="anonymous" onload="renderMathInElement(document.querySelector('.post-content') || document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false},{left:'\\(',right:'\\)',display:false},{left:'\\[',right:'\\]',display:true}],throwOnError:false})"></script>
+{{- end -}}

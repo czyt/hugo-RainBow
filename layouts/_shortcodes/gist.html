@@ -1,0 +1,8 @@
+{{- $owner := .Get 0 -}}
+{{- $id := .Get 1 -}}
+{{- $src := printf "https://gist.github.com/%s/%s.js" $owner $id -}}
+{{- with .Get 2 -}}{{- $src = printf "%s?file=%s" $src (urlquery .) -}}{{- end -}}
+<div class="rainbow-gist">
+<script src="{{ $src }}"></script>
+<noscript><a href="https://gist.github.com/{{ $owner }}/{{ $id }}">View this Gist on GitHub</a></noscript>
+</div>

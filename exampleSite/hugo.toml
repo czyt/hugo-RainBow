@@ -1,0 +1,54 @@
+baseURL = "https://example.org/"
+locale = "zh-CN"
+defaultContentLanguage = "zh"
+title = "RainBow"
+
+[params]
+TagLayout = "cloud"
+author = "RainBow"
+description = "一个安静、耐读的 Hugo 主题。"
+defaultTheme = "auto"
+ShowCodeCopyButtons = true
+ShowToc = true
+TocSide = "right"
+EnableImageZoom = true
+ShowReadingTime = true
+ShowBreadCrumbs = true
+ShowPostNavLinks = true
+DateFormat = "2006-01-02"
+comments = true
+
+[params.homeInfoParams]
+Typewriter = true
+Title = "RainBow"
+Content = "写下思考，留住日常。"
+
+[params.utterances]
+repo = "example/comments"
+mapping = "pathname"
+label = ""
+
+[[menu.main]]
+name = "文章"
+url = "/"
+weight = 1
+[[menu.main]]
+name = "搜索"
+url = "/search/"
+weight = 2
+[[menu.main]]
+name = "标签"
+url = "/tags/"
+weight = 3
+[[menu.main]]
+name = "归档"
+url = "/archives/"
+weight = 4
+
+[outputs]
+home = ["HTML", "RSS", "JSON"]
+[markup.highlight]
+noClasses = false
+[markup.tableOfContents]
+startLevel = 1
+endLevel = 6

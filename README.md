@@ -1,93 +1,124 @@
-# Hugo PaperMod
+# RainBow
 
-**A fast, clean, and responsive theme for [Hugo](https://gohugo.io/).**
+基于 [PaperMod](https://github.com/adityatelange/hugo-PaperMod) 的 Hugo 主题。正文采用纸色、衬线字体和清晰的阅读层级；导航、目录和控件采用轻磨砂材质。支持浅色、深色和移动端。
 
-[![hugo-papermod](https://img.shields.io/badge/Hugo--Themes-@PaperMod-blue)](https://themes.gohugo.io/themes/hugo-papermod/)
-[![Minimum Hugo Version](https://img.shields.io/static/v1?label=Hugo&message=v0.146.0%2B&color=blue&logo=hugo)](https://github.com/gohugoio/hugo/releases/tag/v0.146.0)
-[![Discord](https://img.shields.io/discord/971046860317921340?label=Discord&logo=discord)](https://discord.gg/ahpmTvhVmp)
+保留终端窗口式代码块、侧边目录、图片缩放和 GitHub Issues 评论。标签按名称生成稳定的多色色相，交互动画遵循系统的减少动态效果设置。原始 PaperMod 的 MIT 许可及作者署名保留在仓库中。
 
-> Based on [hugo-paper](https://github.com/nanxiaobei/hugo-paper/tree/4330c8b12aa48bfdecbcad6ad66145f679a430b3), with additional features and customization options.
+## 本地预览
 
-<table>
-	<tbody>
-		<tr>
-			<td>Live Demo</td>
-			<td><a href="https://adityatelange.github.io/hugo-PaperMod/">adityatelange.github.io/hugo-PaperMod</a></td>
-		</tr>
-		<tr>
-			<td>Documentation 📚</td>
-			<td><a href="https://github.com/adityatelange/hugo-PaperMod/wiki">Github Wiki</a></td>
-		</tr>
-		<tr>
-			<td>Example Site Source</td>
-			<td><a href="https://github.com/adityatelange/hugo-PaperMod/tree/exampleSite">exampleSite branch</a></td>
-		</tr>
-		<tr>
-			<td><a href="https://www.star-history.com/adityatelange/hugo-papermod"><img src="https://api.star-history.com/badge?repo=adityatelange/hugo-PaperMod&amp;theme=dark" alt="Star History Rank" /></a></td>
-			<td><a href="https://ko-fi.com/H2H229ZWH"><img src="https://ko-fi.com/img/githubbutton_sm.svg" alt="ko-fi" /></a></td>
-		</tr>
-	</tbody>
-</table>
+建议使用 **Hugo extended 0.165.0**；CI 同时验证 0.165.0 与 0.166.0，最低要求 0.158.0。
 
+```sh
+hugo server --source exampleSite --themesDir ../.. --theme hugo-RainBow
+```
 
-<p align="center">
-  <img src="https://user-images.githubusercontent.com/21258296/114303440-bfc0ae80-9aeb-11eb-8cfa-48a4bb385a6d.png" alt="Mockup image" title="Mockup"/>
-</p>
+示例文章为独立编写的测试内容。`example/comments` 是示例配置，使用时替换为自己的评论仓库。
 
----
+```sh
+bash scripts/verify.sh
+```
 
-## Features 💥
+该命令在临时目录构建示例站点并检查输出：页面、搜索索引、评论映射、资源、图表、公式及功能开关。不会修改现有博客。
 
-`☄️ Fast | ☁️ Fluent | 🌙 Smooth | 📱 Responsive`
+## 接入已有博客
 
-- **Asset pipeline** -- Hugo's built-in asset generator with fingerprinting, bundling, and minification.
-- **Three layout modes** -- [Regular](https://github.com/adityatelange/hugo-PaperMod/wiki/Features#regular-mode-default-mode), [Home-Info](https://github.com/adityatelange/hugo-PaperMod/wiki/Features#home-info-mode), and [Profile](https://github.com/adityatelange/hugo-PaperMod/wiki/Features#profile-mode).
-- **Light and dark themes** -- Automatic switching based on browser preference, plus a manual toggle.
-- **Multilingual support** -- Includes a built-in language selector.
-- **Search** -- Client-side search powered by Fuse.js.
-- **SEO optimized** -- Open Graph, Twitter Cards, and Schema.org structured data out of the box.
-- **Cover images** -- Per-post cover images with responsive image support.
-- **Table of contents** -- Auto-generated from heading structure.
-- **Multiple authors** -- Native support for multi-author sites.
-- **Social icons and share buttons** -- Configurable social links and per-post sharing.
-- **Breadcrumb navigation**
-- **Post archives and taxonomies**
-- **Code block copy buttons** -- One-click copying with Chroma syntax highlighting.
-- **Related post suggestions**
-- **Zero JS build dependencies** -- No webpack, Node.js, or other tooling required.
+```sh
+git submodule add https://github.com/czyt/hugo-RainBow.git themes/RainBow
+ln -s themes/RainBow/_vendor _vendor
+```
 
-| Topic                                                                                             | Description                                     |
-| ------------------------------------------------------------------------------------------------- | ----------------------------------------------- |
-| **[Installation guide](https://github.com/adityatelange/hugo-PaperMod/wiki/Installation)**        | Detailed installation and update instructions   |
-| **[Features wiki page](https://github.com/adityatelange/hugo-PaperMod/wiki/Features)**            | In-depth explanations of all features           |
-| **[FAQ wiki](https://github.com/adityatelange/hugo-PaperMod/wiki/FAQs)**                          | Common questions and configuration walkthroughs |
-| **[Icons wiki](https://github.com/adityatelange/hugo-PaperMod/wiki/Icons)**                       | Documentation for social icons and share icons  |
-| **[Variables wiki](https://github.com/adityatelange/hugo-PaperMod/wiki/Variables)**               | List of all available template variables        |
-| **[Overiding templates](https://github.com/adityatelange/hugo-PaperMod/wiki/Template_Overrides)** | Guide to customizing templates without forking  |
-| **[Releases](https://github.com/adityatelange/hugo-PaperMod/releases)**                           | Detailed history of releases                    |
+仅在博客尚无 `_vendor` 时使用上述链接；已有 Hugo Module 依赖的博客应统一管理自己的模块与 vendor 目录，不覆盖已有目录。`_vendor` 链接让普通主题安装直接使用主题中锁定的 HugoMods，无需在 Cloudflare 构建时安装 Go 或下载模块。
 
----
+```toml
+theme = ["RainBow"]
+locale = "zh-CN"
+defaultContentLanguage = "zh"
 
-## Performance ☄️
+[params]
+ShowCodeCopyButtons = true
+ShowToc = true
+TocSide = "right" # left / right；不设置则使用正文内目录
+EnableImageZoom = true
+comments = true
 
-PaperMod consistently scores near-perfect results on [Pagespeed Insights](https://pagespeed.web.dev/report?url=https://adityatelange.github.io/hugo-PaperMod/).
+[params.utterances]
+repo = "YOUR_NAME/YOUR_COMMENTS_REPO"
+mapping = "pathname"
+label = ""
+theme = "preferred-color-scheme"
 
-<img width="481" height="116" alt="image" src="https://github.com/user-attachments/assets/497d831b-d143-4a46-bc11-b1d7f8ef4a83" />
+[markup.highlight]
+noClasses = false
 
----
+[outputs]
+home = ["HTML", "RSS", "JSON"]
+```
 
-## Support 🫶
+已有评论的站点应保留原来的 `repo`、`mapping` 和文章 URL。RainBow 会通过 HugoMods 的 `setTheme()` 让评论随站点明暗模式切换。旧的 `params.utteranc` 配置仍可兼容。
 
-- Star this repository to show your support.
-- Share PaperMod with others who might find it useful.
-- Sponsor the project on [GitHub Sponsors](https://github.com/sponsors/adityatelange) or [Ko-Fi](https://ko-fi.com/adityatelange).
+数学公式使用 `katex` 短代码或 `katex` 代码围栏，也可在文章 front matter 中设置 `math: true` 以识别 `$...$` 等公式。Mermaid 同时支持原来的 `mermaid` 短代码和代码围栏。资源只在对应页面加载。
 
----
+`ShowCodeCopyButtons`、`EnableImageZoom`、`comments` 可在文章 front matter 中分别关闭。首页 `homeInfoParams.Title` 可省略，此时只显示简介，不重复站点名称。设置 `params.homeInfoParams.Typewriter = true` 可启用简介打字效果，每次进入首页播放一次，并尊重减少动态效果设置。
 
-## Special Thanks 🌟
+## 标签展示
 
-- [Highlight.js](https://github.com/highlightjs/highlight.js)
-- [Fuse.js](https://github.com/krisk/fuse)
-- [Feather Icons](https://github.com/feathericons/feather)
-- [Simple Icons](https://github.com/simple-icons/simple-icons)
-- All contributors and supporters
+```toml
+[params]
+TagLayout = "cloud" # cloud / labels
+```
+
+该配置仅决定首次访问的默认模式。访客可以在页面上切换 3D 球形标签云与完整标签列表，浏览器会记住选择。球形视图展示最多 60 个热门标签，支持拖动、暂停与键盘选择；减少动态效果时默认使用列表。两种模式都按标签名称生成稳定色相。
+
+## 页脚自定义
+
+默认仅显示 Powered by RainBow。可以配置 Hugo 的顶层 `copyright`、`params.footer.text`（支持 Markdown）和 `params.footer.showThemeCredit`：
+
+```toml
+copyright = "© {year} Your Name"
+
+[params.footer]
+text = "[关于本站](/about/)"
+showThemeCredit = true
+```
+
+`{year}` 会在构建时替换为当前年份。
+
+将 `showThemeCredit` 设为 `false` 可隐藏主题链接，`hideFooter = true` 可隐藏整个页脚。博客未填写版权或自定义文字时，不生成默认版权行。
+
+## HugoMods 与维护
+
+主题使用并锁定以下模块：
+
+| 模块 | 版本 | 用途 |
+| --- | --- | --- |
+| hugomods/utterances | 0.1.0 | GitHub Issues 评论与主题接口 |
+| hugomods/mermaid | 0.1.4 | Mermaid 短代码与渲染钩子 |
+| hugomods/katex | 0.3.6 | 公式与本地字体资源 |
+
+传递依赖见 `go.mod`、`go.sum` 和 `_vendor/modules.txt`。Mermaid 浏览器端版本固定为 11.12.0，使用严格安全模式。所有 vendored 依赖的许可证保留在 `licenses/`，以免再次执行 vendor 命令时丢失。
+
+RainBow 在初始化时同步到 PaperMod 提交 `d3768854d00ad003b0a8dbdba254ce9224377a01`，之后独立维护，不再自动或定期合并上游。`upstream` 远程与原始 Git 历史仅用于追溯来源。
+
+更新模块时，在主题仓库执行并提交锁文件与 `_vendor` 的变化：
+
+```sh
+hugo mod get github.com/hugomods/utterances@v0.1.0
+hugo mod vendor
+bash scripts/verify.sh
+```
+
+更新引用主题的博客：
+
+```sh
+git submodule update --init --recursive
+git submodule update --remote themes/RainBow
+hugo --gc --minify
+```
+
+博客需提交新的子模块版本，Cloudflare Pages 的 Git 集成才会收到新提交并重新部署。Cloudflare 的 `HUGO_VERSION` 建议显式设置为 `0.165.0`，构建命令为 `hugo --gc --minify`，输出目录为 `public`。
+
+## 维护边界
+
+PaperMod 的布局和基础资源在初始化时同步，随后由 RainBow 独立维护。定制主要位于 `assets/css/extended/`、`assets/js/rainbow.js` 和 `layouts/_partials/rainbow/`。评论、页脚、目录和首页简介有少量适配，修改时应检查这些位置。
+
+移除了旧的重复复制按钮初始化、无消费者的访问统计脚本、过时的 MathJax 注入，以及包含硬编码凭据且未使用的 iQiyi 短代码。保留现有 Bilibili 嵌入和新版 Hugo 已移除的 Gist 短代码兼容入口。

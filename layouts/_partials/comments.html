@@ -1,3 +1,12 @@
-{{- /* Comments area start */ -}}
-{{- /* to add comments read => https://gohugo.io/content-management/comments/ */ -}}
-{{- /* Comments area end */ -}}
+{{- $options := site.Params.utterances | default dict -}}
+{{- /* Accept the original blog's utteranc settings during migration. */ -}}
+{{- with site.Params.utteranc -}}
+  {{- if .enable -}}
+    {{- $options = merge $options (dict "repo" .repo "mapping" (.issueTerm | default "pathname") "theme" (.theme | default "preferred-color-scheme")) -}}
+  {{- end -}}
+{{- end -}}
+{{- with $options.repo }}
+<section class="rainbow-comments" aria-label="{{ i18n "rainbow_comments" }}">
+  {{- partial "utterances/script-with-options" $options -}}
+</section>
+{{- end }}

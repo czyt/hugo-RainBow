@@ -31,3 +31,48 @@
 
 - id: code_copied
   translation: "copied!"
+
+- id: rainbow_skip
+  translation: "Skip to content"
+- id: rainbow_comments
+  translation: "Comments"
+- id: rainbow_copy_error
+  translation: "Copy failed — select the code to copy"
+- id: rainbow_not_found
+  translation: "This page could not be found."
+- id: rainbow_home
+  translation: "Back to home"
+
+- id: rainbow_search_empty
+  translation: "No articles found. Try another keyword."
+- id: rainbow_search_results
+  translation: "Found {count} articles"
+- id: rainbow_search_error
+  translation: "Search could not load. Please refresh and try again."
+
+- id: rainbow_navigation
+  translation: "Main navigation"
+- id: rainbow_theme_toggle
+  translation: "Toggle theme"
+
+- id: rainbow_tag_cloud
+  translation: "Tag cloud"
+
+- id: rainbow_tags
+  translation: "Tags"
+
+- id: rainbow_tag_view
+  translation: "Tag display"
+- id: rainbow_sphere_help
+  translation: "Drag to rotate, select a tag to read"
+- id: rainbow_pause
+  translation: "Pause rotation"
+- id: rainbow_resume
+  translation: "Resume rotation"
+- id: rainbow_sphere_limit
+  translation: "The sphere shows popular tags. Switch to Tags to see all."
+
+- id: rainbow_effects_on
+  translation: "Disable ambience"
+- id: rainbow_effects_off
+  translation: "Enable ambience"

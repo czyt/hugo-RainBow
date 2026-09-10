@@ -1,0 +1,2 @@
+{{- $type := .Get 1 | default "info" -}}
+<aside class="rainbow-callout rainbow-callout-{{ $type }}">{{ .Get 0 | markdownify }}</aside>

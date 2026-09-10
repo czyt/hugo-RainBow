@@ -8,11 +8,11 @@ body:
       value: |
         Thanks for taking the time to fill out this bug report :)
         - Kindly **DO NOT** ask for instructions.
-        - Use [Discussions](https://github.com/adityatelange/hugo-PaperMod/discussions) section if you have a query or doubts or any other relevant question.
+        - Use [Discussions](https://github.com/czyt/hugo-RainBow/discussions) section if you have a query or doubts or any other relevant question.
         - You may join [Discord community](https://discord.gg/ahpmTvhVmp) to interact with fellow contributors and users
-        - Read project's [Wiki](https://github.com/adityatelange/hugo-PaperMod/wiki) for detailed documentation.
-        - Read project's [FAQs](https://github.com/adityatelange/hugo-PaperMod/wiki/FAQs) section for Frequently asked questions.
-        - Search for previous [Issues](https://github.com/adityatelange/hugo-PaperMod/issues)/[Pull Requests](https://github.com/adityatelange/hugo-PaperMod/pulls) if this issue is already reported or fix has been created.
+        - Read project's [Wiki](https://github.com/czyt/hugo-RainBow/wiki) for detailed documentation.
+        - Read project's [FAQs](https://github.com/czyt/hugo-RainBow/wiki/FAQs) section for Frequently asked questions.
+        - Search for previous [Issues](https://github.com/czyt/hugo-RainBow/issues)/[Pull Requests](https://github.com/czyt/hugo-RainBow/pulls) if this issue is already reported or fix has been created.
   - type: textarea
     id: what_happened
     attributes:
@@ -39,17 +39,17 @@ body:
       label: Hugo Version
       description: What version of Hugo are you running?
       options:
-        - Hugo >= 0.146.0 (Recommended - Minimum version required for PaperMod)
-        - Hugo < 0.146.0  (Incompatible - Not recommended to build PaperMod on lower versions)
+        - Hugo >= 0.165.0 (Recommended - Minimum version required for RainBow)
+        - Hugo < 0.165.0  (Incompatible - Not recommended to build RainBow on lower versions)
     validations:
       required: true
   - type: input
     id: papermod_version
     attributes:
-      label: PaperMod Version
-      description: What version of PaperMod are you running?
+      label: RainBow Version
+      description: What version of RainBow are you running?
       placeholder:  |
-        PaperMod v7.0 or
+        RainBow v7.0 or
         Branch master or
         Commit-id: 3f50861a0ced88f9b614a43662edeb4c0bc45da8
     validations:
@@ -104,7 +104,7 @@ body:
     id: terms
     attributes:
       label: Code of Conduct
-      description: By submitting this issue, you agree to follow our [Code of Conduct](https://github.com/adityatelange/hugo-PaperMod?tab=coc-ov-file#readme).
+      description: By submitting this issue, you agree to follow our [Code of Conduct](https://github.com/czyt/hugo-RainBow?tab=coc-ov-file#readme).
       options:
         - label: I agree to follow this project's Code of Conduct
           required: true

@@ -1,8 +1,13 @@
 {{- define "main" }}
+{{- $cloud := eq (.Param "TagLayout" | default "cloud") "cloud" -}}
 
 {{- if .Title }}
-<header class="page-header">
-    <h1>{{ .Title }}</h1>
+<header class="page-header tag-page-header">
+    <h1>{{ if eq .Type "tags" }}{{ i18n "rainbow_tags" }}{{ else }}{{ .Title }}{{ end }}</h1>
+    <div class="tag-view-switch" role="group" aria-label="{{ i18n "rainbow_tag_view" }}" hidden>
+        <button type="button" data-tag-view="cloud" aria-pressed="false">{{ i18n "rainbow_tag_cloud" }}</button>
+        <button type="button" data-tag-view="labels" aria-pressed="true">{{ i18n "rainbow_tags" }}</button>
+    </div>
     {{- if .Description }}
     <div class="post-description">
         {{ .Description }}
@@ -11,14 +16,26 @@
 </header>
 {{- end }}
 
-<ul class="terms-tags">
+{{- $maxCount := 1 -}}
+{{- range .Data.Terms.ByCount -}}{{- $maxCount = math.Max $maxCount .Count -}}{{- end -}}
+<section class="tag-sphere-panel" hidden data-default-view="{{ if $cloud }}cloud{{ else }}labels{{ end }}">
+    <div class="tag-sphere" aria-label="{{ i18n "rainbow_tag_cloud" }}"></div>
+    <div class="tag-sphere-controls">
+        <p>{{ i18n "rainbow_sphere_help" }}</p>
+        <button type="button" class="sphere-pause" aria-pressed="false" data-pause="{{ i18n "rainbow_pause" }}" data-resume="{{ i18n "rainbow_resume" }}">{{ i18n "rainbow_pause" }}</button>
+        <button type="button" class="sphere-effects" aria-pressed="true" data-on="{{ i18n "rainbow_effects_on" }}" data-off="{{ i18n "rainbow_effects_off" }}">{{ i18n "rainbow_effects_on" }}</button>
+    </div>
+    <p class="tag-sphere-limit" hidden>{{ i18n "rainbow_sphere_limit" }}</p>
+</section>
+<ul class="terms-tags" id="tag-labels">
     {{- $type := .Type }}
         {{- range $key, $value := .Data.Terms.Alphabetical }}
             {{- $name := .Name }}
             {{- $count := .Count }}
             {{- with site.GetPage (printf "/%s/%s" $type $name) }}
-            <li>
-                <a href="{{ .Permalink }}">{{ .LinkTitle }} <sup><strong><sup>{{ $count }}</sup></strong></sup> </a>
+            {{- $weight := div (math.Log (add $count 1)) (math.Log (add $maxCount 1)) -}}
+            <li data-count="{{ $count }}" style="--tag-hue: {{ mod (hash.FNV32a $name) 360 }}; --tag-size: {{ printf "%.3f" (add 0.85 (mul 0.85 $weight)) }}rem;">
+                <a href="{{ .Permalink }}">{{ .LinkTitle }} <sup>{{ $count }}</sup> </a>
             </li>
         {{- end }}
     {{- end }}

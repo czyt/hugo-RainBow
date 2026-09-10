@@ -22,7 +22,8 @@
 
 <div id="searchbox" class="searchbox">
     <input id="searchInput" disabled placeholder="{{ .Params.placeholder | default (printf "%s ↵" .Title) }}"
-        aria-label="search" type="search" autocomplete="off" maxlength="64">
+        aria-label="{{ .Title }}" aria-describedby="searchStatus" type="search" autocomplete="off" maxlength="64">
+    <p id="searchStatus" role="status" data-empty="{{ i18n "rainbow_search_empty" }}" data-results="{{ i18n "rainbow_search_results" }}" data-error="{{ i18n "rainbow_search_error" }}"></p>
     <ul id="searchResults" class="searchResults" aria-label="search results"></ul>
 </div>
 

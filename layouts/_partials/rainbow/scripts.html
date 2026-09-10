@@ -1,0 +1,14 @@
+{{- $options := dict "copy" (.Param "ShowCodeCopyButtons" | default false) "copyLabel" (i18n "code_copy" | default "Copy") "copiedLabel" (i18n "code_copied" | default "Copied!") "copyError" (i18n "rainbow_copy_error") "zoom" (.Param "EnableImageZoom" | default false) "typewriter" (and .IsHome (site.Params.homeInfoParams.Typewriter | default false)) -}}
+{{- if .Param "EnableImageZoom" -}}
+  {{- $zoom := resources.Get "js/medium-zoom.min.js" | fingerprint -}}
+<script defer src="{{ $zoom.RelPermalink }}" integrity="{{ $zoom.Data.Integrity }}" crossorigin="anonymous"></script>
+{{- end -}}
+{{- $script := resources.Get "js/rainbow.js" | js.Build (dict "params" $options) | minify | fingerprint -}}
+<script defer src="{{ $script.RelPermalink }}" integrity="{{ $script.Data.Integrity }}" crossorigin="anonymous"></script>
+{{- partial "mermaid/assets/js" . -}}
+{{- partial "katex/assets/js" . -}}
+
+{{- if eq .Kind "taxonomy" -}}
+{{- $sphere := resources.Get "js/tag-sphere.js" | minify | fingerprint -}}
+<script defer src="{{ $sphere.RelPermalink }}" integrity="{{ $sphere.Data.Integrity }}" crossorigin="anonymous"></script>
+{{- end -}}

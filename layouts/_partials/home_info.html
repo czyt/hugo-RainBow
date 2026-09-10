@@ -1,7 +1,11 @@
 {{- with site.Params.homeInfoParams }}
 <article class="first-entry home-info">
     <header class="entry-header">
-        <h1>{{ .Title | markdownify }}</h1>
+        {{- with .Title }}
+        <h1>{{ . | markdownify }}</h1>
+        {{- else }}
+        <h1 class="visually-hidden">{{ site.Title }}</h1>
+        {{- end }}
     </header>
     <div class="entry-content md-content">
         {{ $opts := dict "display" "block" }}

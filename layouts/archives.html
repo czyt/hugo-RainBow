@@ -43,8 +43,9 @@
     </a>
     <sup class="archive-count">&nbsp;{{ len .Pages }}</sup>
   </h2>
-  {{- range .Pages.GroupByDate "January" }}
-  <div class="archive-month">
+  {{- range .Pages.GroupByPublishDate "January" }}
+  {{- $month := (index .Pages 0).PublishDate.Month -}}
+  <div class="archive-month" style="--month-hue: {{ mod (add 200 (mul (sub (int $month) 1) 30)) 360 }};">
     <h3 class="archive-month-header" id="{{ $year }}-{{ .Key }}">
       <a class="archive-header-link" href="#{{ $year }}-{{ .Key }}">
         {{- .Key -}}
@@ -55,6 +56,7 @@
       {{- range .Pages }}
       {{- if eq .Kind "page" }}
       <div class="archive-entry">
+        <time class="archive-day" datetime="{{ .PublishDate.Format "2006-01-02" }}">{{ .PublishDate.Format "01-02" }}</time>
         <h3 class="archive-entry-title entry-hint-parent">
           {{- .Title | markdownify }}
           {{- if .Draft }}
@@ -67,7 +69,7 @@
           {{- end }}
         </h3>
         <div class="archive-meta">
-          {{- partial "post_meta.html" . -}}
+          {{- if .Param "ShowReadingTime" }}{{ i18n "read_time" .ReadingTime }}{{ end -}}
         </div>
         <a class="entry-link" aria-label="post link to {{ .Title | plainify }}" href="{{ .Permalink }}"></a>
       </div>
