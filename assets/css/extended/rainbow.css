@@ -35,7 +35,7 @@ body {
 .post-content :is(h1,h2,h3,h4,h5,h6) { scroll-margin-top: 28px; line-height: 1.4; }
 .post-content :is(p,ul,ol) { margin-bottom: 1.25em; }
 .post-content a:not(.anchor) { color: var(--rainbow-accent); text-underline-offset: .2em; }
-.post-content code { font-family: "Sarasa Mono SC", "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
+.post-content code { font-family: "Maple Mono", "LXGW WenKai Mono", "Sarasa Mono SC", "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
 .post-content :not(pre) > code { font-size: .85em; padding: .15em .35em; overflow-wrap: anywhere; }
 .post-content .highlight { border: 1px solid var(--border); overflow: hidden; }
 .post-content pre { position: relative; }
@@ -132,7 +132,7 @@ details.toc a[aria-current="location"] { color: var(--rainbow-accent); font-weig
     --code-bg: #f0ede6;
     --rainbow-accent: #365a73;
     --rainbow-accent-bg: #e8edf0;
-    --reading-font: "LXGW WenKai", Charter, "Iowan Old Style", "Noto Serif CJK SC", "Source Han Serif SC", "Songti SC", SimSun, serif;
+    --reading-font: "Maple Mono", "LXGW WenKai", Charter, "Iowan Old Style", "Noto Serif CJK SC", "Source Han Serif SC", "Songti SC", SimSun, serif;
 }
 :root[data-theme="dark"] {
     --theme: #202326;

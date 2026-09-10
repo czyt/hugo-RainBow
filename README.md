@@ -62,10 +62,11 @@ home = ["HTML", "RSS", "JSON"]
 
 ## 阅读字体
 
-默认通过 jsDelivr 加载霞鹜文楷 1.7.0，用于阅读标题、正文和首页摘要，并保留系统字体回退。
+默认优先使用 Maple Mono，中文回退到霞鹜文楷 1.7.0。代码块同样优先使用 Maple Mono，再回退到霞鹜文楷等宽字体与系统等宽字体；未接入额外宋体。
 
 ```toml
 [params.rainbow]
+monoFontCSS = "https://cdn.jsdelivr.net/npm/@fontsource/maple-mono@5.3.0/index.min.css"
 readingFontCSS = "https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/style.min.css"
 ```
 
