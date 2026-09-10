@@ -107,7 +107,7 @@ showThemeCredit = true
 | hugomods/mermaid | 0.1.4 | Mermaid 短代码与渲染钩子 |
 | hugomods/katex | 0.3.6 | 公式与本地字体资源 |
 
-传递依赖见 `go.mod`、`go.sum` 和 `_vendor/modules.txt`。Mermaid 浏览器端版本固定为 11.12.0，使用严格安全模式。所有 vendored 依赖的许可证保留在 `licenses/`，以免再次执行 vendor 命令时丢失。
+传递依赖见 `go.mod`、`go.sum` 和 `_vendor/modules.txt`。Mermaid 浏览器端版本固定为 11.12.0，使用严格安全模式。所有 vendored 依赖的许可证保留在 `licenses/`，由 `scripts/vendor.sh` 在重新生成依赖时恢复；该脚本同时移除上游构建工具的 npm 开发清单。
 
 RainBow 在初始化时同步到 PaperMod 提交 `d3768854d00ad003b0a8dbdba254ce9224377a01`，之后独立维护，不再自动或定期合并上游。`upstream` 远程与原始 Git 历史仅用于追溯来源。
 
@@ -115,7 +115,7 @@ RainBow 在初始化时同步到 PaperMod 提交 `d3768854d00ad003b0a8dbdba254ce
 
 ```sh
 hugo mod get github.com/hugomods/utterances@v0.1.0
-hugo mod vendor
+bash scripts/vendor.sh
 bash scripts/verify.sh
 ```
 
