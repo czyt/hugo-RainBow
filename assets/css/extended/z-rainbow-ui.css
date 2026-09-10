@@ -282,3 +282,7 @@ footer.footer > * + *::before { content: "·"; display: inline-block; margin-inl
 .tag-sphere-controls { padding-top: 18px; }
 .sphere-effects { min-height: 36px; padding: 6px 12px; border: 1px solid var(--border); border-radius: 7px; font: 13px var(--ui-font); color: var(--secondary); }
 @media (prefers-reduced-transparency: reduce), (prefers-contrast: more) { .tag-sphere.has-atmosphere, [data-theme="dark"] .tag-sphere.has-atmosphere { background: var(--entry); } }
+.sphere-tag.is-near { font-weight: 600; }
+@media (hover: hover) and (pointer: fine) {
+    .sphere-tag:hover { background: var(--glass-bg); border-radius: 9px; box-shadow: inset 0 1px 0 var(--glass-highlight), 0 6px 22px rgba(60,95,140,.14); }
+}

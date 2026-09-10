@@ -27,6 +27,21 @@
         context.clearRect(0, 0, weatherWidth, weatherHeight);
         if (!effects) return;
         const dark = document.documentElement.dataset.theme === 'dark';
+        const orbitRadius = Math.min(weatherWidth * .36, weatherHeight * .4);
+        for (let ring = 0; ring < 2; ring++) {
+            context.save();
+            context.translate(weatherWidth / 2, weatherHeight / 2);
+            context.rotate((ring ? -.6 : .5) + Math.sin(weatherTime * .00008) * .08);
+            context.strokeStyle = dark ? 'rgba(135,190,225,.12)' : 'rgba(80,120,165,.12)';
+            context.lineWidth = 1;
+            context.beginPath(); context.ellipse(0, 0, orbitRadius * 1.12, orbitRadius * .43, 0, 0, Math.PI * 2); context.stroke();
+            const phase = weatherTime * .00045 + ring * Math.PI;
+            const x = Math.cos(phase) * orbitRadius * 1.12, y = Math.sin(phase) * orbitRadius * .43;
+            context.fillStyle = dark ? '#afd9f5' : '#658caf';
+            context.shadowColor = '#83baff'; context.shadowBlur = 14;
+            context.beginPath(); context.arc(x, y, 2.2, 0, Math.PI * 2); context.fill();
+            context.restore();
+        }
         context.lineWidth = 1;
         context.strokeStyle = dark ? 'rgba(153,203,237,.22)' : 'rgba(56,107,145,.16)';
         for (const drop of rain) {
@@ -53,7 +68,7 @@
     function setEffects(value) {
         effects = Boolean(value && context);
         effectsButton.setAttribute('aria-pressed', String(effects));
-        effectsButton.textContent = effects ? effectsButton.dataset.on : effectsButton.dataset.off;
+        effectsButton.textContent = effects ? effectsButton.dataset.enabledLabel : effectsButton.dataset.disabledLabel;
         stage.classList.toggle('has-atmosphere', effects);
         canvas.hidden = !effects;
         drawWeather();
@@ -90,8 +105,10 @@
     let frame = 0;
     let lastTime = 0;
     let radius = 1;
+    let velocityYaw = 0, velocityPitch = 0;
     function render() {
-        const cy = Math.cos(yaw), sy = Math.sin(yaw), cp = Math.cos(pitch), sp = Math.sin(pitch);
+        const tilt = pitch + Math.sin(weatherTime * .00014) * .2;
+        const cy = Math.cos(yaw), sy = Math.sin(yaw), cp = Math.cos(tilt), sp = Math.sin(tilt);
         for (const point of points) {
             const x = point.x * cy + point.z * sy;
             const z0 = point.z * cy - point.x * sy;
@@ -99,19 +116,24 @@
             const z = z0 * cp + point.y * sp;
             const depth = (z + 1) / 2;
             const selected = focused === point.link;
-            const scale = selected ? 1.12 : .64 + depth * .38;
-            point.link.style.transform = `translate(-50%, -50%) translate3d(${selected ? 0 : x * radius}px, ${selected ? 0 : y * radius}px, 0) scale(${scale})`;
-            point.link.style.opacity = selected ? '1' : focused ? '.18' : String(.94 + depth * .06);
+            const perspective = 3.8 / (3.8 - z);
+            const scale = selected ? 1.18 : (.52 + depth * .52) * perspective;
+            point.link.style.transform = `translate(-50%, -50%) translate3d(${selected ? 0 : x * radius * perspective}px, ${selected ? 0 : y * radius * perspective}px, 0) scale(${scale})`;
+            point.link.style.opacity = selected ? '1' : focused ? '.18' : String(.2 + Math.pow(depth, 1.4) * .8);
             point.link.style.zIndex = selected ? '101' : String(Math.round(depth * 100));
+            point.link.classList.toggle('is-near', depth > .7);
         }
     }
-    const spinning = () => view === 'cloud' && !paused && !hovered && !focused && !pointer && visible && !document.hidden;
+    const spinning = () => view === 'cloud' && !paused && !focused && !pointer && visible && !document.hidden && (!hovered || Math.abs(velocityYaw) + Math.abs(velocityPitch) > .00002);
     function tick(time) {
         frame = 0;
         if (!spinning()) { lastTime = 0; return; }
         if (lastTime) {
             const elapsed = Math.min(time - lastTime, 50);
-            yaw += elapsed * .00009;
+            yaw += elapsed * (velocityYaw + (hovered ? 0 : .00015));
+            pitch = Math.max(-1.25, Math.min(1.25, pitch + elapsed * velocityPitch));
+            const decay = Math.exp(-elapsed / 180);
+            velocityYaw *= decay; velocityPitch *= decay;
             weatherTime += elapsed;
         }
         lastTime = time;
@@ -143,6 +165,7 @@
     }
     function setPaused(value) {
         paused = value;
+        if (paused) { velocityYaw = 0; velocityPitch = 0; }
         pauseButton.setAttribute('aria-pressed', String(paused));
         pauseButton.textContent = paused ? pauseButton.dataset.resume : pauseButton.dataset.pause;
         schedule();
@@ -158,7 +181,8 @@
     });
     stage.addEventListener('pointerdown', event => {
         if (event.button !== 0 || pointer) return;
-        pointer = { id: event.pointerId, x: event.clientX, y: event.clientY };
+        pointer = { id: event.pointerId, x: event.clientX, y: event.clientY, time: event.timeStamp };
+        velocityYaw = 0; velocityPitch = 0;
         moved = false;
         schedule();
     });
@@ -168,6 +192,10 @@
         if (!moved && Math.hypot(dx, dy) < 4) return;
         moved = true;
         stage.setPointerCapture(event.pointerId);
+        const elapsed = Math.max(8, event.timeStamp - pointer.time);
+        velocityYaw = motion.matches ? 0 : Math.max(-.006, Math.min(.006, dx * .006 / elapsed));
+        velocityPitch = motion.matches ? 0 : Math.max(-.003, Math.min(.003, dy * .006 / elapsed));
+        pointer.time = event.timeStamp;
         yaw += dx * .006;
         pitch = Math.max(-1.25, Math.min(1.25, pitch + dy * .006));
         pointer.x = event.clientX; pointer.y = event.clientY;
@@ -176,6 +204,7 @@
     const endDrag = event => {
         if (!pointer || pointer.id !== event.pointerId) return;
         if (stage.hasPointerCapture(event.pointerId)) stage.releasePointerCapture(event.pointerId);
+        if (event.type === 'pointercancel' || event.timeStamp - pointer.time > 100) { velocityYaw = 0; velocityPitch = 0; }
         if (event.type === 'pointercancel') moved = false;
         pointer = null; schedule();
     };
