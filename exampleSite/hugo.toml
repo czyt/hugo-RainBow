@@ -4,6 +4,7 @@ defaultContentLanguage = "zh"
 title = "RainBow"
 
 [params]
+    CodeHighlighter = "gpu-lexer" # GPU enhancement with automatic Chroma fallback.
     TagEffects = true # Default ambience; visitors may disable it.
 TagLayout = "cloud"
 author = "RainBow"

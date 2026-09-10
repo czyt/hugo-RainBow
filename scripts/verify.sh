@@ -7,11 +7,13 @@ trap 'rm -rf "$rainbow_output"' EXIT
   --themesDir "$(dirname "$rainbow_root")" --theme "$(basename "$rainbow_root")" \
   --destination "$rainbow_output" --cacheDir "$rainbow_output/cache" --gc --minify --panicOnWarning
 python3 "$rainbow_root/scripts/check-output.py" "$rainbow_output"
+node --test "$rainbow_root/tests/gpu-spans.test.mjs"
 # Verify configurable footer and label-view defaults rather than only the demo defaults.
 cat > "$rainbow_output/overrides.toml" <<'CONFIG'
 copyright = "© {year} Example Owner"
 [params]
 TagLayout = "labels"
+CodeHighlighter = "chroma"
 [params.footer]
 text = "[About](/about/)"
 showThemeCredit = false
@@ -29,5 +31,6 @@ footer = re.search(r'<footer class=footer>(.*?)</footer>', text).group(1)
 assert 'Example Owner' in footer and '{year}' not in footer
 assert 'About' in footer and 'github.com/czyt/hugo-RainBow' not in footer
 assert 'data-default-view=labels' in (root / 'tags/index.html').read_text()
+assert 'gpu-highlight' not in (root / 'posts/reading/index.html').read_text()
 print('PASS: configurable copyright, year replacement, custom footer, hidden credit and initial tag view')
 PY

@@ -18,7 +18,7 @@ hugo server --source exampleSite --themesDir ../.. --theme hugo-RainBow
 bash scripts/verify.sh
 ```
 
-该命令在临时目录构建示例站点并检查输出：页面、搜索索引、评论映射、资源、图表、公式及功能开关。不会修改现有博客。
+验证需要 Python 3 和 Node.js 20+。该命令在临时目录构建示例站点并检查输出：页面、搜索索引、评论映射、资源、图表、公式及功能开关。不会修改现有博客。
 
 ## 接入已有博客
 
@@ -59,6 +59,24 @@ home = ["HTML", "RSS", "JSON"]
 数学公式使用 `katex` 短代码或 `katex` 代码围栏，也可在文章 front matter 中设置 `math: true` 以识别 `$...$` 等公式。Mermaid 同时支持原来的 `mermaid` 短代码和代码围栏。资源只在对应页面加载。
 
 `ShowCodeCopyButtons`、`EnableImageZoom`、`comments` 可在文章 front matter 中分别关闭。首页 `homeInfoParams.Title` 可省略，此时只显示简介，不重复站点名称。设置 `params.homeInfoParams.Typewriter = true` 可启用简介打字效果，每次进入首页播放一次，并尊重减少动态效果设置。
+
+## 代码高亮
+
+```toml
+[params]
+CodeHighlighter = "gpu-lexer" # chroma / gpu-lexer
+```
+
+这是站点设置。默认 `chroma` 使用 Hugo 构建时的高亮；`gpu-lexer` 会在支持 WebGPU 的安全浏览器环境中尝试实验高亮。HTML 始终包含 Chroma 回退，模块或 GPU 初始化失败、超时、结果不合法时保留原样。代码只在访客本地处理，不发给外部接口。
+
+GPU 模块仅在代码块接近视口时加载。带行号、指定行高亮或超过 100,000 字符的代码块继续使用 Chroma。代码文本与复制按钮保持不变。该模型是实验性词法分类器，存在识别误差，不用作语法校验。
+
+浏览器分发版本和校验值记录在 `data/rainbow/gpu-lexer.json`。每周一 **Update GPU lexer** 检测 npm 新版，不执行 npm lifecycle scripts；通过导出/语法检查、渲染器回归测试与 Hugo 构建后，才提交更新。上游许可或导出结构变化会停止自动更新，等待人工检查。可在 Actions 手动运行。
+
+```sh
+python3 scripts/update-gpu-lexer.py
+bash scripts/verify.sh
+```
 
 ## 阅读字体
 

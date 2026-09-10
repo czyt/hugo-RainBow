@@ -12,3 +12,8 @@
 {{- $sphere := resources.Get "js/tag-sphere.js" | minify | fingerprint -}}
 <script defer src="{{ $sphere.RelPermalink }}" integrity="{{ $sphere.Data.Integrity }}" crossorigin="anonymous"></script>
 {{- end -}}
+{{- if and .IsPage (eq (.Param "CodeHighlighter") "gpu-lexer") -}}
+{{- $lexer := resources.Get "js/vendor/gpu-lexer.js" | fingerprint -}}
+{{- $gpu := resources.Get "js/gpu-highlight.js" | js.Build (dict "format" "esm" "params" (dict "lexerURL" $lexer.RelPermalink)) | minify | fingerprint -}}
+<script type="module" src="{{ $gpu.RelPermalink }}" integrity="{{ $gpu.Data.Integrity }}" crossorigin="anonymous"></script>
+{{- end -}}

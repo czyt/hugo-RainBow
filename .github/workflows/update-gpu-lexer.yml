@@ -1,0 +1,45 @@
+name: Update GPU lexer
+on:
+  schedule:
+    - cron: '17 2 * * 1'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: update-gpu-lexer
+  cancel-in-progress: false
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: master
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: '0.165.0'
+          extended: true
+      - name: Download the current package without lifecycle scripts
+        run: python3 scripts/update-gpu-lexer.py
+      - name: Verify the renderer contract and Hugo outputs
+        env:
+          HUGO_MODULE_PROXY: 'off'
+          GOPROXY: 'off'
+        run: bash scripts/verify.sh
+      - name: Publish the verified distribution
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if git diff --quiet -- assets/js/vendor/gpu-lexer.js data/rainbow/gpu-lexer.json; then
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add assets/js/vendor/gpu-lexer.js data/rainbow/gpu-lexer.json
+          git commit -m "chore: update gpu-lexer browser bundle"
+          gh auth setup-git
+          git push origin HEAD:master

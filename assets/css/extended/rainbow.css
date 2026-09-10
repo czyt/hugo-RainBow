@@ -227,3 +227,13 @@ details:focus-within::details-content { transition: none; }
 .typewriter-char.typing::after { content: ""; position: absolute; left: 100%; top: .1em; height: 1em; border-left: 1px solid currentColor; opacity: .65; }
 
 .entry-content { font-family: var(--reading-font); }
+/* Optional GPU tokens use the same terminal surface as server-rendered Chroma. */
+.post-content .highlight pre.chroma code[data-highlighter="gpu-lexer"] { padding-inline: 18px; }
+.gpu-token-comment { color: #9aa8b7; font-style: italic; }
+.gpu-token-string { color: #b7d995; }
+.gpu-token-number { color: #e9b878; }
+.gpu-token-keyword { color: #d5a8ee; }
+.gpu-token-type { color: #e8d790; }
+.gpu-token-function { color: #9fc9ed; }
+.gpu-token-constant { color: #e7b0b6; }
+.gpu-token-operator { color: #a4d5df; }

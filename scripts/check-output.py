@@ -1,5 +1,6 @@
 """Regression checks for the published theme fixture (no private blog content)."""
 import json
+import hashlib
 import sys
 from html.parser import HTMLParser
 from pathlib import Path
@@ -40,3 +41,9 @@ for path in root.rglob('*.html'):
         if url and url.startswith('/') and not url.startswith('//'):
             assert (root / url.lstrip('/').split('?')[0]).exists(), f'{path}: missing {url}'
 print('PASS: page routes, comments mapping, independent feature flags, diagrams, math, search and local assets')
+
+repo = Path(__file__).resolve().parents[1]
+package = json.loads((repo / 'data/rainbow/gpu-lexer.json').read_text())
+assert hashlib.sha256((repo / 'assets/js/vendor/gpu-lexer.js').read_bytes()).hexdigest() == package['sha256'], 'GPU bundle checksum mismatch'
+assert any('gpu-highlight' in a.get('src', '') for a in reading.find('script')), 'GPU site option ignored'
+print('PASS: pinned GPU distribution and experimental-mode assets')
