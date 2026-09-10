@@ -60,6 +60,17 @@ home = ["HTML", "RSS", "JSON"]
 
 `ShowCodeCopyButtons`、`EnableImageZoom`、`comments` 可在文章 front matter 中分别关闭。首页 `homeInfoParams.Title` 可省略，此时只显示简介，不重复站点名称。设置 `params.homeInfoParams.Typewriter = true` 可启用简介打字效果，每次进入首页播放一次，并尊重减少动态效果设置。
 
+## 阅读字体
+
+默认通过 jsDelivr 加载霞鹜文楷 1.7.0，用于阅读标题、正文和首页摘要，并保留系统字体回退。
+
+```toml
+[params.rainbow]
+readingFontCSS = "https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/style.min.css"
+```
+
+可以替换为自己的同名字体 CSS，或设置为空字符串以使用本地字体回退。
+
 ## 标签展示
 
 ```toml

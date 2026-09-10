@@ -4,3 +4,8 @@
 {{- partial "katex/assets/css" . -}}
 
 <style>:root { --rainbow-grain: url('{{ "images/rainbow-grain.png" | relURL }}'); }</style>
+
+{{- with site.Params.rainbow.readingFontCSS }}
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="{{ . }}">
+{{- end }}

@@ -132,7 +132,7 @@ details.toc a[aria-current="location"] { color: var(--rainbow-accent); font-weig
     --code-bg: #f0ede6;
     --rainbow-accent: #365a73;
     --rainbow-accent-bg: #e8edf0;
-    --reading-font: Charter, "Iowan Old Style", "Noto Serif CJK SC", "Source Han Serif SC", "Songti SC", SimSun, serif;
+    --reading-font: "LXGW WenKai", Charter, "Iowan Old Style", "Noto Serif CJK SC", "Source Han Serif SC", "Songti SC", SimSun, serif;
 }
 :root[data-theme="dark"] {
     --theme: #202326;
@@ -225,3 +225,5 @@ details:focus-within::details-content { transition: none; }
 .home-info .entry-footer:has(.social-icons:empty) { display: none; }
 .typewriter-char { position: relative; }
 .typewriter-char.typing::after { content: ""; position: absolute; left: 100%; top: .1em; height: 1em; border-left: 1px solid currentColor; opacity: .65; }
+
+.entry-content { font-family: var(--reading-font); }
