@@ -26,4 +26,6 @@ monoFontCSS = "https://cdn.jsdelivr.net/npm/@fontsource/maple-mono@5.3.0/index.m
 readingFontCSS = "https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/style.min.css"
 
 [params]
+    TocOpen = true
+    CodeCopyDisplay = "hover" # always / hover; touch and keyboard stay accessible.
 CodeHighlighter = "chroma"

@@ -286,3 +286,58 @@ footer.footer > * + *::before { content: "·"; display: inline-block; margin-inl
 @media (hover: hover) and (pointer: fine) {
     .sphere-tag:hover { background: var(--glass-bg); border-radius: 9px; box-shadow: inset 0 1px 0 var(--glass-highlight), 0 6px 22px rgba(60,95,140,.14); }
 }
+/* Native disclosure with a quiet floating handle instead of a heading-sized button. */
+details.toc { position: relative; overflow: visible; }
+details.toc .toc-heading { padding: 15px 16px 9px; font: 600 12px/1.4 var(--ui-font); color: var(--secondary); letter-spacing: .04em; }
+details.toc summary.toc-toggle {
+    position: absolute; top: 10px; right: 10px; width: 32px; min-height: 32px;
+    padding: 0; display: grid; place-items: center; z-index: 3;
+    border-radius: 9px; border: 1px solid var(--glass-border); background: var(--glass-bg);
+    color: var(--secondary); opacity: 0; transition: opacity 160ms var(--ease-out);
+    -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+}
+details.toc summary.toc-toggle::after { content: none; }
+details.toc summary.toc-toggle svg { transition: transform 160ms var(--ease-out); }
+details.toc:not([open]) summary.toc-toggle svg { transform: rotate(180deg); }
+details.toc:not([open]) { min-height: 48px; background: transparent; border-color: transparent; box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none; }
+details.toc summary.toc-toggle:focus-visible { opacity: 1; }
+details.toc summary.toc-toggle:focus-visible svg { transition: none; }
+@media (hover: hover) and (pointer: fine) {
+    details.toc:hover summary.toc-toggle { opacity: 1; }
+    .copy-code[data-display="hover"] { opacity: 0; pointer-events: none; }
+    .highlight:hover .copy-code[data-display="hover"], pre:hover .copy-code[data-display="hover"],
+    .highlight:focus-within .copy-code[data-display="hover"], pre:focus-within .copy-code[data-display="hover"],
+    .copy-code[data-display="hover"]:focus-visible { opacity: 1; pointer-events: auto; }
+}
+@media (min-width: 1280px) {
+    details.toc.side { width: min(240px, calc((100vw - var(--main-width)) / 2 - 80px)); overflow: visible; }
+    details.toc.side.right { left: calc(50% + var(--main-width) / 2 + 64px); }
+    details.toc.side.left { right: calc(50% + var(--main-width) / 2 + 64px); }
+    details.toc.side.right summary.toc-toggle { left: -17px; right: auto; }
+    details.toc.side.left summary.toc-toggle { right: -17px; }
+    details.toc.side.left summary.toc-toggle svg { transform: rotate(180deg); }
+    details.toc.side.left:not([open]) summary.toc-toggle svg { transform: none; }
+    details.toc.side .inner { max-height: calc(100dvh - 188px); border-radius: 0 0 13px 13px; }
+    details.toc.side:not([open]) { background: transparent; border-color: transparent; box-shadow: none; }
+}
+@media (hover: none), (pointer: coarse) {
+    details.toc summary.toc-toggle { opacity: 1; }
+    .copy-code[data-display="hover"] { opacity: 1; pointer-events: auto; }
+}
+@media (prefers-reduced-motion: reduce) { details.toc summary.toc-toggle, details.toc summary.toc-toggle svg { transition: none; } }
+@media (prefers-reduced-transparency: reduce), (prefers-contrast: more) { details.toc summary.toc-toggle { background: var(--entry); -webkit-backdrop-filter: none; backdrop-filter: none; } }
+/* Copy feedback stays icon-only; the full status remains available to assistive tools. */
+.copy-code { display: grid; place-items: center; width: 32px; min-width: 32px; padding: 0; }
+.copy-code svg { width: 16px; height: 16px; pointer-events: none; }
+.copy-code[data-state="success"] { color: #287441; }
+.copy-code[data-state="error"] { color: #b43c42; }
+[data-theme="dark"] .copy-code[data-state="success"] { color: #b7e6c1; }
+[data-theme="dark"] .copy-code[data-state="error"] { color: #ffc0b9; }
+.copy-code[data-display="hover"][data-state="success"], .copy-code[data-display="hover"][data-state="error"] { opacity: 1; }
+@media (hover: none), (pointer: coarse) { .copy-code { width: 44px; min-width: 44px; min-height: 44px; } }
+.code-language { position: absolute; z-index: 2; top: 0; right: 12px; max-width: calc(100% - 132px); height: 32px; line-height: 32px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-family: var(--ui-font); font-size: 11px; font-weight: 500; color: #62666c; pointer-events: none; }
+:is(.highlight, pre):has(> .copy-code) > .code-language { right: 48px; }
+[data-theme="dark"] .code-language { color: #e0e3e8; }
+@media (hover: none), (pointer: coarse) { .code-language { height: 44px; line-height: 44px; } :is(.highlight,pre):has(> .copy-code) > .code-language { right: 56px; } }
+.highlight:hover .copy-code, pre:hover .copy-code { display: grid; }
+@media (max-width: 1279px) { details.toc .inner { max-height: min(320px, 45dvh); overflow-y: auto; scrollbar-width: thin; } }

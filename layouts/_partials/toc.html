@@ -2,9 +2,10 @@
 {{- $has_headers := ge (len $headers) 1 -}}
 {{- if $has_headers -}}
 <details class="toc{{ with .Param "TocSide" }} side {{ . }}{{ end }}" {{if (.Param "TocOpen") }} open{{ end }}>
-    <summary accesskey="c" title="(Alt + C)">
-        <span class="title">{{- i18n "toc" | default "Table of Contents" }}</span>
+    <summary class="toc-toggle" accesskey="c" title="{{ i18n "rainbow_toggle_toc" }} (Alt + C)" aria-label="{{ i18n "rainbow_toggle_toc" }}">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m9 5 7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </summary>
+    <div class="toc-heading" aria-hidden="true">{{ i18n "toc" | default "Table of Contents" }}</div>
 
     <div class="inner">
         {{- if (.Param "UseHugoToc") }}

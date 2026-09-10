@@ -60,6 +60,16 @@ home = ["HTML", "RSS", "JSON"]
 
 `ShowCodeCopyButtons`、`EnableImageZoom`、`comments` 可在文章 front matter 中分别关闭。首页 `homeInfoParams.Title` 可省略，此时只显示简介，不重复站点名称。设置 `params.homeInfoParams.Typewriter = true` 可启用简介打字效果，每次进入首页播放一次，并尊重减少动态效果设置。
 
+## 目录与复制按钮
+
+```toml
+[params]
+TocOpen = true
+CodeCopyDisplay = "hover" # always / hover
+```
+
+目录默认展开，浮动折叠按钮在悬停或键盘聚焦时显示。触摸设备直接显示按钮。`hover` 模式下复制按钮随代码块悬停或键盘聚焦显示，触摸设备始终显示。
+
 ## 代码高亮
 
 ```toml

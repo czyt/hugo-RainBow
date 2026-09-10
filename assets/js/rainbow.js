@@ -96,7 +96,33 @@ updateScroll();
 const sideToc = document.querySelector('details.toc.side');
 if (sideToc && matchMedia('(min-width: 1280px)').matches) sideToc.open = true;
 
-document.querySelectorAll('.post-content pre > code').forEach(code => { code.tabIndex = 0; });
+const languageNames = {go:'Go',golang:'Go',bash:'Bash',sh:'Shell',shell:'Shell',rust:'Rust',js:'JavaScript',javascript:'JavaScript',ts:'TypeScript',typescript:'TypeScript',json:'JSON',yaml:'YAML',yml:'YAML',toml:'TOML',sql:'SQL',html:'HTML',css:'CSS',python:'Python',py:'Python',csharp:'C#',cs:'C#',cpp:'C++',text:'Text',plaintext:'Text'};
+document.querySelectorAll('.post-content pre > code').forEach(code => {
+    code.tabIndex = 0;
+    const language = code.dataset.lang || Array.from(code.classList).find(name => name.startsWith('language-'))?.slice(9);
+    const container = code.closest('.highlight') || code.parentElement;
+    if (!language || language === 'fallback' || container.querySelector('.code-language')) return;
+    const label = document.createElement('span');
+    label.className = 'code-language';
+    label.textContent = languageNames[language.toLowerCase()] || language;
+    container.appendChild(label);
+});
+
+function copyIcon(state) {
+    const namespace = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(namespace, 'svg');
+    for (const [name, value] of Object.entries({viewBox:'0 0 24 24',width:'16',height:'16',fill:'none',stroke:'currentColor','stroke-width':'1.8','stroke-linecap':'round','stroke-linejoin':'round','aria-hidden':'true'})) svg.setAttribute(name, value);
+    // Lucide copy, check and circle-x geometry.
+    const shapes = state === 'success' ? [['path',{d:'m20 6-11 11-5-5'}]] : state === 'error' ?
+        [['circle',{cx:'12',cy:'12',r:'10'}],['path',{d:'m15 9-6 6m0-6 6 6'}]] :
+        [['rect',{x:'8',y:'8',width:'14',height:'14',rx:'2'}],['path',{d:'M4 16a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2'}]];
+    for (const [tag, attrs] of shapes) {
+        const shape = document.createElementNS(namespace, tag);
+        Object.entries(attrs).forEach(([key, value]) => shape.setAttribute(key, value));
+        svg.appendChild(shape);
+    }
+    return svg;
+}
 
 if (params.copy) {
     document.querySelectorAll('.post-content pre > code').forEach(code => {
@@ -108,8 +134,19 @@ if (params.copy) {
         const button = document.createElement('button');
         button.type = 'button';
         button.className = 'copy-code';
-        button.textContent = params.copyLabel;
-        button.setAttribute('aria-live', 'polite');
+        button.dataset.display = params.copyDisplay;
+        const status = document.createElement('span');
+        status.className = 'visually-hidden';
+        status.setAttribute('aria-live', 'polite');
+        button.append(copyIcon('copy'), status);
+        const setState = (state, label) => {
+            button.dataset.state = state;
+            button.setAttribute('aria-label', label);
+            button.title = label;
+            button.querySelector('svg').replaceWith(copyIcon(state));
+            status.textContent = state === 'copy' ? '' : label;
+        };
+        setState('copy', params.copyLabel);
         let resetTimer;
         button.addEventListener('click', async () => {
             let copied = false;
@@ -125,9 +162,9 @@ if (params.copy) {
                 try { copied = document.execCommand('copy'); } catch {}
                 if (copied) selection.removeAllRanges();
             }
-            button.textContent = copied ? params.copiedLabel : params.copyError;
+            setState(copied ? 'success' : 'error', copied ? params.copiedLabel : params.copyError);
             clearTimeout(resetTimer);
-            resetTimer = setTimeout(() => { button.textContent = params.copyLabel; }, 2000);
+            resetTimer = setTimeout(() => setState('copy', params.copyLabel), 2000);
         });
         container.appendChild(button);
     });

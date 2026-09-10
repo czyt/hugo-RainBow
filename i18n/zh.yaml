@@ -76,3 +76,6 @@
   translation: "关闭氛围"
 - id: rainbow_effects_off
   translation: "开启氛围"
+
+- id: rainbow_toggle_toc
+  translation: "展开或收起目录"

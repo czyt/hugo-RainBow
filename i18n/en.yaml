@@ -76,3 +76,6 @@
   translation: "Disable ambience"
 - id: rainbow_effects_off
   translation: "Enable ambience"
+
+- id: rainbow_toggle_toc
+  translation: "Expand or collapse table of contents"
