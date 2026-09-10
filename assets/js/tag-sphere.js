@@ -12,8 +12,11 @@
     canvas.setAttribute('aria-hidden', 'true');
     stage.appendChild(canvas);
     const context = canvas.getContext('2d');
-    let effects = !motion.matches;
-    try { effects = effects && localStorage.getItem('rainbow-tag-effects') !== 'off'; } catch {}
+    let effects = !motion.matches && panel.dataset.effects !== 'false';
+    try {
+        const preference = localStorage.getItem('rainbow-tag-effects');
+        if (preference === 'on' || preference === 'off') effects = !motion.matches && preference === 'on';
+    } catch {}
     let weatherWidth = 0, weatherHeight = 0, weatherTime = 0;
     let lightningAt = 7000 + Math.random() * 6000;
     let lightningStart = -1000;

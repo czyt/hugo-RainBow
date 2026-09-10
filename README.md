@@ -65,6 +65,7 @@ home = ["HTML", "RSS", "JSON"]
 ```toml
 [params]
 TagLayout = "cloud" # cloud / labels
+TagEffects = true # Default ambience; visitors can toggle it
 ```
 
 该配置仅决定首次访问的默认模式。访客可以在页面上切换 3D 球形标签云与完整标签列表，浏览器会记住选择。球形视图展示最多 60 个热门标签，支持拖动、暂停与键盘选择；减少动态效果时默认使用列表。两种模式都按标签名称生成稳定色相。

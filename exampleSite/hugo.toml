@@ -4,6 +4,7 @@ defaultContentLanguage = "zh"
 title = "RainBow"
 
 [params]
+    TagEffects = true # Default ambience; visitors may disable it.
 TagLayout = "cloud"
 author = "RainBow"
 description = "一个安静、耐读的 Hugo 主题。"

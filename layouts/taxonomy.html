@@ -18,7 +18,7 @@
 
 {{- $maxCount := 1 -}}
 {{- range .Data.Terms.ByCount -}}{{- $maxCount = math.Max $maxCount .Count -}}{{- end -}}
-<section class="tag-sphere-panel" hidden data-default-view="{{ if $cloud }}cloud{{ else }}labels{{ end }}">
+<section class="tag-sphere-panel" hidden data-effects="{{ ne (.Param "TagEffects") false }}" data-default-view="{{ if $cloud }}cloud{{ else }}labels{{ end }}">
     <div class="tag-sphere" aria-label="{{ i18n "rainbow_tag_cloud" }}"></div>
     <div class="tag-sphere-controls">
         <p>{{ i18n "rainbow_sphere_help" }}</p>
