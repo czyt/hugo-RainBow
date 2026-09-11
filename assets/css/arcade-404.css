@@ -1,0 +1,32 @@
+.arcade { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border); font-family: var(--ui-font); }
+.arcade[hidden] { display: none; }
+.arcade-screens { display: grid; }
+.arcade-panel { grid-area: 1 / 1; min-width: 0; align-self: start; }
+/* Inactive panels reserve their space, so the switch never moves between games. */
+.arcade-panel[aria-hidden="true"] { visibility: hidden; pointer-events: none; }
+.arcade .snake-game { margin: 0; padding: 0; border: 0; }
+.arcade button { min-height: 44px; min-width: 44px; padding: 8px 16px; border: 1px solid var(--border); border-radius: 6px; background: var(--code-bg); color: var(--primary); font: 14px/1.4 var(--ui-font); cursor: pointer; touch-action: manipulation; }
+.arcade :is(button, .tetris-board):focus-visible { outline: 2px solid var(--rainbow-accent); outline-offset: 4px; }
+.arcade-switch { display: flex; justify-content: center; gap: 8px; margin-top: 24px; }
+.arcade-switch button { display: grid; place-items: center; width: 44px; height: 44px; padding: 0; background: transparent; border-color: transparent; color: var(--secondary); border-radius: 50%; }
+.arcade-switch button[aria-selected="true"] { color: var(--rainbow-accent); background: var(--rainbow-accent-bg); box-shadow: inset 0 0 0 1px currentColor; }
+.arcade-switch svg { width: 21px; height: 21px; }
+.tetris-console { --lcd-paper: #c4d6a7; --lcd-ink: #303a21; display: grid; justify-items: center; padding: 16px; border-radius: 6px; background: var(--lcd-paper); color: var(--lcd-ink); }
+.tetris-board { width: min(100%, 200px); padding: 4px; border: 2px solid var(--lcd-ink); direction: ltr; }
+.tetris-stage { display: grid; grid-template-columns: repeat(10, 1fr); grid-template-rows: repeat(16, 1fr); aspect-ratio: 10 / 16; gap: 1px; }
+.tetris-cell { position: relative; min-width: 0; min-height: 0; border: 2px solid var(--lcd-ink); opacity: .12; }
+.tetris-cell::after { content: ''; position: absolute; inset: 2px; background: var(--lcd-ink); }
+.tetris-cell--filled { opacity: 1; }
+.tetris-lines { margin-top: 10px; font: 12px/1.5 "Maple Mono", monospace; font-variant-numeric: tabular-nums; }
+.tetris-lines output { margin-inline-start: 8px; }
+.tetris-pad { display: flex; justify-content: center; gap: 8px; margin-top: 16px; direction: ltr; }
+.tetris-pad button { width: 44px; padding: 0; font: 20px/1 sans-serif; }
+.arcade .snake-pad { gap: 8px; }
+.arcade .snake-pad button { font: 20px/1 sans-serif; }
+@media (hover: hover) and (pointer: fine) {
+    .arcade button:hover { background: var(--rainbow-accent-bg); }
+}
+@media (prefers-reduced-motion: no-preference) {
+    .arcade button { transition: transform 120ms cubic-bezier(.23, 1, .32, 1); }
+    .arcade button:active:not(:focus-visible) { transform: scale(.97); }
+}

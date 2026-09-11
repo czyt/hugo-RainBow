@@ -1,0 +1,29 @@
+<section class="snake-game arcade-panel" id="arcade-snake" data-arcade-panel data-snake-game role="tabpanel" aria-labelledby="arcade-tab-snake" aria-hidden="false"
+    data-ready="{{ i18n "rainbow_snake_ready" }}"
+    data-running="{{ i18n "rainbow_snake_running" }}"
+    data-paused="{{ i18n "rainbow_snake_paused" }}"
+    data-over="{{ i18n "rainbow_snake_over" }}"
+    data-won="{{ i18n "rainbow_snake_won" }}"
+    data-start="{{ i18n "rainbow_snake_start" }}"
+    data-pause="{{ i18n "rainbow_snake_pause" }}"
+    data-resume="{{ i18n "rainbow_snake_resume" }}"
+    data-restart="{{ i18n "rainbow_snake_restart" }}">
+    <div class="snake-header">
+        <h2 id="snake-title">{{ i18n "rainbow_snake_title" }}</h2>
+        <span class="snake-score">{{ i18n "rainbow_snake_score" }} <output data-snake-score>0</output></span>
+    </div>
+    <div class="snake-board" data-snake-board tabindex="0" role="group" aria-label="{{ i18n "rainbow_snake_title" }}" aria-describedby="snake-help snake-status">
+        <div class="snake-stage" data-snake-stage aria-hidden="true"></div>
+    </div>
+    <div class="snake-toolbar">
+        <p id="snake-status" role="status" data-snake-status>{{ i18n "rainbow_snake_ready" }}</p>
+        <button type="button" data-snake-toggle>{{ i18n "rainbow_snake_start" }}</button>
+    </div>
+    <p class="snake-help" id="snake-help">{{ i18n "rainbow_snake_help" }}</p>
+    <div class="snake-pad" role="group" aria-label="{{ i18n "rainbow_snake_controls" }}">
+        <button type="button" data-snake-direction="up" aria-label="{{ i18n "rainbow_snake_up" }}">↑</button>
+        <button type="button" data-snake-direction="left" aria-label="{{ i18n "rainbow_snake_left" }}">←</button>
+        <button type="button" data-snake-direction="down" aria-label="{{ i18n "rainbow_snake_down" }}">↓</button>
+        <button type="button" data-snake-direction="right" aria-label="{{ i18n "rainbow_snake_right" }}">→</button>
+    </div>
+</section>

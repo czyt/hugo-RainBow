@@ -7,7 +7,7 @@ trap 'rm -rf "$rainbow_output"' EXIT
   --themesDir "$(dirname "$rainbow_root")" --theme "$(basename "$rainbow_root")" \
   --destination "$rainbow_output" --cacheDir "$rainbow_output/cache" --gc --minify --panicOnWarning
 python3 "$rainbow_root/scripts/check-output.py" "$rainbow_output"
-node --test "$rainbow_root/tests/gpu-spans.test.mjs"
+node --test "$rainbow_root/tests/"*.test.mjs
 # Verify configurable footer and label-view defaults rather than only the demo defaults.
 cat > "$rainbow_output/overrides.toml" <<'CONFIG'
 copyright = "© {year} Example Owner"

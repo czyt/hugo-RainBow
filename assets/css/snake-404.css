@@ -1,0 +1,46 @@
+.status-page--bear:has(.snake-game) { padding-top: 32px; }
+.status-page--bear:has(.snake-game) .status-scene { margin-bottom: 20px; }
+.status-page--bear:has(.snake-game) .status-bear { width: 88px; }
+.status-page--bear:has(.snake-game) .status-digits { font-size: 4.5rem; }
+.status-page--bear:has(.snake-game) .status-signal-label { font-size: .85rem; }
+.snake-game {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    font-family: var(--ui-font);
+}
+.snake-game[hidden] { display: none; }
+.snake-header, .snake-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.snake-header { margin-bottom: 16px; }
+.snake-header h2 { font-size: 17px; font-weight: 500; }
+.snake-score { color: var(--secondary); font-size: 13px; white-space: nowrap; }
+.snake-score output { margin-inline-start: 8px; color: var(--primary); font: 20px "Maple Mono", monospace; font-variant-numeric: tabular-nums; }
+.snake-board { padding: 12px; border-radius: 6px; background: radial-gradient(ellipse at center, #333, #111); touch-action: none; direction: ltr; }
+.snake-stage { display: grid; grid-template-columns: repeat(var(--snake-cols), 1fr); grid-template-rows: repeat(var(--snake-rows), 1fr); gap: 2px; aspect-ratio: var(--snake-cols) / var(--snake-rows); }
+.snake-cell { display: flex; align-items: center; justify-content: center; min-width: 0; min-height: 0; background: rgb(0 0 0 / 15%); color: rgb(255 255 255 / 22%); font: 9px/1 sans-serif; }
+.snake-cell--body { background: rgb(255 255 255 / var(--snake-alpha)); }
+.snake-cell--head { background: #fff; box-shadow: 0 0 12px rgb(255 255 255 / 45%); }
+.snake-cell--food { background: #99ff33; box-shadow: 0 0 14px rgb(153 255 51 / 60%); }
+.snake-toolbar { margin-top: 16px; }
+.snake-toolbar p { color: var(--secondary); font-size: 13px; line-height: 1.6; }
+.snake-game button { min-height: 44px; min-width: 44px; padding: 8px 16px; border: 1px solid var(--border); border-radius: 6px; background: var(--code-bg); color: var(--primary); font: 14px/1.4 var(--ui-font); cursor: pointer; touch-action: manipulation; }
+.snake-toolbar button { flex-shrink: 0; }
+.snake-game :is(button, .snake-board):focus-visible { outline: 2px solid var(--rainbow-accent); outline-offset: 4px; }
+.snake-help { margin-top: 12px; color: var(--secondary); font-size: 12px; line-height: 1.8; }
+.snake-pad { display: grid; grid-template-columns: repeat(3, 48px); gap: 6px; justify-content: center; margin-top: 16px; direction: ltr; }
+.snake-pad button { height: 44px; padding: 0; font: 20px/1 sans-serif; }
+.snake-pad [data-snake-direction="up"] { grid-column: 2; }
+.snake-pad [data-snake-direction="left"] { grid-column: 1; }
+@media (hover: hover) and (pointer: fine) {
+    .snake-game button:hover { background: var(--rainbow-accent-bg); }
+}
+@media (prefers-reduced-motion: no-preference) {
+    .snake-game button:active { transform: scale(.97); }
+    .snake-cell--food { animation: snake-food 1.2s ease-in-out infinite alternate; }
+    @keyframes snake-food { to { transform: scale(.75); opacity: .75; } }
+}
+.snake-game:not([data-state="running"]) .snake-cell--food { animation-play-state: paused; }
+@media (max-width: 480px) {
+    .snake-board { padding: 8px; }
+    .snake-stage { gap: 1px; }
+}

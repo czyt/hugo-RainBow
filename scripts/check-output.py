@@ -42,6 +42,20 @@ for path in root.rglob('*.html'):
             assert (root / url.lstrip('/').split('?')[0]).exists(), f'{path}: missing {url}'
 print('PASS: page routes, comments mapping, independent feature flags, diagrams, math, search and local assets')
 
+# The game must stay exclusive to 404, including its CSS and bundled engine.
+not_found = Page(root / '404.html')
+assert any('data-snake-game' in a for a in not_found.find('section')), '404: Snake game missing'
+assert any('data-snake-board' in a for a in not_found.find('div', tabindex='0')), '404: keyboard game target missing'
+assert len(not_found.find('button', **{'data-snake-direction': 'up'})) == 1, '404: touch controls missing'
+assert any('arcade-404' in a.get('src', '') for a in not_found.find('script')), '404: game script missing'
+assert any('arcade-404' in a.get('href', '') for a in not_found.find('link')), '404: game styles missing'
+for path in root.rglob('*.html'):
+    if path.name != '404.html':
+        assert 'arcade-404' not in path.read_text(), f'{path}: unused game assets loaded'
+assert len(not_found.find('button', role='tab')) == 2, '404: game switch missing'
+assert any('data-tetris-game' in a for a in not_found.find('section')), '404: Tetris missing'
+print('PASS: 404-only arcade assets, game switch, keyboard target and touch controls')
+
 repo = Path(__file__).resolve().parents[1]
 package = json.loads((repo / 'data/rainbow/gpu-lexer.json').read_text())
 assert hashlib.sha256((repo / 'assets/js/vendor/gpu-lexer.js').read_bytes()).hexdigest() == package['sha256'], 'GPU bundle checksum mismatch'

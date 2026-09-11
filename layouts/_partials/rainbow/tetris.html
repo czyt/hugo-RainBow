@@ -1,0 +1,32 @@
+<section class="tetris-game arcade-panel" id="arcade-tetris" data-arcade-panel data-tetris-game role="tabpanel" aria-labelledby="arcade-tab-tetris" aria-hidden="true" inert
+    data-ready="{{ i18n "rainbow_tetris_ready" }}"
+    data-running="{{ i18n "rainbow_tetris_running" }}"
+    data-paused="{{ i18n "rainbow_snake_paused" }}"
+    data-over="{{ i18n "rainbow_tetris_over" }}"
+    data-start="{{ i18n "rainbow_snake_start" }}"
+    data-pause="{{ i18n "rainbow_snake_pause" }}"
+    data-resume="{{ i18n "rainbow_snake_resume" }}"
+    data-restart="{{ i18n "rainbow_snake_restart" }}">
+    <div class="snake-header">
+        <h2>{{ i18n "rainbow_tetris_title" }}</h2>
+        <span class="snake-score">{{ i18n "rainbow_snake_score" }} <output data-tetris-score>0</output></span>
+    </div>
+    <div class="tetris-console">
+        <div class="tetris-board" data-tetris-board tabindex="0" role="group" aria-label="{{ i18n "rainbow_tetris_name" }}" aria-describedby="tetris-help tetris-status">
+            <div class="tetris-stage" data-tetris-stage aria-hidden="true"></div>
+        </div>
+        <p class="tetris-lines">{{ i18n "rainbow_tetris_lines" }} <output data-tetris-lines>0</output></p>
+    </div>
+    <div class="snake-toolbar">
+        <p id="tetris-status" data-tetris-status role="status">{{ i18n "rainbow_tetris_ready" }}</p>
+        <button type="button" data-tetris-toggle>{{ i18n "rainbow_snake_start" }}</button>
+    </div>
+    <p class="snake-help" id="tetris-help">{{ i18n "rainbow_tetris_help" }}</p>
+    <div class="tetris-pad" role="group" aria-label="{{ i18n "rainbow_snake_controls" }}">
+        <button type="button" data-tetris-action="left" aria-label="{{ i18n "rainbow_snake_left" }}" title="{{ i18n "rainbow_snake_left" }}">←</button>
+        <button type="button" data-tetris-action="rotate" aria-label="{{ i18n "rainbow_tetris_rotate" }}" title="{{ i18n "rainbow_tetris_rotate" }}">↻</button>
+        <button type="button" data-tetris-action="right" aria-label="{{ i18n "rainbow_snake_right" }}" title="{{ i18n "rainbow_snake_right" }}">→</button>
+        <button type="button" data-tetris-action="down" aria-label="{{ i18n "rainbow_tetris_down" }}" title="{{ i18n "rainbow_tetris_down" }}">↓</button>
+        <button type="button" data-tetris-action="drop" aria-label="{{ i18n "rainbow_tetris_drop" }}" title="{{ i18n "rainbow_tetris_drop" }}">⤓</button>
+    </div>
+</section>

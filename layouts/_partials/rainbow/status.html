@@ -36,6 +36,9 @@
         {{- end }}
         {{- end }}
     </div>
+    {{- if eq $code "404" }}
+    {{- partial "rainbow/arcade.html" $page }}
+    {{- end }}
 </section>
 
 {{- if eq $code "404" }}

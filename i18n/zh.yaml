@@ -103,3 +103,96 @@
 
 - id: rainbow_tag_list_toggle
   translation: "显示完整标签列表"
+
+- id: rainbow_snake_title
+  translation: "迷路了，玩局贪吃蛇吧"
+
+- id: rainbow_snake_score
+  translation: "得分"
+
+- id: rainbow_snake_ready
+  translation: "吃掉绿点，别咬到自己。"
+
+- id: rainbow_snake_running
+  translation: "可以穿墙，小心蛇身。"
+
+- id: rainbow_snake_paused
+  translation: "已暂停，歇一会儿。"
+
+- id: rainbow_snake_over
+  translation: "咬到自己了，再来一局？"
+
+- id: rainbow_snake_won
+  translation: "你填满了整个棋盘！"
+
+- id: rainbow_snake_start
+  translation: "开始游戏"
+
+- id: rainbow_snake_pause
+  translation: "暂停"
+
+- id: rainbow_snake_resume
+  translation: "继续游戏"
+
+- id: rainbow_snake_restart
+  translation: "再来一局"
+
+- id: rainbow_snake_help
+  translation: "方向键 / WASD 转向，空格暂停。手机可滑动棋盘或点方向按钮。"
+
+- id: rainbow_snake_controls
+  translation: "方向控制"
+
+- id: rainbow_snake_up
+  translation: "向上"
+
+- id: rainbow_snake_down
+  translation: "向下"
+
+- id: rainbow_snake_left
+  translation: "向左"
+
+- id: rainbow_snake_right
+  translation: "向右"
+
+- id: rainbow_snake_noscript
+  translation: "开启 JavaScript 后，可以在这里玩贪吃蛇。"
+
+- id: rainbow_arcade_switch
+  translation: "切换小游戏"
+
+- id: rainbow_arcade_noscript
+  translation: "开启 JavaScript 后，可以在这里玩贪吃蛇和俄罗斯方块。"
+
+- id: rainbow_snake_name
+  translation: "贪吃蛇"
+
+- id: rainbow_tetris_name
+  translation: "俄罗斯方块"
+
+- id: rainbow_tetris_title
+  translation: "歇一会儿，叠叠方块"
+
+- id: rainbow_tetris_ready
+  translation: "填满一行，就能消除。"
+
+- id: rainbow_tetris_running
+  translation: "留点空间，别堆到顶。"
+
+- id: rainbow_tetris_over
+  translation: "堆到顶了，再来一局？"
+
+- id: rainbow_tetris_lines
+  translation: "已消行"
+
+- id: rainbow_tetris_help
+  translation: "← → 移动，↑ 旋转，↓ 下落，空格落到底，P 暂停。也可点下方按钮。"
+
+- id: rainbow_tetris_rotate
+  translation: "旋转"
+
+- id: rainbow_tetris_down
+  translation: "下落一格"
+
+- id: rainbow_tetris_drop
+  translation: "落到底"

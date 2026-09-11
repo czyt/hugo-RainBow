@@ -103,3 +103,96 @@
 
 - id: rainbow_tag_list_toggle
   translation: "Show the complete tag list"
+
+- id: rainbow_snake_title
+  translation: "Lost? Play a little Snake"
+
+- id: rainbow_snake_score
+  translation: "Score"
+
+- id: rainbow_snake_ready
+  translation: "Eat the green food. Avoid your own tail."
+
+- id: rainbow_snake_running
+  translation: "Wrap through the edges. Watch your tail."
+
+- id: rainbow_snake_paused
+  translation: "Paused. Take a breather."
+
+- id: rainbow_snake_over
+  translation: "You hit yourself. Another round?"
+
+- id: rainbow_snake_won
+  translation: "You filled the entire board!"
+
+- id: rainbow_snake_start
+  translation: "Start game"
+
+- id: rainbow_snake_pause
+  translation: "Pause"
+
+- id: rainbow_snake_resume
+  translation: "Resume"
+
+- id: rainbow_snake_restart
+  translation: "Play again"
+
+- id: rainbow_snake_help
+  translation: "Arrow keys / WASD to turn, Space to pause. On mobile, swipe the board or use the buttons."
+
+- id: rainbow_snake_controls
+  translation: "Direction controls"
+
+- id: rainbow_snake_up
+  translation: "Up"
+
+- id: rainbow_snake_down
+  translation: "Down"
+
+- id: rainbow_snake_left
+  translation: "Left"
+
+- id: rainbow_snake_right
+  translation: "Right"
+
+- id: rainbow_snake_noscript
+  translation: "Enable JavaScript to play Snake here."
+
+- id: rainbow_arcade_switch
+  translation: "Switch game"
+
+- id: rainbow_arcade_noscript
+  translation: "Enable JavaScript to play Snake and Tetris here."
+
+- id: rainbow_snake_name
+  translation: "Snake"
+
+- id: rainbow_tetris_name
+  translation: "Tetris"
+
+- id: rainbow_tetris_title
+  translation: "Take a break. Stack some blocks."
+
+- id: rainbow_tetris_ready
+  translation: "Fill a row to clear it."
+
+- id: rainbow_tetris_running
+  translation: "Leave some room. Keep the stack low."
+
+- id: rainbow_tetris_over
+  translation: "Stack full. Another round?"
+
+- id: rainbow_tetris_lines
+  translation: "Lines"
+
+- id: rainbow_tetris_help
+  translation: "← → move, ↑ rotate, ↓ fall, Space to drop, P to pause. Or use the buttons below."
+
+- id: rainbow_tetris_rotate
+  translation: "Rotate"
+
+- id: rainbow_tetris_down
+  translation: "Soft drop"
+
+- id: rainbow_tetris_drop
+  translation: "Hard drop"

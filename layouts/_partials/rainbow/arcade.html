@@ -1,0 +1,19 @@
+<div class="arcade" data-arcade hidden>
+    <div class="arcade-screens">
+        {{- partial "rainbow/snake.html" . }}
+        {{- partial "rainbow/tetris.html" . }}
+    </div>
+    <div class="arcade-switch" role="tablist" aria-label="{{ i18n "rainbow_arcade_switch" }}">
+        <button type="button" id="arcade-tab-snake" role="tab" aria-controls="arcade-snake" aria-selected="true" tabindex="0" aria-label="{{ i18n "rainbow_snake_name" }}" title="{{ i18n "rainbow_snake_name" }}">
+            {{- partial "rainbow/icons/worm.svg" . }}
+        </button>
+        <button type="button" id="arcade-tab-tetris" role="tab" aria-controls="arcade-tetris" aria-selected="false" tabindex="-1" aria-label="{{ i18n "rainbow_tetris_name" }}" title="{{ i18n "rainbow_tetris_name" }}">
+            {{- partial "rainbow/icons/blocks.svg" . }}
+        </button>
+    </div>
+</div>
+<noscript><p class="status-description">{{ i18n "rainbow_arcade_noscript" }}</p></noscript>
+{{- $css := slice (resources.Get "css/snake-404.css") (resources.Get "css/arcade-404.css") | resources.Concat "css/arcade-404.css" | minify | fingerprint }}
+<link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}" crossorigin="anonymous">
+{{- $js := resources.Get "js/arcade-404.js" | js.Build | minify | fingerprint }}
+<script defer src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}" crossorigin="anonymous"></script>
