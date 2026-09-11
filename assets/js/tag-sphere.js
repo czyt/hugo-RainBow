@@ -4,19 +4,14 @@
     const toolbar = document.querySelector('.tag-view-switch');
     if (!list || !panel || !toolbar) return;
     const stage = panel.querySelector('.tag-sphere');
-    const pauseButton = panel.querySelector('.sphere-pause');
+    const viewSwitch = toolbar.querySelector('input');
     const motion = matchMedia('(prefers-reduced-motion: reduce)');
-    const effectsButton = panel.querySelector('.sphere-effects');
     const canvas = document.createElement('canvas');
     canvas.className = 'sphere-weather';
     canvas.setAttribute('aria-hidden', 'true');
     stage.appendChild(canvas);
     const context = canvas.getContext('2d');
     let effects = !motion.matches && panel.dataset.effects !== 'false';
-    try {
-        const preference = localStorage.getItem('rainbow-tag-effects');
-        if (preference === 'on' || preference === 'off') effects = !motion.matches && preference === 'on';
-    } catch {}
     let weatherWidth = 0, weatherHeight = 0, weatherTime = 0;
     let lightningAt = 7000 + Math.random() * 6000;
     let lightningStart = -1000;
@@ -67,21 +62,13 @@
     }
     function setEffects(value) {
         effects = Boolean(value && context);
-        effectsButton.setAttribute('aria-pressed', String(effects));
-        effectsButton.textContent = effects ? effectsButton.dataset.enabledLabel : effectsButton.dataset.disabledLabel;
         stage.classList.toggle('has-atmosphere', effects);
         canvas.hidden = !effects;
         drawWeather();
     }
-    effectsButton.addEventListener('click', () => {
-        setEffects(!effects);
-        try { localStorage.setItem('rainbow-tag-effects', effects ? 'on' : 'off'); } catch {}
-    });
-    const buttons = Array.from(toolbar.querySelectorAll('button'));
     const items = Array.from(list.children).sort((a, b) => Number(b.dataset.count) - Number(a.dataset.count));
     // Limit density in the sphere; the complete, alphabetic list always remains available.
     const featured = items.slice(0, 60).sort((a, b) => a.textContent.localeCompare(b.textContent));
-    panel.querySelector('.tag-sphere-limit').hidden = items.length <= featured.length;
     const points = featured.map((item, index) => {
         const link = item.querySelector('a').cloneNode(true);
         link.className = 'sphere-tag';
@@ -159,19 +146,16 @@
         view = next === 'cloud' ? 'cloud' : 'labels';
         list.hidden = view === 'cloud';
         panel.hidden = view !== 'cloud';
-        buttons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.tagView === view)));
+        viewSwitch.checked = view === 'labels';
         if (remember) { try { localStorage.setItem('rainbow-tag-view', view); } catch {} }
         resize(); schedule();
     }
     function setPaused(value) {
         paused = value;
         if (paused) { velocityYaw = 0; velocityPitch = 0; }
-        pauseButton.setAttribute('aria-pressed', String(paused));
-        pauseButton.textContent = paused ? pauseButton.dataset.resume : pauseButton.dataset.pause;
         schedule();
     }
-    buttons.forEach(button => button.addEventListener('click', () => setView(button.dataset.tagView, true)));
-    pauseButton.addEventListener('click', () => setPaused(!paused));
+    viewSwitch.addEventListener('change', () => setView(viewSwitch.checked ? 'labels' : 'cloud', true));
     stage.addEventListener('pointerenter', event => { if (event.pointerType === 'mouse') { hovered = true; schedule(); } });
     stage.addEventListener('pointerleave', () => { hovered = false; schedule(); });
     stage.addEventListener('focusin', event => { focused = event.target.matches(':focus-visible') ? event.target.closest('a') : null; render(); schedule(); });
@@ -214,7 +198,11 @@
     document.addEventListener('visibilitychange', schedule);
     new IntersectionObserver(entries => { visible = entries[0].isIntersecting; schedule(); }).observe(stage);
     new ResizeObserver(resize).observe(stage);
-    motion.addEventListener('change', () => { if (motion.matches) { setPaused(true); setEffects(false); setView('labels'); } });
+    motion.addEventListener('change', () => {
+        setPaused(motion.matches);
+        setEffects(!motion.matches && panel.dataset.effects !== 'false');
+        if (motion.matches) setView('labels');
+    });
     let initial = panel.dataset.defaultView;
     try { initial = localStorage.getItem('rainbow-tag-view') || initial; } catch {}
     toolbar.hidden = false;

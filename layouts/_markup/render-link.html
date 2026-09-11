@@ -1,0 +1,4 @@
+{{- $url := urls.Parse .Destination -}}
+{{- $siteURL := urls.Parse .Page.Site.BaseURL -}}
+{{- $external := and $url.Host (ne $url.Host $siteURL.Host) (in (slice "http" "https" "") $url.Scheme) -}}
+<a href="{{ .Destination }}"{{ with .Title }} title="{{ . }}"{{ end }}{{ if $external }} class="prose-external"{{ end }}>{{ .Text | safeHTML }}{{ if $external }}<span class="prose-external-mark" aria-hidden="true"></span>{{ end }}</a>

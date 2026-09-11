@@ -35,19 +35,36 @@
 .post-content :is(h4,h5,h6) { font-size: 1.05em; margin: 24px 0 8px; }
 .post-content :is(h1,h2,h3,h4,h5,h6) + :is(h2,h3,h4,h5,h6) { margin-top: 24px; }
 .post-content > :first-child { margin-top: 0; }
-.post-content :is(ul,ol) { padding-inline-start: 1.5em; margin-block: 16px 24px; }
-.post-content li { margin-block: 4px; padding-inline-start: 4px; }
-.post-content li > :is(ul,ol) { margin-block: 8px 12px; }
+.post-content :is(ul,ol) { padding-inline-start: 1.75em; margin-block: 16px 24px; }
+.post-content li { margin-block: 6px; padding-inline-start: .25em; }
+.post-content li::marker { color: var(--secondary); font-variant-numeric: lining-nums tabular-nums; }
+.post-content ol > li::marker { font-weight: 500; }
+.post-content ul { list-style-type: disc; }
+.post-content ul ul { list-style-type: circle; }
+.post-content ul ul ul { list-style-type: square; }
+.post-content ol ol:not([type]) { list-style-type: lower-alpha; }
+.post-content ol ol ol:not([type]) { list-style-type: lower-roman; }
+.post-content li > :is(ul,ol) { margin-block: 8px 12px; padding-inline-start: 1.5em; }
 .post-content li > p { margin-block: 8px 12px; }
+.post-content li > p:last-child { margin-bottom: 0; }
+.post-content li:has(> input[type="checkbox"], > p > input[type="checkbox"]) { list-style: none; }
+.post-content li > input[type="checkbox"], .post-content li > p > input[type="checkbox"] { margin-inline: -1.25em .45em; accent-color: var(--rainbow-accent); }
 .post-content blockquote {
-    padding: 4px 24px;
-    margin: 24px 0;
+    padding: 0;
+    margin: 28px 0;
+    margin-inline: 1.5em .5em;
     font-size: .98em;
     line-height: 1.75;
     letter-spacing: .015em;
     border: 0;
 }
+.post-content blockquote > :first-child { margin-top: 0; }
+.post-content blockquote > p { margin-bottom: 16px; }
 .post-content blockquote > :last-child { margin-bottom: 0; }
+.post-content blockquote blockquote { margin-block: 16px; }
+.post-content blockquote footer { margin-top: 12px; font-size: .85em; color: var(--secondary); }
+.post-content blockquote :is(footer strong,cite) { font-weight: 400; font-style: normal; }
+.post-content blockquote footer strong + cite { margin-inline-start: .5em; }
 .post-content figure { margin-block: 32px; }
 .post-content figure figcaption {
     margin-top: 12px;
@@ -60,14 +77,40 @@
 .post-content figure figcaption p { margin-block: 0; }
 .post-content hr { margin-block: 40px; background: var(--border); }
 .post-content .footnotes { margin-top: 48px; font-size: .86em; line-height: 1.75; color: var(--secondary); }
+.post-content .footnotes hr { height: 1px; margin-block: 0 24px; }
+.post-content .footnotes ol { margin-block: 0; }
+.post-content .footnotes li { margin-block: 12px; }
+.post-content :is(.footnotes li, sup[id]) { scroll-margin-block: 144px 32px; }
+.post-content a.footnote-ref {
+    padding-inline: .2em;
+    font-size: .85em;
+    font-weight: 500;
+    font-variant-numeric: lining-nums tabular-nums;
+    text-decoration: none;
+}
+.post-content a.footnote-ref::before { content: "["; }
+.post-content a.footnote-ref::after { content: "]"; }
+.post-content a.footnote-backref {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 24px;
+    min-height: 24px;
+    margin-inline-start: .25em;
+    text-decoration: none;
+}
+.post-content :is(.footnotes li, sup[id]):target { background: var(--rainbow-accent-bg); border-radius: 3px; }
+.post-content :is(a.footnote-ref,a.footnote-backref):hover { text-decoration: underline; }
+.post-content :is(a.footnote-ref,a.footnote-backref):focus-visible { outline: 2px solid var(--rainbow-accent); outline-offset: 3px; }
 .post-content code { letter-spacing: 0; }
 @media (max-width: 600px) {
     .post-content { font-size: 17px; line-height: 1.75; letter-spacing: 0; }
     .post-header .post-title { font-size: 1.8rem; line-height: 1.35; }
     .post-content h2 { font-size: 1.35em; }
     .post-content h3 { font-size: 1.15em; }
-    .post-content blockquote { padding-inline: 1em; }
+    .post-content blockquote { margin-inline: 1em 0; }
 }
 
 .post-header { margin-block: 24px 32px; padding-bottom: 32px; }
+.post-header-tags { margin-top: 16px; }
 @media (max-width: 600px) { .post-header { margin-block: 20px 24px; padding-bottom: 24px; } .post-content h2 { margin-top: 32px; } }

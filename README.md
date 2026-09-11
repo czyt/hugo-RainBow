@@ -1,8 +1,10 @@
 # RainBow
 
-基于 [PaperMod](https://github.com/adityatelange/hugo-PaperMod) 的 Hugo 主题。正文采用纸色、衬线字体和清晰的阅读层级；导航、目录和控件采用轻磨砂材质。支持浅色、深色和移动端。
+**简体中文** · [English](README.en.md)
 
-保留终端窗口式代码块、侧边目录、图片缩放和 GitHub Issues 评论。标签按名称生成稳定的多色色相，交互动画遵循系统的减少动态效果设置。原始 PaperMod 的 MIT 许可及作者署名保留在仓库中。
+面向长文阅读的 Hugo 主题。正文采用纸色、衬线字体和清晰的阅读层级；导航、目录和控件采用轻磨砂材质。支持浅色、深色和移动端。
+
+保留终端窗口式代码块、侧边目录、图片缩放和 GitHub Issues 评论。标签按名称生成稳定的多色色相，交互动画遵循系统的减少动态效果设置。来源与许可证见下文。
 
 ## 本地预览
 
@@ -62,6 +64,8 @@ home = ["HTML", "RSS", "JSON"]
 
 ## 目录与复制按钮
 
+目录以随标题层级缩进的细导轨连接各项，当前章节用主题强调色标记。顶部导航采用跟随鼠标的共享高亮气泡，离开后返回当前栏目；键盘和减少动态效果模式直接定位。
+
 ```toml
 [params]
 TocOpen = true
@@ -105,10 +109,10 @@ readingFontCSS = "https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/style.m
 ```toml
 [params]
 TagLayout = "cloud" # cloud / labels
-TagEffects = true # Default ambience; visitors can toggle it
+TagEffects = true # Enable tag-cloud ambience
 ```
 
-该配置仅决定首次访问的默认模式。访客可以在页面上切换 3D 球形标签云与完整标签列表，浏览器会记住选择。球形视图展示最多 60 个热门标签，支持拖动、暂停与键盘选择；减少动态效果时默认使用列表。两种模式都按标签名称生成稳定色相。
+该配置仅决定首次访问的默认模式。访客可以用右上角的小熊开关切换 3D 球形标签云与完整标签列表，浏览器会记住选择。球形视图展示最多 60 个热门标签，支持拖动与键盘选择；鼠标悬停、键盘聚焦或切换到列表时停止旋转，减少动态效果时默认使用列表。底部不再显示控制按钮与说明，氛围效果由 `TagEffects` 配置。两种模式都按标签名称生成稳定色相。完整列表与文章顶部标签共用紧凑的“标签名＋内部数量”样式。列表数量默认可见；悬停只增强背景反馈。
 
 ## 页脚自定义
 
@@ -138,7 +142,7 @@ showThemeCredit = true
 
 传递依赖见 `go.mod`、`go.sum` 和 `_vendor/modules.txt`。Mermaid 浏览器端版本固定为 11.12.0，使用严格安全模式。所有 vendored 依赖的许可证保留在 `licenses/`，由 `scripts/vendor.sh` 在重新生成依赖时恢复；该脚本同时移除上游构建工具的 npm 开发清单。
 
-RainBow 在初始化时同步到 PaperMod 提交 `d3768854d00ad003b0a8dbdba254ce9224377a01`，之后独立维护，不再自动或定期合并上游。`upstream` 远程与原始 Git 历史仅用于追溯来源。
+RainBow 源自 [PaperMod](https://github.com/adityatelange/hugo-PaperMod)，原始 MIT 许可及作者署名保留在 `LICENSE`、资源许可头和 `theme.toml` 的 `[original]` 中。初始化时同步到提交 `d3768854d00ad003b0a8dbdba254ce9224377a01`，之后独立维护，不再自动或定期合并上游。`upstream` 远程与原始 Git 历史仅用于追溯来源。
 
 更新模块时，在主题仓库执行并提交锁文件与 `_vendor` 的变化：
 
@@ -160,6 +164,22 @@ hugo --gc --minify
 
 ## 维护边界
 
-PaperMod 的布局和基础资源在初始化时同步，随后由 RainBow 独立维护。定制主要位于 `assets/css/extended/`、`assets/js/rainbow.js` 和 `layouts/_partials/rainbow/`。评论、页脚、目录和首页简介有少量适配，修改时应检查这些位置。
+RainBow 的布局和基础资源由本仓库独立维护。定制主要位于 `assets/css/extended/`、`assets/js/rainbow.js` 和 `layouts/_partials/rainbow/`。评论、页脚、目录和首页简介有少量适配，修改时应检查这些位置。
 
 移除了旧的重复复制按钮初始化、无消费者的访问统计脚本、过时的 MathJax 注入，以及包含硬编码凭据且未使用的 iQiyi 短代码。保留现有 Bilibili 嵌入和新版 Hugo 已移除的 Gist 短代码兼容入口。
+
+## Markdown 阅读样式
+
+正文链接采用细下划线与主题强调色，外链附带小型方向标记；导航、标签、目录与页脚不套用这组正文链接样式。
+
+文章标题与日期下方显示可点击的标签；点击可查看同一标签下的文章，文末不再重复显示。标签名采用中性色，文章标签内部显示同标签文章数量；桌面悬停时以 160ms 淡入，背景以 180ms 轻移填充，标签尺寸不变。键盘聚焦直接显示，触屏数量始终可见，并尊重减少动态效果设置。没有标签的文章不生成空标签区域。
+
+引用采用缩进与低饱和文字区分，带出处的 `blockquote` 短代码支持多段落。列表保留原生编号及起始值，嵌套层级使用圆点、空心圆或字母辅助辨认；不添加编号徽章。脚注使用方括号编号、分隔线和落点高亮，原生锚点支持浏览器返回与键盘焦点。示例见 `exampleSite/content/posts/typography.md`。
+
+## 状态页
+
+404 自动生成，提供返回首页和搜索入口；仅在站点存在 `layout: search` 页面时显示搜索链接。页面遵循站点语言及明暗模式。404 采用小熊插画和逐字恢复的故障文字，进入页面后约 640ms 恢复为状态码；悬停或键盘聚焦返回首页时，小熊恢复表情。减少动态效果时直接显示状态码。说明与导航保持稳定。
+
+需要 500 或 503 页面时，将 `exampleSite/content/500.md`、`exampleSite/content/503.md` 复制到博客的 `content/` 下。Hugo 会生成 `/500.html` 和 `/503.html`，并通过 `layout: status` 使用同一套排版；这两个页面不出现在文章列表、搜索、RSS 和站点地图中，且标记为 noindex。多语言站点需在对应语言的内容目录放置这些文件，URL 按部署路径设置。
+
+这些文件只负责页面内容。实际 HTTP 500/503 响应需由服务器或 CDN 配置，并保留原错误状态码；直接访问静态文件通常返回 200。Cloudflare Pages 会使用根目录的 `404.html` 处理不存在的路径，但不会因为存在 `500.html` 就自动替换平台的 5xx 错误页。不要用 200 重写规则模拟服务器错误。

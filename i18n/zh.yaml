@@ -79,3 +79,27 @@
 
 - id: rainbow_toggle_toc
   translation: "展开或收起目录"
+
+- id: rainbow_status_404_title
+  translation: "没有找到这个页面"
+
+- id: rainbow_status_404_description
+  translation: "链接可能已变更，或地址输入有误。可以回到首页，也可以搜索文章。"
+
+- id: rainbow_status_500_title
+  translation: "页面暂时无法显示"
+
+- id: rainbow_status_500_description
+  translation: "服务器处理请求时遇到了问题。请稍后重试，或先回到首页。"
+
+- id: rainbow_status_503_title
+  translation: "网站暂时无法访问"
+
+- id: rainbow_status_503_description
+  translation: "服务暂时不可用。请稍后再来。"
+
+- id: rainbow_status_search
+  translation: "搜索文章"
+
+- id: rainbow_tag_list_toggle
+  translation: "显示完整标签列表"

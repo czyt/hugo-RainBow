@@ -27,6 +27,13 @@
       {{- partial "post_canonical.html" . -}}
     </div>
     {{- end }}
+    {{- with .GetTerms (.Language.Params.Taxonomies.tag | default "tags") }}
+    <ul class="post-tags post-header-tags rainbow-label-tags" aria-label="{{ i18n "rainbow_tags" }}">
+      {{- range . }}
+      <li style="--tag-hue: {{ mod (hash.FNV32a (.Data.Term | default .LinkTitle)) 360 }};"><a href="{{ .RelPermalink }}"><span class="tag-name">{{ .LinkTitle }}</span><span class="tag-count">{{ len .Pages }}</span></a></li>
+      {{- end }}
+    </ul>
+    {{- end }}
   </header>
   {{- $isHidden := (.Param "cover.hiddenInSingle") | default (.Param "cover.hidden") | default false }}
   {{- partial "cover.html" (dict "cxt" . "IsSingle" true "isHidden" $isHidden) }}
@@ -45,12 +52,6 @@
   {{- partial "extend_post_content.html" . }}
 
   <footer class="post-footer">
-    {{- $tags := .Language.Params.Taxonomies.tag | default "tags" }}
-    <ul class="post-tags">
-      {{- range ($.GetTerms $tags) }}
-      <li><a href="{{ .Permalink }}">{{ .LinkTitle }}</a></li>
-      {{- end }}
-    </ul>
     {{- if (.Param "ShowPostNavLinks") }}
     {{- partial "post_nav_links.html" . }}
     {{- end }}

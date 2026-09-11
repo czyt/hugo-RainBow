@@ -1,0 +1,26 @@
+/* A single stepped rail follows the heading hierarchy. */
+details.toc, details.toc.side, [data-theme="dark"] details.toc {
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    background-image: none;
+    box-shadow: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+}
+details.toc .inner { padding: 0 8px 8px; }
+details.toc .toc-heading { padding-inline-start: 8px; }
+details.toc li { margin: 0; }
+details.toc li ul { padding-inline-start: 16px; }
+details.toc a { padding: 7px 10px 7px 20px; border-radius: 0; font-size: 13px; line-height: 1.5; }
+details.toc a[aria-current="location"] { color: var(--rainbow-accent); font-weight: 500; background: transparent; }
+details.toc a[aria-current="location"]::before { left: 0; top: 5px; bottom: 5px; width: 2px; border-radius: 1px; }
+details.toc a:focus-visible { outline-offset: -2px; }
+.toc-rail-root { position: relative; isolation: isolate; }
+.toc-rail { position: absolute; z-index: -1; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+.toc-rail path { fill: none; stroke: var(--border); stroke-width: 1.5; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+@media (hover: hover) and (pointer: fine) {
+    details.toc a:hover, details.toc a[aria-current="location"]:hover { background: transparent; color: var(--rainbow-accent); }
+}
+[dir="rtl"] details.toc a { padding-inline: 20px 10px; }
+[dir="rtl"] details.toc a[aria-current="location"]::before { left: auto; right: 0; }

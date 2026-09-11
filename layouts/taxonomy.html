@@ -4,10 +4,13 @@
 {{- if .Title }}
 <header class="page-header tag-page-header">
     <h1>{{ if eq .Type "tags" }}{{ i18n "rainbow_tags" }}{{ else }}{{ .Title }}{{ end }}</h1>
-    <div class="tag-view-switch" role="group" aria-label="{{ i18n "rainbow_tag_view" }}" hidden>
-        <button type="button" data-tag-view="cloud" aria-pressed="false">{{ i18n "rainbow_tag_cloud" }}</button>
-        <button type="button" data-tag-view="labels" aria-pressed="true">{{ i18n "rainbow_tags" }}</button>
-    </div>
+    <label class="tag-view-switch" title="{{ i18n "rainbow_tag_list_toggle" }}" hidden>
+        <input id="tag-view-toggle" type="checkbox" role="switch" checked aria-label="{{ i18n "rainbow_tag_list_toggle" }}" aria-controls="tag-cloud tag-labels">
+        <span class="tag-bear" aria-hidden="true">
+            <span class="tag-bear-body"><span class="tag-bear-eyes"></span></span>
+            <span class="tag-bear-track"><span class="tag-bear-thumb"></span></span>
+        </span>
+    </label>
     {{- if .Description }}
     <div class="post-description">
         {{ .Description }}
@@ -19,15 +22,9 @@
 {{- $maxCount := 1 -}}
 {{- range .Data.Terms.ByCount -}}{{- $maxCount = math.Max $maxCount .Count -}}{{- end -}}
 <section class="tag-sphere-panel" hidden data-effects="{{ ne (.Param "TagEffects") false }}" data-default-view="{{ if $cloud }}cloud{{ else }}labels{{ end }}">
-    <div class="tag-sphere" aria-label="{{ i18n "rainbow_tag_cloud" }}"></div>
-    <div class="tag-sphere-controls">
-        <p>{{ i18n "rainbow_sphere_help" }}</p>
-        <button type="button" class="sphere-pause" aria-pressed="false" data-pause="{{ i18n "rainbow_pause" }}" data-resume="{{ i18n "rainbow_resume" }}">{{ i18n "rainbow_pause" }}</button>
-        <button type="button" class="sphere-effects" aria-pressed="true" data-enabled-label="{{ i18n "rainbow_effects_on" }}" data-disabled-label="{{ i18n "rainbow_effects_off" }}">{{ i18n "rainbow_effects_on" }}</button>
-    </div>
-    <p class="tag-sphere-limit" hidden>{{ i18n "rainbow_sphere_limit" }}</p>
+    <div class="tag-sphere" id="tag-cloud" aria-label="{{ i18n "rainbow_tag_cloud" }}"></div>
 </section>
-<ul class="terms-tags" id="tag-labels">
+<ul class="terms-tags rainbow-label-tags" id="tag-labels">
     {{- $type := .Type }}
         {{- range $key, $value := .Data.Terms.Alphabetical }}
             {{- $name := .Name }}
@@ -35,7 +32,7 @@
             {{- with site.GetPage (printf "/%s/%s" $type $name) }}
             {{- $weight := div (math.Log (add $count 1)) (math.Log (add $maxCount 1)) -}}
             <li data-count="{{ $count }}" style="--tag-hue: {{ mod (hash.FNV32a $name) 360 }}; --tag-size: {{ printf "%.3f" (add 0.85 (mul 0.85 $weight)) }}rem;">
-                <a href="{{ .Permalink }}">{{ .LinkTitle }} <sup>{{ $count }}</sup> </a>
+                <a href="{{ .Permalink }}"><span class="tag-name">{{ .LinkTitle }}</span><sup class="tag-count">{{ $count }}</sup></a>
             </li>
         {{- end }}
     {{- end }}

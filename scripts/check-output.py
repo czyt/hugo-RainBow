@@ -47,3 +47,47 @@ package = json.loads((repo / 'data/rainbow/gpu-lexer.json').read_text())
 assert hashlib.sha256((repo / 'assets/js/vendor/gpu-lexer.js').read_bytes()).hexdigest() == package['sha256'], 'GPU bundle checksum mismatch'
 assert any('gpu-highlight' in a.get('src', '') for a in reading.find('script')), 'GPU site option ignored'
 print('PASS: pinned GPU distribution and experimental-mode assets')
+
+# Status documents must remain reachable without becoming articles or search results.
+for code in (404, 500, 503):
+    page = Page(root / f'{code}.html')
+    assert page.find('h1', id='status-title'), f'{code}: missing error heading'
+    assert page.find('meta', name='robots', content='noindex, nofollow'), f'{code}: indexable error page'
+    assert page.find('a', **{'class': 'status-home', 'href': '/'}), f'{code}: missing recovery route'
+    assert not page.find('script', repo='example/comments'), f'{code}: unexpected comments'
+    if code != 404:
+        assert not any(f'/{code}.html' in p['permalink'] for p in index), f'{code}: included in search'
+        for name in ('index.html', 'index.xml', 'sitemap.xml', 'archives/index.html'):
+            assert f'/{code}.html' not in (root / name).read_text(), f'{code}: included in {name}'
+
+typography = Page(root / 'posts/typography/index.html')
+assert typography.find('ol', start='8'), 'Authored list start was lost'
+ids = {a['id'] for _, a in typography.elements if 'id' in a}
+refs = typography.find('a', **{'class': 'footnote-ref'})
+backs = typography.find('a', **{'class': 'footnote-backref'})
+assert len(refs) == 3 and len(backs) == 3, 'Repeated footnote references lost'
+assert all(a['href'][1:] in ids for a in refs + backs), 'Broken footnote target'
+print('PASS: status recovery, noindex, article exclusion, list numbering and footnote links')
+
+tags = Page(root / 'tags/index.html')
+assert tags.find('input', id='tag-view-toggle', type='checkbox', role='switch'), 'Native tag view switch missing'
+assert tags.find('div', id='tag-cloud') and tags.find('ul', id='tag-labels'), 'Tag view targets missing'
+assert not any(a.get('class') in ('sphere-pause', 'sphere-effects', 'tag-sphere-controls', 'tag-sphere-limit') for _, a in tags.elements), 'Removed bottom tag controls returned'
+not_found = Page(root / '404.html')
+assert any('status-404' in a.get('src', '') for a in not_found.find('script')), '404 reveal missing'
+assert not any('status-404' in a.get('src', '') for a in reading.find('script')), '404 animation leaked into articles'
+print('PASS: native tag switch, removed bottom controls and page-scoped 404 script')
+
+assert reading.find('ul', **{'class': 'post-tags post-header-tags rainbow-label-tags'}), 'Header tag links missing'
+assert not reading.find('ul', **{'class': 'post-tags'}), 'Duplicate footer tags returned'
+assert any('/tags/' in a.get('href', '') for a in reading.find('a')), 'No tag archive destinations'
+assert reading.find('span', **{'class': 'tag-count'}), 'Article tag count structure missing'
+print('PASS: header-only article tags and label count structure')
+
+external = typography.find('a', href='https://gohugo.io/')
+assert external and external[0].get('class') == 'prose-external', 'External prose link not classified'
+internal = typography.find('a', href='/posts/reading/')
+assert internal and internal[0].get('class') != 'prose-external', 'Internal prose link misclassified'
+assert typography.find('span', **{'class': 'prose-external-mark', 'aria-hidden': 'true'}), 'External marker missing'
+assert '↗' not in (root / 'posts/typography/index.html').read_text(), 'Decorative arrow can leak into plain-text summaries'
+print('PASS: prose link classification and text-only summary isolation')

@@ -5,7 +5,7 @@ title = "RainBow"
 
 [params]
     CodeHighlighter = "gpu-lexer" # GPU enhancement with automatic Chroma fallback.
-    TagEffects = true # Default ambience; visitors may disable it.
+    TagEffects = true # Enable tag-cloud ambience.
 TagLayout = "cloud"
 author = "RainBow"
 description = "一个安静、耐读的 Hugo 主题。"

@@ -6,11 +6,9 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thanks for taking the time to fill out this enhancement form :)
+        Describe the use case and the expected behavior in RainBow.
+        Documentation: [RainBow README](https://github.com/czyt/hugo-RainBow#readme).
         - Use [Discussions](https://github.com/czyt/hugo-RainBow/discussions) section if you have a query or doubts or any other relevant question.
-        - You may join [Discord community](https://discord.gg/ahpmTvhVmp) to interact with fellow contributors and users
-        - Read project's [Wiki](https://github.com/czyt/hugo-RainBow/wiki) for detailed documentation.
-        - Read project's [FAQs](https://github.com/czyt/hugo-RainBow/wiki/FAQs) section for Frequently asked questions.
         - Search for previous [Issues](https://github.com/czyt/hugo-RainBow/issues)/[Pull Requests](https://github.com/czyt/hugo-RainBow/pulls) if this issue is already reported or fix has been created.
   - type: textarea
     id: what_happened
@@ -21,12 +19,9 @@ body:
     validations:
       required: true
   - type: checkboxes
-    id: terms
+    id: checked_docs
     attributes:
-      label: Code of Conduct
-      description: By submitting this issue, you agree to follow our [Code of Conduct](https://github.com/czyt/hugo-RainBow?tab=coc-ov-file#readme).
+      label: Before submitting
       options:
-        - label: I agree to follow this project's Code of Conduct
+        - label: I checked the RainBow README and existing issues.
           required: true
-    validations:
-      required: true

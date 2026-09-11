@@ -1,0 +1,3 @@
+{{- define "main" }}
+{{- partial "rainbow/status.html" (dict "page" . "code" (string (.Params.statusCode | default 500))) }}
+{{- end }}

@@ -79,3 +79,27 @@
 
 - id: rainbow_toggle_toc
   translation: "Expand or collapse table of contents"
+
+- id: rainbow_status_404_title
+  translation: "Page not found"
+
+- id: rainbow_status_404_description
+  translation: "The link may have changed, or the address may be incorrect. Visit the home page or search for an article."
+
+- id: rainbow_status_500_title
+  translation: "This page is unavailable"
+
+- id: rainbow_status_500_description
+  translation: "The server could not complete the request. Please try again later, or return to the home page."
+
+- id: rainbow_status_503_title
+  translation: "Temporarily unavailable"
+
+- id: rainbow_status_503_description
+  translation: "The service is currently unavailable. Please try again later."
+
+- id: rainbow_status_search
+  translation: "Search articles"
+
+- id: rainbow_tag_list_toggle
+  translation: "Show the complete tag list"

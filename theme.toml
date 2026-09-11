@@ -4,7 +4,7 @@
 name = "RainBow"
 license = "MIT"
 licenselink = "https://github.com/czyt/hugo-RainBow/blob/master/LICENSE"
-description = "A reading-focused PaperMod fork with side TOC, image zoom and GitHub issue comments"
+description = "A reading-focused Hugo theme with side TOC, image zoom and GitHub issue comments"
 homepage = "https://github.com/czyt/hugo-RainBow"
 tags = [
   "responsive",

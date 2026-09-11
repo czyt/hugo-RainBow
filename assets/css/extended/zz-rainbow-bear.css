@@ -1,0 +1,37 @@
+/* Compact native switch: off is the cloud, on is the complete list. */
+.tag-view-switch {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 56px;
+    width: 56px;
+    height: 48px;
+    cursor: pointer;
+    border-radius: 8px;
+}
+.tag-view-switch input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
+.tag-bear { position: relative; width: 44px; height: 40px; pointer-events: none; }
+.tag-bear-body { position: absolute; top: 6px; left: 7px; width: 30px; height: 34px; border-radius: 12px 12px 6px 6px; background: var(--secondary); transform: rotateY(-16deg); }
+.tag-bear-body::before, .tag-bear-body::after { content: ""; position: absolute; top: -4px; width: 11px; height: 11px; border: 3px solid var(--secondary); border-radius: 50%; background: var(--code-bg); }
+.tag-bear-body::before { left: -3px; }
+.tag-bear-body::after { right: -3px; }
+.tag-bear-eyes { position: absolute; top: 9px; left: 8px; width: 3px; height: 4px; border-radius: 50%; background: var(--theme); box-shadow: 11px 0 var(--theme); }
+.tag-bear-track { position: absolute; z-index: 1; bottom: 0; left: 0; width: 44px; height: 23px; border: 1px solid var(--border); border-radius: 20px; background: var(--code-bg); }
+.tag-bear-thumb { position: absolute; top: 2px; left: 2px; width: 17px; height: 17px; border-radius: 50%; background: var(--secondary); }
+.tag-bear-thumb::after { content: ""; position: absolute; width: 5px; height: 3px; top: 6px; left: 6px; border-radius: 50%; background: var(--theme); }
+.tag-view-switch input:checked + .tag-bear .tag-bear-thumb { transform: translateX(21px); background: var(--rainbow-accent); }
+.tag-view-switch input:checked + .tag-bear .tag-bear-body { transform: rotateY(180deg); }
+.tag-view-switch:has(input:focus-visible) { outline: 2px solid var(--rainbow-accent); outline-offset: 3px; }
+@media (prefers-reduced-motion: no-preference) {
+    .tag-bear-thumb { transition: transform 200ms var(--ease-out); }
+    .tag-bear-body { transition: transform 200ms var(--ease-out); }
+}
+.tag-view-switch input:focus-visible + .tag-bear :is(.tag-bear-thumb,.tag-bear-body) { transition: none; }
+@media (hover: hover) and (pointer: fine) {
+    .tag-view-switch:hover { background: var(--ui-hover); }
+}
+@media (forced-colors: active) {
+    .tag-view-switch input { opacity: 1; }
+    .tag-bear { visibility: hidden; }
+}

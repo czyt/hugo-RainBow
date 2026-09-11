@@ -1,0 +1,44 @@
+{{- $code := .code }}
+{{- $page := .page }}
+<section class="status-page{{ if eq $code "404" }} status-page--bear{{ end }}" aria-labelledby="status-title">
+    {{- if eq $code "404" }}
+    <div class="status-scene" aria-hidden="true">
+        <svg class="status-bear" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+            <g transform="matrix(1.34105 0 0 1.34105 -51.157 -1049.694)">
+                <ellipse cx="68.304" cy="827.682" rx="23.762" ry="23.111" class="status-bear-fur"/>
+                <ellipse cx="231.243" cy="827.682" rx="23.762" ry="23.111" class="status-bear-fur"/>
+                <ellipse cx="68.304" cy="827.682" rx="14" ry="14" class="status-bear-muzzle"/>
+                <ellipse cx="231.243" cy="827.682" rx="14" ry="14" class="status-bear-muzzle"/>
+                <path class="status-bear-fur" d="M242.822 893.869c0 61.251-41.365 106.284-94.67 106.284-53.306 0-90.974-45.033-90.974-106.284 0-61.252 37.668-85.951 90.973-85.951 53.306 0 94.67 24.699 94.67 85.95z"/>
+                <path class="status-bear-muzzle" d="M211.925 958.105c0 19.907-28.138 38.819-62.85 38.819-34.71 0-61-18.912-61-38.82 0-19.907 26.29-33.273 61-33.273 34.712 0 62.85 13.366 62.85 33.274z"/>
+                <path class="status-bear-nose" d="M179.114 931.763c0 7.657-19.04 24.493-30.27 24.493s-32.117-16.836-32.117-24.493 20.888-12.477 32.118-12.477 30.27 4.82 30.27 12.477z"/>
+                <path class="status-bear-tears" d="M190.665 893.336v96.221c8.24-4.43 15.761-10.15 22.37-16.971v-79.25h-22.37zM86.056 893.336v80.399c6.546 6.885 14.056 12.592 22.37 16.92v-97.32h-22.37z"/>
+                <path class="status-bear-brows" d="M96.601 864.041a21.271 21.271 0 01-6.78 15.572 21.271 21.271 0 01-16.02 5.644M203.53 864.041a21.271 21.271 0 006.78 15.572 21.271 21.271 0 0016.02 5.644" fill="none" stroke-width="3" stroke-linecap="round"/>
+                <circle class="status-bear-eye status-bear-eye--left" r="11.185" cy="894.081" cx="97.242"/>
+                <circle class="status-bear-eye status-bear-eye--right" r="11.185" cy="894.081" cx="201.851"/>
+            </g>
+        </svg>
+        <div class="status-signal">
+            <span class="status-digits"><span data-status-char="4">4</span><span data-status-char="0">0</span><span data-status-char="4">4</span></span>
+            <span class="status-signal-label">NOT FOUND</span>
+        </div>
+    </div>
+    {{- else }}
+    <p class="status-code">{{ $code }}</p>
+    {{- end }}
+    <h1 id="status-title">{{ if eq $code "404" }}<span class="status-sr-only">404: </span>{{ end }}{{ i18n (printf "rainbow_status_%s_title" $code) }}</h1>
+    <p class="status-description">{{ i18n (printf "rainbow_status_%s_description" $code) }}</p>
+    <div class="status-actions">
+        <a class="status-home" href="{{ $page.Site.Home.RelPermalink }}">{{ i18n "rainbow_home" }}</a>
+        {{- if eq $code "404" }}
+        {{- range first 1 (where $page.Site.RegularPages "Layout" "search") }}
+        <a href="{{ .RelPermalink }}">{{ i18n "rainbow_status_search" }}</a>
+        {{- end }}
+        {{- end }}
+    </div>
+</section>
+
+{{- if eq $code "404" }}
+{{- $script := resources.Get "js/status-404.js" | resources.Minify | fingerprint }}
+<script defer src="{{ $script.RelPermalink }}" integrity="{{ $script.Data.Integrity }}" crossorigin="anonymous"></script>
+{{- end }}

@@ -1,0 +1,24 @@
+/* Reading links only: retain the shared ink accent and quiet the underline. */
+.prose-external-mark { display: none; }
+.post-content a:not(.anchor,.footnote-ref,.footnote-backref) {
+    color: var(--rainbow-accent);
+    text-decoration-line: underline;
+    text-decoration-thickness: 1px;
+    text-decoration-color: color-mix(in srgb, var(--rainbow-accent) 45%, transparent);
+    text-underline-offset: .2em;
+    text-decoration-skip-ink: auto;
+}
+.post-content a > .prose-external-mark {
+    display: inline-block;
+    margin-inline-start: .2em;
+    font-family: var(--ui-font);
+    font-size: .75em;
+    line-height: 1;
+    vertical-align: .08em;
+    text-decoration: none;
+}
+.post-content a:has(img) > .prose-external-mark { display: none; }
+.post-content .prose-external-mark::after { content: "↗"; }
+.post-content a:not(.anchor,.footnote-ref,.footnote-backref):is(:hover,:focus-visible) { text-decoration-color: currentColor; }
+.post-content a:not(.anchor,.footnote-ref,.footnote-backref):focus-visible { outline: 2px solid var(--rainbow-accent); outline-offset: 3px; border-radius: 2px; }
+.post-content a > code { color: inherit; }

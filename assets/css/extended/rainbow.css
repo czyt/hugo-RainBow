@@ -1,4 +1,4 @@
-/* RainBow extends PaperMod's tokens and layout; upstream core styles stay intact. */
+/* RainBow theme tokens and shared layout. */
 :root {
     --main-width: 740px;
     --theme: #fff;
@@ -97,10 +97,6 @@ details.toc a[aria-current="location"] { color: var(--rainbow-accent); font-weig
 .mermaid svg { max-width: 100%; height: auto; background: #fafafa; border-radius: 6px; }
 .medium-zoom-overlay, .medium-zoom-image--opened { z-index: 100; }
 .medium-zoom-overlay, .medium-zoom-image { transition-duration: 200ms; transition-timing-function: var(--ease-out); }
-.not-found { position: static; font-size: 6rem; margin-top: 40px; text-align: center; }
-.not-found-message, .not-found-home { display: block; text-align: center; }
-.not-found-home { margin: 16px auto; text-decoration: underline; text-underline-offset: 4px; }
-.gopher { display: block; max-width: 100%; height: 240px; margin: 0 auto; }
 @media (hover: hover) and (pointer: fine) {
     .post-entry:hover .entry-header h2, #menu a:hover { color: var(--rainbow-accent); }
     .copy-code { opacity: .75; }
@@ -195,29 +191,6 @@ details:focus-within::details-content { transition: none; }
 @media (pointer: coarse) { .post-content .highlight { padding-top: 44px; } .post-content .highlight::after { height: 44px; } .post-content .highlight::before { top: 16px; } .highlight .copy-code { min-height: 44px; } }
 
 .post-content pre code:focus-visible { outline-offset: -3px; }
-/* Stable per-label hues; color is decorative, labels and counts carry meaning. */
-.terms-tags li {
-    --tag-bg: hsl(var(--tag-hue) 62% 92%);
-    --tag-ink: hsl(var(--tag-hue) 58% 25%);
-    --tag-border: hsl(var(--tag-hue) 40% 81%);
-}
-[data-theme="dark"] .terms-tags li {
-    --tag-bg: hsl(var(--tag-hue) 28% 21%);
-    --tag-ink: hsl(var(--tag-hue) 65% 82%);
-    --tag-border: hsl(var(--tag-hue) 28% 34%);
-}
-.terms-tags a { background: var(--tag-bg); color: var(--tag-ink); border-color: var(--tag-border); transition: transform 160ms var(--ease-out); }
-.terms-tags sup { color: inherit; font-variant-numeric: tabular-nums; }
-.terms-tags a:active:not(:focus-visible) { transform: scale(.97); }
-.terms-tags a:focus-visible { transition: none; outline-color: var(--tag-ink); }
-@media (hover: hover) and (pointer: fine) {
-    .terms-tags a:hover:not(:focus-visible) { transform: translateY(-2px); }
-    .terms-tags a:active:not(:focus-visible) { transform: scale(.97); }
-}
-@media (prefers-reduced-motion: reduce) {
-    .terms-tags a { transition: none; }
-    .terms-tags a:hover, .terms-tags a:active { transform: none; }
-}
 
 .visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
 .home-info:has(.entry-header > h1.visually-hidden) { padding: 24px 0 28px; }

@@ -50,7 +50,7 @@
 {{ end }}
 
 <blockquote>
-  <p>{{ .Inner | markdownify }}</p>
+  {{ .Inner | markdownify }}
   <footer>
     <strong>{{ with $.Scratch.Get "bl_author" }}{{ . }}{{ end }}</strong>
     {{ with $.Scratch.Get "bl_source" }}
@@ -63,7 +63,7 @@
       {{ else }}
         {{ with $.Scratch.Get "bl_title" }}
           <cite>
-            {{ $.Scratch.Get "bl_title" }}</a>
+            {{ $.Scratch.Get "bl_title" }}
           </cite>
         {{ end }}
       {{ end }}
