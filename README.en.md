@@ -64,15 +64,18 @@ Math supports the `katex` shortcode and fenced code blocks. Set `math: true` in 
 
 ## Table of contents and copy buttons
 
-A thin stepped rail follows the heading hierarchy and marks the current section with the theme accent. The top navigation uses a shared highlight bubble that follows the pointer and returns to the current route on leave; keyboard and reduced-motion navigation position it immediately.
+Choose `classic` (default) for a thin stepped rail, or `tree` for a ruler with heading branches, a reading-position dot, and pointer previews. Both styles mark the current section with the theme accent. The top navigation uses a shared highlight bubble that follows the pointer and returns to the current route on leave; keyboard and reduced-motion navigation position it immediately.
 
 ```toml
 [params]
 TocOpen = true
+TocStyle = "classic" # classic / tree
 CodeCopyDisplay = "hover" # always / hover
 ```
 
-The table of contents opens by default. Its floating toggle appears on hover or keyboard focus and stays visible on touch devices. In `hover` mode, the code-copy button appears on code-block hover or keyboard focus and remains visible on touch devices.
+`TocOpen` controls the initial disclosure state; wide side TOCs start open. The bookmark toggle stays visible and supports keyboard and touch input. Reduced motion disables movement. Override `TocStyle` in article front matter if needed; unknown values fall back to `classic`. In `hover` mode, the code-copy button appears on code-block hover or keyboard focus and remains visible on touch devices.
+
+The TOC uses a fine native scrollbar that appears on desktop hover or keyboard interaction, with a subtle touch-device indicator. Reserved scrollbar space keeps labels from shifting.
 
 ## Code highlighting
 

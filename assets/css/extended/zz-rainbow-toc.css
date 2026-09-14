@@ -24,3 +24,153 @@ details.toc a:focus-visible { outline-offset: -2px; }
 }
 [dir="rtl"] details.toc a { padding-inline: 20px 10px; }
 [dir="rtl"] details.toc a[aria-current="location"]::before { left: auto; right: 0; }
+
+/* A small bookmark keeps the disclosure discoverable, even when folded. */
+details.toc summary.toc-toggle {
+    position: relative;
+    inset: auto;
+    display: flex;
+    justify-content: flex-start;
+    gap: 8px;
+    width: max-content;
+    min-height: 44px;
+    margin: 0 0 8px;
+    padding: 0 8px 0 0;
+    border: 0;
+    border-radius: 10px;
+    background: transparent;
+    color: var(--secondary);
+    opacity: 1;
+    box-shadow: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    letter-spacing: 0;
+    cursor: pointer;
+    touch-action: manipulation;
+}
+details.toc .toc-heading { display: none; }
+.toc-bookmark {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    margin-inline: 4px;
+    border-radius: 11px;
+    background: var(--code-bg);
+    box-shadow: inset 0 0 0 1px var(--border);
+    color: var(--rainbow-accent);
+}
+details.toc summary.toc-toggle .toc-bookmark svg,
+details.toc.side.left summary.toc-toggle .toc-bookmark svg { transform: none; }
+.toc-bookmark-outline { fill: var(--rainbow-accent-bg); }
+.toc-bookmark-arrow { opacity: 0; transform: translateX(-2px); transform-origin: 12px 10px; }
+.toc-toggle-label { font-size: 12px; font-weight: 500; }
+details.toc:not([open]) .toc-bookmark-lines { opacity: 0; transform: translateX(2px); }
+details.toc:not([open]) .toc-bookmark-arrow { opacity: 1; transform: none; }
+details.toc summary.toc-toggle:active:not(:focus-visible) .toc-bookmark { transform: scale(.96); }
+@media (hover: hover) and (pointer: fine) {
+    details.toc summary.toc-toggle:hover { color: var(--primary); }
+    details.toc summary.toc-toggle:hover .toc-bookmark { transform: translateY(-1px); }
+    details.toc summary.toc-toggle:active .toc-bookmark { transform: scale(.96); }
+}
+@media (prefers-reduced-motion: no-preference) {
+    .toc-bookmark { transition: transform 160ms var(--ease-out); }
+    .toc-bookmark-lines, .toc-bookmark-arrow { transition: transform 180ms var(--ease-out), opacity 120ms ease; }
+}
+details.toc summary.toc-toggle:focus-visible .toc-bookmark,
+details.toc summary.toc-toggle:focus-visible path { transition: none; }
+
+/* Optional tree style: a quiet ruler, one reading dot, and heading-sized branches. */
+details.toc[data-toc-style="tree"] .inner {
+    position: relative;
+    padding: 4px 64px 16px 0;
+    isolation: isolate;
+}
+details.toc[data-toc-style="tree"] ul { padding: 0; }
+details.toc[data-toc-style="tree"] li { margin: 0; }
+details.toc[data-toc-style="tree"] a {
+    min-height: 40px;
+    padding: 10px 0 10px calc(84px + var(--toc-depth, 0) * 8px);
+    font-size: 13px;
+    line-height: 20px;
+    font-weight: 400;
+    text-decoration: none;
+}
+details.toc[data-toc-style="tree"] a[aria-current="location"] { font-weight: 500; }
+details.toc[data-toc-style="tree"] a::before { content: none; }
+.toc-tree-scale { position: absolute; inset: 0; pointer-events: none; z-index: -1; }
+.toc-tree-tick {
+    position: absolute;
+    top: 0;
+    inset-inline-start: 20px;
+    height: 1px;
+    background: var(--secondary);
+    opacity: .45;
+    transform-origin: left center;
+}
+.toc-tree-tick.is-heading { opacity: .65; }
+.toc-tree-tick.is-active { height: 2px; background: var(--rainbow-accent); opacity: 1; }
+.toc-tree-dot { position: absolute; top: 0; inset-inline-start: 0; width: 14px; height: 14px; border-radius: 50%; background: var(--primary); }
+@media (prefers-reduced-motion: no-preference) {
+    [data-toc-style="tree"] .toc-tree-tick,
+    [data-toc-style="tree"] .toc-tree-dot,
+    details.toc[data-toc-style="tree"] a { transition: transform 200ms var(--ease-out); }
+}
+details.toc.toc-keyboard a, .toc-keyboard .toc-tree-tick, .toc-keyboard .toc-tree-dot { transition: none; }
+[dir="rtl"] details.toc[data-toc-style="tree"] .inner { padding-inline: 0 64px; }
+[dir="rtl"] details.toc[data-toc-style="tree"] a { padding-inline: calc(84px + var(--toc-depth, 0) * 8px) 0; }
+[dir="rtl"] .toc-tree-tick { transform-origin: right center; }
+@media (min-width: 1280px) {
+    details.toc.side.left summary.toc-toggle, details.toc.side.right summary.toc-toggle { inset: auto; }
+    details.toc.side[data-toc-style="tree"] {
+        top: 144px;
+        width: min(320px, calc((100vw - var(--main-width)) / 2 - 32px));
+    }
+    details.toc.side[data-toc-style="tree"].right { left: calc(50% + var(--main-width) / 2 + 16px); }
+    details.toc.side[data-toc-style="tree"].left { right: calc(50% + var(--main-width) / 2 + 16px); }
+    details.toc.side[data-toc-style="tree"] .inner { max-height: calc(100dvh - 228px); border-radius: 0; }
+}
+@media (max-width: 1279px) {
+    details.toc[data-toc-style="tree"] { padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    details.toc[data-toc-style="tree"] a { min-height: 44px; padding-block: 10px 14px; }
+}
+@media (forced-colors: active) {
+    .toc-bookmark { outline: 1px solid ButtonText; }
+    .toc-tree-tick, .toc-tree-dot { background: CanvasText; }
+    .toc-tree-tick.is-active { background: LinkText; }
+}
+
+/* Keep native scrolling and a generous drag area behind the fine visible thumb. */
+details.toc { --toc-scroll-thumb: transparent; }
+details.toc .inner, details.toc.side .inner {
+    scrollbar-width: thin;
+    scrollbar-color: var(--toc-scroll-thumb) transparent;
+    scrollbar-gutter: stable;
+    overscroll-behavior: contain;
+}
+details.toc .inner:has(:focus-visible) {
+    --toc-scroll-thumb: var(--secondary);
+}
+@media (hover: hover) and (pointer: fine) {
+    details.toc .inner:hover { --toc-scroll-thumb: color-mix(in srgb, var(--secondary) 45%, transparent); }
+}
+@media (hover: none), (pointer: coarse) {
+    details.toc .inner { --toc-scroll-thumb: color-mix(in srgb, var(--secondary) 30%, transparent); }
+}
+@supports selector(::-webkit-scrollbar) {
+    details.toc .inner, details.toc.side .inner { scrollbar-width: auto; scrollbar-color: auto; }
+    details.toc .inner::-webkit-scrollbar, details.toc.side .inner::-webkit-scrollbar { width: 10px; height: 10px; }
+    details.toc .inner::-webkit-scrollbar-track { background: transparent; }
+    details.toc .inner::-webkit-scrollbar-thumb, details.toc.side .inner::-webkit-scrollbar-thumb {
+        border: 3px solid transparent;
+        border-radius: 10px;
+        background: var(--toc-scroll-thumb);
+        background-clip: padding-box;
+    }
+    details.toc .inner::-webkit-scrollbar-thumb:hover { background-color: var(--secondary); }
+    details.toc .inner::-webkit-scrollbar-button { display: none; width: 0; height: 0; }
+    details.toc .inner::-webkit-scrollbar-corner { background: transparent; }
+}
+@media (forced-colors: active), (prefers-contrast: more) {
+    details.toc .inner, details.toc.side .inner { --toc-scroll-thumb: var(--secondary); scrollbar-color: auto; }
+}

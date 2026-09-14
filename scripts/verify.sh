@@ -14,6 +14,7 @@ copyright = "© {year} Example Owner"
 [params]
 TagLayout = "labels"
 CodeHighlighter = "chroma"
+TocStyle = "tree"
 [params.footer]
 text = "[About](/about/)"
 showThemeCredit = false
@@ -32,5 +33,7 @@ assert 'Example Owner' in footer and '{year}' not in footer
 assert 'About' in footer and 'github.com/czyt/hugo-RainBow' not in footer
 assert 'data-default-view=labels' in (root / 'tags/index.html').read_text()
 assert 'gpu-highlight' not in (root / 'posts/reading/index.html').read_text()
+assert 'data-toc-style=tree' in (root / 'posts/reading/index.html').read_text()
+print('PASS: classic TOC default and configurable tree navigation')
 print('PASS: configurable copyright, year replacement, custom footer, hidden credit and initial tag view')
 PY

@@ -23,6 +23,8 @@ comments = reading.find('script', repo='example/comments')
 assert len(comments) == 1 and comments[0]['issue-term'] == 'pathname', 'Issue mapping changed'
 assert reading.find('main', id='main'), 'Skip-link target missing'
 assert reading.find('details', **{'class': 'toc side right'}), 'Side TOC lost'
+assert reading.find('details', **{'data-toc-style': 'classic'}), 'Default TOC style changed'
+assert reading.find('span', **{'class': 'toc-bookmark'}), 'TOC disclosure bookmark missing'
 assert any('medium-zoom' in a.get('src', '') for a in reading.find('script')), 'Zoom asset missing'
 assert any('katex' in a.get('src', '') for a in reading.find('script')), 'Formula assets missing'
 text = (root / 'posts/reading/index.html').read_text()

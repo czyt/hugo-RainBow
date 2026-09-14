@@ -1,9 +1,18 @@
 {{- $headers := findRE "<h[1-6].*?>(.|\n])+?</h[1-6]>" .Content -}}
 {{- $has_headers := ge (len $headers) 1 -}}
 {{- if $has_headers -}}
-<details class="toc{{ with .Param "TocSide" }} side {{ . }}{{ end }}" {{if (.Param "TocOpen") }} open{{ end }}>
+{{- $style := .Param "TocStyle" | default "classic" -}}
+{{- if not (in (slice "classic" "tree") $style) }}{{ $style = "classic" }}{{ end -}}
+<details class="toc{{ with .Param "TocSide" }} side {{ . }}{{ end }}" data-toc-style="{{ $style }}" {{if (.Param "TocOpen") }} open{{ end }}>
     <summary class="toc-toggle" accesskey="c" title="{{ i18n "rainbow_toggle_toc" }} (Alt + C)" aria-label="{{ i18n "rainbow_toggle_toc" }}">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m9 5 7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="toc-bookmark" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path class="toc-bookmark-outline" d="M7 3.5h10a1.5 1.5 0 0 1 1.5 1.5v15l-6.5-4-6.5 4V5A1.5 1.5 0 0 1 7 3.5Z"/>
+                <path class="toc-bookmark-lines" d="M9 8h6M9 11h4"/>
+                <path class="toc-bookmark-arrow" d="m10 7 3 3-3 3"/>
+            </svg>
+        </span>
+        <span class="toc-toggle-label">{{ i18n "toc" | default "Table of Contents" }}</span>
     </summary>
     <div class="toc-heading" aria-hidden="true">{{ i18n "toc" | default "Table of Contents" }}</div>
 

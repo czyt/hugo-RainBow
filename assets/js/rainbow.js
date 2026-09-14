@@ -1,5 +1,6 @@
 import * as params from '@params';
 import Utterances from 'mods/utterances/js';
+import { initTreeToc } from './toc-tree.js';
 
 const root = document.documentElement;
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
@@ -106,7 +107,9 @@ if (sideToc && matchMedia('(min-width: 1280px)').matches) sideToc.open = true;
 
 // Measure the rendered hierarchy so wrapped titles and either TOC renderer align.
 const tocInner = document.querySelector('.toc .inner');
-if (tocInner && tocLinks.length) {
+if (tocInner && tocLinks.length && tocInner.closest('details').dataset.tocStyle === 'tree') {
+    redrawTocRail = initTreeToc(tocInner, tocLinks, () => activeLink);
+} else if (tocInner && tocLinks.length) {
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     const path = document.createElementNS(svg.namespaceURI, 'path');
     svg.classList.add('toc-rail');
