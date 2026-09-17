@@ -201,6 +201,8 @@ details:focus-within::details-content { transition: none; }
 
 .entry-content { font-family: var(--reading-font); }
 /* Optional GPU tokens use the same terminal surface as server-rendered Chroma. */
+/* GPU markup contains inline tokens, not Chroma's grid rows for whole lines. */
+.post-content pre > code[data-highlighter="gpu-lexer"] { display: block; }
 .post-content .highlight pre.chroma code[data-highlighter="gpu-lexer"] { padding-inline: 18px; }
 .gpu-token-comment { color: #9aa8b7; font-style: italic; }
 .gpu-token-string { color: #b7d995; }

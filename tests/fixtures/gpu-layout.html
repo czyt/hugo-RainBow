@@ -1,0 +1,50 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>GPU highlight layout regression</title>
+<link rel="stylesheet" href="../../assets/css/common/md-content.css">
+<link rel="stylesheet" href="../../assets/css/includes/chroma-styles.css">
+<link rel="stylesheet" href="../../assets/css/extended/rainbow.css">
+<style>body { margin: 20px; } pre { font: 16px/24px monospace; } </style>
+<div class="post-content md-content">
+<div class="highlight"><pre class="chroma"><code id="gpu"><span class="line"><span class="cl">for !aborted &amp;&amp; !streamClosed {
+</span></span><span class="line"><span class="cl">    // 中文 😀
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code id="chroma"><span class="line"><span class="cl">original
+</span></span><span class="line"><span class="cl">    chroma
+</span></span></code></pre></div>
+</div>
+<output id="result">Waiting</output>
+<script type="module">
+import { tokenRuns } from '../../assets/js/gpu-spans.mjs';
+const code = document.querySelector('#gpu');
+const source = code.textContent;
+const height = code.getBoundingClientRect().height;
+// Deterministic parser output: reproduce the flat DOM installed by gpu-highlight.js,
+// independently of WebGPU support, model downloads and inference timing.
+const fragment = document.createDocumentFragment();
+for (const run of tokenRuns(source, [
+    { type: 'keyword', start: 0, end: 3 },
+    { type: 'operator', start: 4, end: 5 },
+    { type: 'keyword', start: 5, end: 12 },
+])) {
+    if (run.type === 'plain') fragment.append(document.createTextNode(run.text));
+    else {
+        const span = document.createElement('span');
+        span.className = `gpu-token-${run.type}`;
+        span.textContent = run.text;
+        fragment.append(span);
+    }
+}
+code.replaceChildren(fragment);
+code.dataset.highlighter = 'gpu-lexer';
+const tokens = [...code.children];
+const checks = {
+    textPreserved: code.textContent === source,
+    heightPreserved: code.getBoundingClientRect().height === height,
+    tokensOnSameLine: tokens.every(token => token.getBoundingClientRect().top === tokens[0].getBoundingClientRect().top),
+    chromaStillGrid: getComputedStyle(document.querySelector('#chroma')).display === 'grid',
+};
+window.layoutChecks = checks;
+document.querySelector('#result').textContent = Object.values(checks).every(Boolean) ? 'PASS' : 'FAIL';
+</script>
