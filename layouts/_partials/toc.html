@@ -16,7 +16,7 @@
     </summary>
     <div class="toc-heading" aria-hidden="true">{{ i18n "toc" | default "Table of Contents" }}</div>
 
-    <div class="inner">
+    <div class="inner"{{ if eq $style "tree" }} data-toc-tree-icon="{{ "images/toc-tree.svg" | relURL }}"{{ end }}>
         {{- if (.Param "UseHugoToc") }}
         {{- .TableOfContents -}}
         {{- else }}

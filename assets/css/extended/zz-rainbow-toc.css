@@ -80,7 +80,7 @@ details.toc summary.toc-toggle:active:not(:focus-visible) .toc-bookmark { transf
 details.toc summary.toc-toggle:focus-visible .toc-bookmark,
 details.toc summary.toc-toggle:focus-visible path { transition: none; }
 
-/* Optional tree style: a quiet ruler, one reading dot, and heading-sized branches. */
+/* Optional tree style: a quiet ruler, one reading icon, and heading-sized branches. */
 details.toc[data-toc-style="tree"] .inner {
     position: relative;
     padding: 4px 64px 16px 0;
@@ -110,7 +110,7 @@ details.toc[data-toc-style="tree"] a::before { content: none; }
 }
 .toc-tree-tick.is-heading { opacity: .65; }
 .toc-tree-tick.is-active { height: 2px; background: var(--rainbow-accent); opacity: 1; }
-.toc-tree-dot { position: absolute; top: 0; inset-inline-start: 0; width: 14px; height: 14px; border-radius: 50%; background: var(--primary); }
+.toc-tree-dot { position: absolute; top: 0; inset-inline-start: 0; width: 16px; height: 16px; margin: 0; border-radius: 0; background: transparent; }
 @media (prefers-reduced-motion: no-preference) {
     [data-toc-style="tree"] .toc-tree-tick,
     [data-toc-style="tree"] .toc-tree-dot,
@@ -136,7 +136,7 @@ details.toc.toc-keyboard a, .toc-keyboard .toc-tree-tick, .toc-keyboard .toc-tre
 }
 @media (forced-colors: active) {
     .toc-bookmark { outline: 1px solid ButtonText; }
-    .toc-tree-tick, .toc-tree-dot { background: CanvasText; }
+    .toc-tree-tick { background: CanvasText; }
     .toc-tree-tick.is-active { background: LinkText; }
 }
 

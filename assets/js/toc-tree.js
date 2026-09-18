@@ -4,7 +4,11 @@ export function initTreeToc(inner, entries, getActiveLink) {
     const scale = document.createElement('div');
     scale.className = 'toc-tree-scale';
     scale.setAttribute('aria-hidden', 'true');
-    const dot = document.createElement('span');
+    const dot = document.createElement('img');
+    dot.src = inner.dataset.tocTreeIcon;
+    dot.alt = '';
+    dot.width = 16;
+    dot.height = 16;
     dot.className = 'toc-tree-dot';
     scale.append(dot);
     const baseLevel = Math.min(...entries.map(({ heading }) => Number(heading.tagName[1])));
@@ -25,7 +29,7 @@ export function initTreeToc(inner, entries, getActiveLink) {
     function paint() {
         const current = rows.find(row => row.link === (previewLink || getActiveLink())) || rows[0];
         const direction = getComputedStyle(inner).direction === 'rtl' ? -1 : 1;
-        dot.style.transform = `translateY(${current.y - 7}px)`;
+        dot.style.transform = `translateY(${current.y - 8}px)`;
         rows.forEach(row => {
             const distance = (row.y - current.y) / 76;
             const shift = 56 * Math.exp(-distance * distance);
