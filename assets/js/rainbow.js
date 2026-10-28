@@ -372,11 +372,13 @@ if (archiveFilter) {
     let active = null;
     let orbitFrame = 0, orbitPaint = 0;
     const orbitMotion = matchMedia('(prefers-reduced-motion: reduce)');
+    let orbitStart = 0;
     const drawOrbits = (time = 0) => {
         orbitFrame = 0;
         if (!orbitMotion.matches && !document.hidden) scheduleOrbits();
         if (time && time - orbitPaint < 40) return;
         orbitPaint = time;
+        if (!orbitStart) orbitStart = time;
         if (!context) return;
         const width = window.innerWidth, height = window.innerHeight;
         const ratio = Math.min(window.devicePixelRatio || 1, 2);
@@ -395,6 +397,8 @@ if (archiveFilter) {
         const count = Math.min(visible.length, 220);
         const indices = new Set(Array.from({ length: count }, (_, index) => index));
         if (activeIndex >= 0) indices.add(activeIndex);
+        const exposure = orbitMotion.matches ? 1 : Math.min(1, Math.max(0, (time - orbitStart) / 1800));
+        const growth = 1 - Math.pow(1 - exposure, 3);
         const extent = Math.max(width, height);
         const cx = width * (width < 700 ? .82 : .73), cy = height * .36;
         for (const index of indices) {
@@ -402,14 +406,14 @@ if (archiveFilter) {
             const spread = ((index * 89) % Math.max(visible.length, 1)) / Math.max(visible.length - 1, 1);
             const radius = extent * (.08 + spread * 1.05);
             const start = ((index * 2.399963) % (Math.PI * 2)) + (orbitMotion.matches ? 0 : time * .000045 * (index % 2 ? 1 : -1));
-            const length = .3 + (index * 17 % 85) / 100;
+            const length = (.3 + (index * 17 % 85) / 100) * growth;
             context.beginPath();
             context.ellipse(cx, cy, radius * 1.06, radius * .82, -.12, start, start + length);
             context.strokeStyle = highlighted ? accent : ink;
             context.globalAlpha = highlighted ? .95 : .18 + (index % 4) * .045;
             context.lineWidth = highlighted ? 1.6 : .8;
             context.stroke();
-            if (index % 3 === 0 || highlighted) {
+            if (index % 3 === 0 || highlighted || growth < 1) {
                 const a = start + length;
                 const rx = radius * 1.06, ry = radius * .82;
                 const dx = Math.cos(a) * rx, dy = Math.sin(a) * ry;

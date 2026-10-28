@@ -106,6 +106,18 @@
             const progress = Math.min(1, Math.max(0, scrollY / max));
             about.style.setProperty('--fall-progress', `${progress * 100}%`);
             velocity *= .92;
+            const arrival = reduced.matches ? 1 : Math.min(1, Math.max(0, (time - started) / 1100));
+            if (arrival < 1) {
+                const title = about.querySelector('.post-title').getBoundingClientRect();
+                const x = title.right, targetY = title.top + title.height * .65;
+                const y = -100 + (targetY + 100) * arrival * arrival;
+                const tail = ctx.createLinearGradient(x, y, x, y - 90);
+                tail.addColorStop(0, `rgba(${color},.9)`); tail.addColorStop(1, `rgba(${color},0)`);
+                ctx.strokeStyle = tail; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x, y - 90); ctx.stroke();
+                const glow = ctx.createRadialGradient(x, y, 0, x, y, 22);
+                glow.addColorStop(0, `rgba(${color},1)`); glow.addColorStop(1, `rgba(${color},0)`);
+                ctx.fillStyle = glow; ctx.beginPath(); ctx.arc(x, y, 22, 0, Math.PI * 2); ctx.fill();
+            }
             for (let i = 0; i < 340; i++) {
                 const x = random(i + 5) * width, y = (random(i + 202) * (height + 100) - (reduced.matches ? 0 : (time * (.012 + random(i) * .035) + scrollY * (.12 + random(i) * .25))) % (height + 100) + height + 100) % (height + 100) - 50;
                 const radius = .4 + random(i + 60) * 1.4;
