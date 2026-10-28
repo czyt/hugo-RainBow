@@ -61,6 +61,28 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 });
 
 const topLink = document.getElementById('top-link');
+const progressBar = document.querySelector('.reading-progress-bar');
+const articleContent = document.querySelector('.post-content');
+const readingControls = document.querySelector('.reading-controls');
+if (readingControls && articleContent) {
+    const sizes = ['small', 'default', 'large'];
+    const setReadingSize = size => {
+        const selected = sizes.includes(size) ? size : 'default';
+        root.dataset.readingSize = selected;
+        readingControls.querySelectorAll('button').forEach(button => {
+            button.setAttribute('aria-pressed', String(button.dataset.readingSize === selected));
+        });
+        try { localStorage.setItem('rainbow-reading-size', selected); } catch {}
+    };
+    let savedSize;
+    try { savedSize = localStorage.getItem('rainbow-reading-size'); } catch {}
+    setReadingSize(savedSize);
+    readingControls.hidden = false;
+    readingControls.addEventListener('click', event => {
+        const button = event.target.closest('button[data-reading-size]');
+        if (button) setReadingSize(button.dataset.readingSize);
+    });
+}
 const tocLinks = Array.from(document.querySelectorAll('.toc a[href^="#"]')).flatMap(link => {
     let heading;
     try { heading = document.getElementById(decodeURIComponent(link.hash.slice(1))); } catch { return []; }
@@ -73,6 +95,12 @@ function updateScroll() {
     scrollScheduled = false;
     root.classList.toggle('is-scrolled', window.scrollY > 16);
     topLink?.classList.toggle('hidden', window.scrollY < window.innerHeight);
+    if (progressBar && articleContent) {
+        const rect = articleContent.getBoundingClientRect();
+        const distance = Math.max(1, rect.height - window.innerHeight);
+        const progress = Math.max(0, Math.min(1, -rect.top / distance));
+        progressBar.style.transform = `scaleX(${progress})`;
+    }
     let current = tocLinks[0];
     const headingOffset = tocLinks[0] ? parseFloat(getComputedStyle(tocLinks[0].heading).scrollMarginTop) || 100 : 100;
     for (const entry of tocLinks) {
@@ -100,6 +128,10 @@ window.addEventListener('scroll', () => {
     }
 }, { passive: true });
 updateScroll();
+if (progressBar) window.addEventListener('resize', updateScroll, { passive: true });
+if (progressBar && articleContent && 'ResizeObserver' in window) {
+    new ResizeObserver(updateScroll).observe(articleContent);
+}
 
 // Native details remain collapsible on smaller screens; wide side TOCs start open.
 const sideToc = document.querySelector('details.toc.side');
@@ -320,4 +352,111 @@ if (params.typewriter && !reducedMotion.matches) {
             timer = setTimeout(tick, 250);
         }
     }
+}
+
+// Archive filtering keeps normal links usable when JavaScript is unavailable.
+const archiveFilter = document.querySelector('.archive-filter');
+if (archiveFilter) {
+    const select = archiveFilter.querySelector('select');
+    const status = archiveFilter.querySelector('.archive-filter-status');
+    const empty = document.querySelector('.archive-empty');
+    const years = Array.from(document.querySelectorAll('.archive-year'));
+    const entries = Array.from(document.querySelectorAll('.archive-entry')).map(element => {
+        let tags = [];
+        try { tags = JSON.parse(element.dataset.archiveTags); } catch {}
+        return { element, tags: Array.isArray(tags) ? tags : [] };
+    });
+    // Draw a bounded set of background orbits; the focused row gets the bright track.
+    const canvas = document.querySelector('.archive-orbits');
+    const context = canvas?.getContext('2d');
+    let active = null;
+    let orbitFrame = 0;
+    const drawOrbits = () => {
+        orbitFrame = 0;
+        if (!context) return;
+        const width = window.innerWidth, height = window.innerHeight;
+        const ratio = Math.min(window.devicePixelRatio || 1, 2);
+        if (canvas.width !== Math.round(width * ratio) || canvas.height !== Math.round(height * ratio)) {
+            canvas.width = Math.round(width * ratio);
+            canvas.height = Math.round(height * ratio);
+        }
+        context.setTransform(ratio, 0, 0, ratio, 0, 0);
+        context.clearRect(0, 0, width, height);
+        const style = getComputedStyle(root);
+        const accent = style.getPropertyValue('--rainbow-accent').trim();
+        const ink = style.getPropertyValue('--secondary').trim();
+        const visible = entries.filter(entry => !entry.element.hidden);
+        const activeIndex = visible.findIndex(entry => entry.element === active);
+        // Limit work on very large archives while always retaining the active orbit.
+        const indices = new Set(visible.slice(0, 48).map((_, index) => index));
+        if (activeIndex >= 0) indices.add(activeIndex);
+        for (const index of indices) {
+            const highlighted = index === activeIndex;
+            const lane = index % 12;
+            const radiusX = Math.max(width * .25, 180) + lane * 18;
+            const radiusY = Math.max(height * .22, 140) + lane * 14;
+            const angle = (index * 0.61) % (Math.PI * 2);
+            context.beginPath();
+            context.ellipse(width * .84, height * .56, radiusX, radiusY, -.42, angle, angle + 1.1 + (index % 4) * .23);
+            context.strokeStyle = highlighted ? accent : ink;
+            context.globalAlpha = highlighted ? .48 : .065;
+            context.lineWidth = highlighted ? 1.5 : 1;
+            context.stroke();
+        }
+        context.globalAlpha = 1;
+    };
+    const scheduleOrbits = () => { if (!orbitFrame) orbitFrame = requestAnimationFrame(drawOrbits); };
+    if (context) {
+        entries.forEach(({ element }) => {
+            element.addEventListener('pointerenter', event => { if (event.pointerType === 'mouse') { active = element; scheduleOrbits(); } });
+            element.addEventListener('pointerleave', () => { active = null; scheduleOrbits(); });
+            element.addEventListener('focusin', () => { active = element; scheduleOrbits(); });
+            element.addEventListener('focusout', () => { active = null; scheduleOrbits(); });
+        });
+        window.addEventListener('resize', scheduleOrbits, { passive: true });
+        new MutationObserver(scheduleOrbits).observe(root, { attributes: true, attributeFilter: ['data-theme'] });
+    }
+    const applyFilter = tag => {
+        let count = 0;
+        entries.forEach(({ element, tags }) => {
+            const shown = !tag || tags.includes(tag);
+            element.hidden = !shown;
+            if (shown) count++;
+        });
+        years.forEach(year => {
+            year.querySelectorAll('.archive-month').forEach(month => {
+                month.hidden = !month.querySelector('.archive-entry:not([hidden])');
+            });
+            year.hidden = !year.querySelector('.archive-entry:not([hidden])');
+            const yearLink = document.querySelector(`.archive-years a[href="#${year.querySelector('.archive-year-header').id}"]`);
+            if (yearLink) yearLink.hidden = year.hidden;
+        });
+        empty.hidden = count !== 0;
+        status.textContent = status.dataset.template.replace('{count}', String(count));
+        scheduleOrbits();
+    };
+    const readLocation = () => {
+        const tag = new URL(location.href).searchParams.get('tag') || '';
+        const missing = select.querySelector('[data-missing]');
+        missing?.remove();
+        if (tag && !Array.from(select.options).some(option => option.value === tag)) {
+            const option = document.createElement('option');
+            option.value = tag;
+            option.textContent = tag;
+            option.dataset.missing = '';
+            select.appendChild(option);
+        }
+        select.value = tag;
+        applyFilter(tag);
+    };
+    select.addEventListener('change', () => {
+        const url = new URL(location.href);
+        if (select.value) url.searchParams.set('tag', select.value);
+        else url.searchParams.delete('tag');
+        history.pushState(null, '', url);
+        applyFilter(select.value);
+    });
+    window.addEventListener('popstate', readLocation);
+    archiveFilter.hidden = false;
+    readLocation();
 }

@@ -18,7 +18,13 @@ class Page(HTMLParser):
 root = Path(sys.argv[1])
 for name in ['index.html', 'posts/reading/index.html', 'posts/without-copy/index.html', 'search/index.html', 'archives/index.html', 'tags/index.html', '404.html', 'index.xml']:
     assert (root / name).is_file(), f'Missing output: {name}'
+archive = Page(root / 'archives/index.html')
+assert archive.find('select', id='archive-tag'), 'Archive tag filter missing'
+assert archive.find('canvas', **{'class': 'archive-orbits'}), 'Archive orbit canvas missing'
+assert archive.find('nav', **{'class': 'archive-years'}), 'Archive year navigation missing'
+assert all('data-archive-tags' in attrs for attrs in archive.find('div', **{'class': 'archive-entry'})), 'Archive tag data missing'
 reading = Page(root / 'posts/reading/index.html')
+assert reading.find('details', **{'class': 'related-tags'}), 'Related tag shelf missing'
 comments = reading.find('script', repo='example/comments')
 assert len(comments) == 1 and comments[0]['issue-term'] == 'pathname', 'Issue mapping changed'
 assert reading.find('main', id='main'), 'Skip-link target missing'

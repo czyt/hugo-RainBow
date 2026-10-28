@@ -1,0 +1,82 @@
+/* A quiet, palette-aware sky for navigation pages; articles keep their paper surface. */
+body { isolation: isolate; }
+.sky-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+    display: none;
+}
+.list .sky-backdrop { display: block; }
+.sky-stars {
+    position: absolute;
+    inset: -260px -360px;
+    opacity: .38;
+    background-image:
+        radial-gradient(1px 1px at 13% 22%, var(--rainbow-accent), transparent),
+        radial-gradient(1px 1px at 72% 39%, var(--secondary), transparent),
+        radial-gradient(1.5px 1.5px at 44% 78%, var(--rainbow-accent), transparent);
+    background-size: 360px 260px;
+    animation: rainbow-sky-drift 160s linear infinite;
+}
+@keyframes rainbow-sky-drift {
+    to { transform: translate3d(-360px, -260px, 0); }
+}
+
+.reading-progress {
+    position: fixed;
+    z-index: 100;
+    inset: 0 0 auto;
+    height: 3px;
+    pointer-events: none;
+}
+.reading-progress-bar {
+    width: 100%;
+    height: 100%;
+    background: var(--rainbow-accent);
+    transform: scaleX(0);
+    transform-origin: left center;
+}
+[dir="rtl"] .reading-progress-bar { transform-origin: right center; }
+
+.reading-controls:not([hidden]) {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 4px;
+    color: var(--secondary);
+    font: 13px var(--ui-font);
+}
+.reading-controls span { margin-inline-end: 6px; }
+.reading-controls button {
+    min-width: 44px;
+    min-height: 44px;
+    border: 1px solid transparent;
+    border-radius: 9px;
+    color: var(--secondary);
+    font: inherit;
+    cursor: pointer;
+}
+.reading-controls button[aria-pressed="true"] {
+    color: var(--rainbow-accent);
+    background: var(--ui-selected);
+    border-color: var(--glass-border);
+}
+.reading-controls button:focus-visible { outline: 2px solid var(--rainbow-accent); outline-offset: 2px; }
+:root[data-reading-size="small"] .post-content { font-size: 16px; }
+:root[data-reading-size="large"] .post-content { font-size: 20px; }
+
+@media (hover: hover) and (pointer: fine) {
+    .post-entry {
+        transition: transform 200ms var(--ease-out), border-color 200ms ease, box-shadow 200ms ease;
+    }
+    .post-entry:hover {
+        box-shadow: var(--ui-shadow);
+    }
+    .reading-controls button:hover { background: var(--ui-hover); }
+}
+@media (prefers-reduced-motion: reduce) {
+    .sky-stars { animation: none; }
+    .post-entry, .post-entry:hover, .post-entry:focus-within { transform: none; transition: none; }
+}

@@ -6,6 +6,10 @@ A Hugo theme for long-form reading. Paper tones, serif reading typography and cl
 
 Includes terminal-style code blocks, a side table of contents, image zoom and GitHub Issues comments. Tags receive stable colors derived from their names, and motion respects the system's reduced-motion preference. See the provenance and license notes below.
 
+The starry backdrop and reading progress interactions are inspired by [sora-to-ki](https://github.com/timo9378/sora-to-ki), adapted to RainBow's light and dark palettes and long-form reading.
+
+The star field follows the theme palette on listing pages, and a progress line tracks article reading. Readers can adjust text size above the article; the choice is saved locally. Articles can reveal related posts by tag; archives offer year links, tag filters encoded in the URL and orbits that respond to the selected entry. Stars stop moving when reduced motion is enabled.
+
 ## Local preview
 
 **Hugo extended 0.165.0** is recommended. CI verifies 0.165.0 and 0.166.0; the minimum supported version is 0.158.0.

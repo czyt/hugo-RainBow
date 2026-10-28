@@ -196,3 +196,29 @@
 
 - id: rainbow_tetris_drop
   translation: "Hard drop"
+- id: rainbow_text_size
+  translation: "Text size"
+- id: rainbow_text_small
+  translation: "Small text"
+- id: rainbow_text_default
+  translation: "Default text size"
+- id: rainbow_text_large
+  translation: "Large text"
+
+- id: rainbow_archive_filter
+  translation: "Filter by tag"
+
+- id: rainbow_archive_all
+  translation: "All tags"
+
+- id: rainbow_archive_count
+  translation: "{count} posts"
+
+- id: rainbow_archive_empty
+  translation: "No posts match this tag."
+
+- id: rainbow_related_tags
+  translation: "More posts with these tags"
+
+- id: rainbow_archive_years
+  translation: "Jump to year"

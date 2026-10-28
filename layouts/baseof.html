@@ -21,6 +21,10 @@
 {{- else }}
 <body id="top">
 {{- end }}
+    <div class="sky-backdrop" aria-hidden="true"><div class="sky-stars"></div>{{ if eq .Layout "archives" }}<canvas class="archive-orbits"></canvas>{{ end }}</div>
+    {{- if and .IsPage (not (in (slice "archives" "search" "status") .Layout)) }}
+    <div class="reading-progress" aria-hidden="true"><div class="reading-progress-bar"></div></div>
+    {{- end }}
     {{ partialCached "header.html" . .Page -}}
     <a class="skip-link" href="#main">{{ i18n "rainbow_skip" }}</a>
     <main class="main" id="main" tabindex="-1">

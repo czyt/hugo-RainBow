@@ -35,6 +35,26 @@
     </ul>
     {{- end }}
   </header>
+  {{- $current := . }}
+  {{- $terms := .GetTerms (.Language.Params.Taxonomies.tag | default "tags") }}
+  {{- $hasRelated := false }}
+  {{- range $terms }}{{ if gt (len (where .Pages "RelPermalink" "ne" $current.RelPermalink)) 0 }}{{ $hasRelated = true }}{{ end }}{{ end }}
+  {{- if $hasRelated }}
+  <details class="related-tags">
+    <summary>{{ i18n "rainbow_related_tags" | default "More posts with these tags" }}</summary>
+    <div class="related-tags-content">
+      {{- range $terms }}
+      {{- $related := where .Pages "RelPermalink" "ne" $current.RelPermalink }}
+      {{- if $related }}
+      <section>
+        <h2><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></h2>
+        <ul>{{ range first 5 $related }}<li><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a><time datetime="{{ .PublishDate.Format "2006-01-02" }}">{{ .PublishDate.Format "2006-01-02" }}</time></li>{{ end }}</ul>
+      </section>
+      {{- end }}
+      {{- end }}
+    </div>
+  </details>
+  {{- end }}
   {{- $isHidden := (.Param "cover.hiddenInSingle") | default (.Param "cover.hidden") | default false }}
   {{- partial "cover.html" (dict "cxt" . "IsSingle" true "isHidden" $isHidden) }}
   {{- if (.Param "ShowToc") }}
@@ -42,6 +62,12 @@
   {{- end }}
 
   {{- if .Content }}
+  <div class="reading-controls" role="group" aria-label="{{ i18n "rainbow_text_size" | default "Text size" }}" hidden>
+    <span>{{ i18n "rainbow_text_size" | default "Text size" }}</span>
+    <button type="button" data-reading-size="small" aria-label="{{ i18n "rainbow_text_small" | default "Small text" }}">A−</button>
+    <button type="button" data-reading-size="default" aria-label="{{ i18n "rainbow_text_default" | default "Default text size" }}">A</button>
+    <button type="button" data-reading-size="large" aria-label="{{ i18n "rainbow_text_large" | default "Large text" }}">A+</button>
+  </div>
   <div class="post-content md-content">
     {{- if not (.Param "disableAnchoredHeadings") }}
     {{- partial "anchored_headings.html" .Content -}}

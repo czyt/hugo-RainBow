@@ -196,3 +196,29 @@
 
 - id: rainbow_tetris_drop
   translation: "落到底"
+- id: rainbow_text_size
+  translation: "字号"
+- id: rainbow_text_small
+  translation: "小字号"
+- id: rainbow_text_default
+  translation: "默认字号"
+- id: rainbow_text_large
+  translation: "大字号"
+
+- id: rainbow_archive_filter
+  translation: "按标签筛选"
+
+- id: rainbow_archive_all
+  translation: "全部标签"
+
+- id: rainbow_archive_count
+  translation: "{count} 篇文章"
+
+- id: rainbow_archive_empty
+  translation: "没有符合该标签的文章。"
+
+- id: rainbow_related_tags
+  translation: "查看同标签文章"
+
+- id: rainbow_archive_years
+  translation: "跳转年份"

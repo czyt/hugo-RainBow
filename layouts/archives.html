@@ -33,7 +33,22 @@
 {{- $pages = site.RegularPages }}
 {{- end }}
 
-{{- range $pages.GroupByPublishDate "2006" }}
+{{- $groups := $pages.GroupByPublishDate "2006" }}
+<nav class="archive-years" aria-label="{{ i18n "rainbow_archive_years" | default "Jump to year" }}">
+  {{- range $groups }}{{ if ne .Key "0001" }}<a href="#{{ .Key }}">{{ .Key }} <span>{{ len .Pages }}</span></a>{{ end }}{{ end }}
+</nav>
+{{- with site.Taxonomies.tags }}
+<div class="archive-filter" hidden>
+  <label for="archive-tag">{{ i18n "rainbow_archive_filter" | default "Filter by tag" }}</label>
+  <select id="archive-tag">
+    <option value="">{{ i18n "rainbow_archive_all" | default "All tags" }}</option>
+    {{- range .Alphabetical }}<option value="{{ .Page.LinkTitle }}">{{ .Page.LinkTitle }}</option>{{ end }}
+  </select>
+  <span class="archive-filter-status" role="status" aria-live="polite" data-template="{{ i18n "rainbow_archive_count" | default "{count} posts" }}"></span>
+</div>
+{{- end }}
+<p class="archive-empty" hidden>{{ i18n "rainbow_archive_empty" | default "No posts match this tag." }}</p>
+{{- range $groups }}
 {{- if ne .Key "0001" }}
 <div class="archive-year">
   {{- $year := replace .Key "0001" "" }}
@@ -55,7 +70,9 @@
     <div class="archive-posts">
       {{- range .Pages }}
       {{- if eq .Kind "page" }}
-      <div class="archive-entry">
+      {{- $tags := slice }}
+      {{- range .GetTerms (.Language.Params.Taxonomies.tag | default "tags") }}{{ $tags = $tags | append .LinkTitle }}{{ end }}
+      <div class="archive-entry" data-archive-tags="{{ $tags | jsonify }}">
         <time class="archive-day" datetime="{{ .PublishDate.Format "2006-01-02" }}">{{ .PublishDate.Format "01-02" }}</time>
         <h3 class="archive-entry-title entry-hint-parent">
           {{- .Title | markdownify }}
