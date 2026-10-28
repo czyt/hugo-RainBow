@@ -21,7 +21,7 @@
 {{- else }}
 <body id="top">
 {{- end }}
-    <div class="sky-backdrop" aria-hidden="true"><div class="sky-stars"></div>{{ if eq .Layout "archives" }}<canvas class="archive-orbits"></canvas>{{ else }}<canvas class="space-depth"></canvas>{{ end }}</div>
+    <div class="sky-backdrop" aria-hidden="true"><div class="sky-stars"></div>{{ if .IsHome }}<div class="sky-planet"><span></span></div>{{ end }}{{ if eq .Layout "archives" }}<canvas class="archive-orbits"></canvas>{{ else }}<canvas class="space-depth"></canvas>{{ end }}</div>
     {{- if and .IsPage (not (in (slice "archives" "search" "status") .Layout)) }}
     <div class="reading-progress" aria-hidden="true"><div class="reading-progress-bar"></div></div>
     {{- end }}

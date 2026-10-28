@@ -22,3 +22,6 @@
 {{- $space := resources.Get "js/space-depth.js" | minify | fingerprint -}}
 <script defer src="{{ $space.RelPermalink }}" integrity="{{ $space.Data.Integrity }}" crossorigin="anonymous"></script>
 {{- end -}}
+
+{{- $flight := resources.Get "js/page-flight.js" | minify | fingerprint -}}
+<script defer src="{{ $flight.RelPermalink }}" integrity="{{ $flight.Data.Integrity }}" crossorigin="anonymous"></script>

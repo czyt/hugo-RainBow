@@ -81,3 +81,33 @@ body { isolation: isolate; }
     .sky-stars { animation: none; }
     .post-entry, .post-entry:hover, .post-entry:focus-within { transform: none; transition: none; }
 }
+/* A quiet planet on the edge of the home page, away from the reading column. */
+.sky-planet {
+    position: absolute;
+    top: 150px;
+    right: max(32px, calc((100vw - var(--main-width)) / 4 - 46px));
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    opacity: .22;
+    background: radial-gradient(circle at 32% 24%, var(--entry), var(--rainbow-accent) 72%, var(--secondary));
+    transform: rotate(-18deg);
+}
+.sky-planet span {
+    position: absolute;
+    inset: 30% -45%;
+    border: 1px solid var(--rainbow-accent);
+    border-radius: 50%;
+    transform: rotateX(68deg);
+}
+.page-flight-dot {
+    position: fixed;
+    z-index: 200;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--rainbow-accent);
+    box-shadow: 0 0 0 5px var(--ui-selected), 0 0 16px var(--rainbow-accent);
+    pointer-events: none;
+}
+@media (max-width: 1050px) { .sky-planet { display: none; } }

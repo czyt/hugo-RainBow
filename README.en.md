@@ -8,7 +8,7 @@ Includes terminal-style code blocks, a side table of contents, image zoom and Gi
 
 The starry backdrop and reading progress interactions are inspired by [sora-to-ki](https://github.com/timo9378/sora-to-ki), adapted to RainBow's light and dark palettes and long-form reading.
 
-The star field follows the theme palette on listing pages, and a progress line tracks article reading. Readers can adjust text size above the article; the choice is saved locally. Articles can reveal related posts by tag; archives offer year links, tag filters encoded in the URL and orbits that respond to the selected entry. Stars stop moving when reduced motion is enabled.
+The star field follows the theme palette on listing pages, and a progress line tracks article reading. Readers can adjust text size above the article; the choice is saved locally. Articles can reveal related posts by tag; archives offer year links, tag filters encoded in the URL and orbits that respond to the selected entry. The home page adds a depth star field and orbital planet; pointer navigation between pages is connected by a brief star flight. Keyboard navigation remains immediate. Reduced motion stops the stars and skips the flight.
 
 ## Local preview
 

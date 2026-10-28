@@ -1,0 +1,64 @@
+// Decorative pointer-initiated handoff between full Hugo page loads.
+(() => {
+    if (!Element.prototype.animate) return;
+    const motion = matchMedia('(prefers-reduced-motion: reduce)');
+    const key = 'rainbow-page-flight';
+    let flight;
+    function makeDot(x, y) {
+        const dot = document.createElement('div');
+        dot.className = 'page-flight-dot';
+        dot.setAttribute('aria-hidden', 'true');
+        dot.style.left = `${x}px`;
+        dot.style.top = `${y}px`;
+        document.body.appendChild(dot);
+        return dot;
+    }
+    let arrival;
+    try {
+        arrival = JSON.parse(sessionStorage.getItem(key) || 'null');
+        sessionStorage.removeItem(key);
+    } catch {}
+    if (!motion.matches && arrival && arrival.path === location.pathname && Date.now() - arrival.time < 5000) {
+        const originX = Math.max(0, Math.min(innerWidth, arrival.x * innerWidth));
+        const originY = Math.max(0, Math.min(innerHeight, arrival.y * innerHeight));
+        const target = document.querySelector('.page-header h1, .post-title, .first-entry h1, .first-entry h2');
+        const rect = target?.getBoundingClientRect();
+        const destinationX = rect ? Math.max(12, Math.min(innerWidth - 12, rect.left)) : innerWidth / 2;
+        const destinationY = rect ? Math.max(12, Math.min(innerHeight - 12, rect.top + rect.height / 2)) : innerHeight / 3;
+        const dot = makeDot(originX, originY);
+        const animation = dot.animate([
+            { opacity: 0, transform: 'translate(-50%, -50%) scale(.8)' },
+            { opacity: 1, transform: 'translate(-50%, -50%) scale(1)', offset: .15 },
+            { opacity: 0, transform: `translate(calc(-50% + ${destinationX - originX}px), calc(-50% + ${destinationY - originY}px)) scale(.8)` }
+        ], { duration: 380, easing: 'cubic-bezier(0.23, 1, 0.32, 1)', fill: 'forwards' });
+        animation.finished.then(() => dot.remove(), () => dot.remove());
+    }
+    document.addEventListener('click', event => {
+        if (event.defaultPrevented || event.button !== 0 || event.detail === 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || motion.matches) return;
+        const link = event.target.closest('a[href]');
+        if (!link || link.hasAttribute('download') || (link.target && link.target !== '_self')) return;
+        let url;
+        try { url = new URL(link.href, location.href); } catch { return; }
+        if (url.origin !== location.origin || !/^https?:$/.test(url.protocol) || url.pathname === location.pathname || url.hash) return;
+        try {
+            sessionStorage.setItem(key, JSON.stringify({ path: url.pathname, x: event.clientX / innerWidth, y: event.clientY / innerHeight, time: Date.now() }));
+        } catch { return; }
+        event.preventDefault();
+        if (flight) { flight.animation.cancel(); flight.dot.remove(); clearTimeout(flight.timer); }
+        const dot = makeDot(event.clientX, event.clientY);
+        const animation = dot.animate([
+            { opacity: 0, transform: 'translate(-50%, -50%) scale(.8)' },
+            { opacity: 1, transform: 'translate(-50%, -50%) scale(1)' },
+            { opacity: 0, transform: 'translate(-50%, -50%) scale(.8)' }
+        ], { duration: 180, easing: 'cubic-bezier(0.23, 1, 0.32, 1)', fill: 'forwards' });
+        const timer = setTimeout(() => { location.href = url.href; }, 180);
+        flight = { dot, animation, timer };
+    });
+    window.addEventListener('pageshow', () => {
+        if (!flight) return;
+        clearTimeout(flight.timer);
+        flight.animation.cancel();
+        flight.dot.remove();
+        flight = null;
+    });
+})();
