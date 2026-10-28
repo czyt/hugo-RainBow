@@ -111,3 +111,20 @@ body { isolation: isolate; }
     pointer-events: none;
 }
 @media (max-width: 1050px) { .sky-planet { display: none; } }
+.sky-planet span::before {
+    content: "";
+    position: absolute;
+    top: calc(50% - 3px);
+    left: calc(50% - 3px);
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--rainbow-accent);
+    transform: translateX(86px);
+    animation: rainbow-satellite 48s linear infinite;
+}
+@keyframes rainbow-satellite {
+    from { transform: rotate(0deg) translateX(86px); }
+    to { transform: rotate(360deg) translateX(86px); }
+}
+@media (prefers-reduced-motion: reduce) { .sky-planet span::before { animation: none; } }
