@@ -18,15 +18,15 @@
         const columns = Math.max(2, Math.floor(width / 150));
         const cellWidth = width / columns;
         stage.style.setProperty('--tag-cell-width', `${cellWidth - 14}px`);
-        const rowHeight = 72;
+        const rowHeight = 78;
         const rows = Math.ceil(links.length / columns);
         const height = Math.max(420, rows * rowHeight + 230);
         stage.style.height = `${height}px`;
         links.forEach((link, index) => {
-            const row = Math.floor(index / columns), column = index % columns;
-            const drift = motion.matches || panel.dataset.effects === 'false' ? 0 : Math.sin(phase + index * 1.7) * 7;
-            const x = (column + .5) * cellWidth + Math.sin(index * 2.3) * Math.min(12, cellWidth * .08);
-            const y = 155 + row * rowHeight + (column % 2) * 18 + drift;
+            const row = Math.floor(index / columns), column = (index + row * 3) % columns;
+            const drift = motion.matches || panel.dataset.effects === 'false' ? 0 : Math.sin(phase + index * 1.7) * 9;
+            const x = (column + .5) * cellWidth + Math.sin(index * 2.3) * Math.min(20, cellWidth * .13);
+            const y = 165 + row * rowHeight + Math.sin(index * 3.1) * 15 + drift;
             link.style.left = `${x}px`;
             link.style.top = `${y}px`;
             link.style.transform = 'translate(-50%, -50%)';
@@ -72,8 +72,8 @@
     }
     pause.addEventListener('click', () => { paused = !paused; syncPause(); });
     viewSwitch.addEventListener('change', () => setView(viewSwitch.checked ? 'labels' : 'cloud', true));
-    stage.addEventListener('pointerenter', event => { if (event.pointerType === 'mouse') { hovering = true; schedule(); } });
-    stage.addEventListener('pointerleave', () => { hovering = false; schedule(); });
+    stage.addEventListener('pointerover', event => { if (event.pointerType === 'mouse' && event.target.closest('.sphere-tag')) { hovering = true; schedule(); } });
+    stage.addEventListener('pointerout', event => { if (event.pointerType === 'mouse' && event.target.closest('.sphere-tag') && !event.relatedTarget?.closest?.('.sphere-tag')) { hovering = false; schedule(); } });
     stage.addEventListener('focusin', () => { focused = true; schedule(); });
     stage.addEventListener('focusout', event => { focused = stage.contains(event.relatedTarget); schedule(); });
     document.addEventListener('visibilitychange', schedule);

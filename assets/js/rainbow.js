@@ -370,9 +370,13 @@ if (archiveFilter) {
     const canvas = document.querySelector('.archive-orbits');
     const context = canvas?.getContext('2d');
     let active = null;
-    let orbitFrame = 0;
-    const drawOrbits = () => {
+    let orbitFrame = 0, orbitPaint = 0;
+    const orbitMotion = matchMedia('(prefers-reduced-motion: reduce)');
+    const drawOrbits = (time = 0) => {
         orbitFrame = 0;
+        if (!orbitMotion.matches && !document.hidden) scheduleOrbits();
+        if (time && time - orbitPaint < 40) return;
+        orbitPaint = time;
         if (!context) return;
         const width = window.innerWidth, height = window.innerHeight;
         const ratio = Math.min(window.devicePixelRatio || 1, 2);
@@ -397,7 +401,7 @@ if (archiveFilter) {
             const highlighted = index === activeIndex;
             const spread = ((index * 89) % Math.max(visible.length, 1)) / Math.max(visible.length - 1, 1);
             const radius = extent * (.08 + spread * 1.05);
-            const start = ((index * 2.399963) % (Math.PI * 2));
+            const start = ((index * 2.399963) % (Math.PI * 2)) + (orbitMotion.matches ? 0 : time * .000015 * (index % 2 ? 1 : -1));
             const length = .3 + (index * 17 % 85) / 100;
             context.beginPath();
             context.ellipse(cx, cy, radius * 1.06, radius * .82, -.12, start, start + length);
@@ -427,6 +431,8 @@ if (archiveFilter) {
             element.addEventListener('focusout', () => { active = null; scheduleOrbits(); });
         });
         window.addEventListener('resize', scheduleOrbits, { passive: true });
+        document.addEventListener('visibilitychange', scheduleOrbits);
+        orbitMotion.addEventListener('change', scheduleOrbits);
         new MutationObserver(scheduleOrbits).observe(root, { attributes: true, attributeFilter: ['data-theme'] });
     }
     const applyFilter = tag => {

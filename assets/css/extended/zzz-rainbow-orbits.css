@@ -71,3 +71,9 @@
 .rainbow-about-chapter h1, .rainbow-about-chapter h2 { font-size: clamp(32px, 5vw, 56px); }
 .rainbow-about-chapter > * { max-width: 100%; }
 @media (max-width: 600px) { .rainbow-about-chapter { min-height: 45vh; } }
+
+/* Every label is a star: the name floats beside its point of light. */
+.sphere-tag, [data-theme="dark"] .sphere-tag { overflow: visible; border: 0; background: transparent; color: var(--primary); padding: 6px 4px; box-shadow: none; gap: 8px; }
+.sphere-tag::before { flex-basis: 5px; width: 5px; height: 5px; box-shadow: 0 0 8px 2px hsl(var(--tag-hue) 60% 65% / .5); }
+.sphere-tag .tag-name { overflow: hidden; text-overflow: ellipsis; }
+@media (hover: hover) and (pointer: fine) { .sphere-tag:hover { background: transparent; color: var(--rainbow-accent); } .sphere-tag:hover::before { box-shadow: 0 0 14px 4px hsl(var(--tag-hue) 70% 70% / .7); } }

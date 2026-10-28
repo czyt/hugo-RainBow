@@ -21,10 +21,13 @@
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
-    let frame = 0, width = 0, height = 0;
+    let frame = 0, width = 0, height = 0, lastPaint = 0, inView = true;
     const random = n => { const x = Math.sin(n * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); };
-    function draw() {
+    function draw(time = 0) {
         frame = 0;
+        if (galaxy && !reduced.matches && !document.hidden && inView) schedule();
+        if (time && time - lastPaint < 40) return;
+        lastPaint = time;
         const rect = canvas.getBoundingClientRect();
         const dpr = Math.min(devicePixelRatio || 1, 1.5);
         // A viewport-sized bitmap avoids allocating a huge canvas for long lists.
@@ -36,14 +39,15 @@
         const dark = document.documentElement.dataset.theme === 'dark';
         const color = dark ? '159,190,244' : '91,115,173';
         if (galaxy) {
-            const offset = Math.max(0, Math.min(rect.height - height, -galaxy.getBoundingClientRect().top - 150));
+            const offset = Math.max(0, Math.min(galaxy.clientHeight - height, -galaxy.getBoundingClientRect().top - 150));
             canvas.style.transform = `translateY(${offset}px)`;
             const start = Math.floor(offset / 3), end = Math.ceil((offset + height) / 3);
             for (let i = start; i < end; i++) {
                 const y = i * 3 - offset, center = width * (.5 + .23 * Math.sin((i * 3 + 100) / 440));
+                const flow = reduced.matches ? 0 : time * .00045;
                 for (let j = 0; j < 8; j++) {
-                    const n = i * 8 + j, spread = (random(n) - .5) * width * .075;
-                    ctx.fillStyle = `rgba(${color},${.12 + random(n + 17) * .55})`;
+                    const n = i * 8 + j, spread = (random(n) - .5) * width * .075 + Math.sin(flow + n * .7) * 2;
+                    ctx.fillStyle = `rgba(${color},${.12 + random(n + 17) * .4 + (reduced.matches ? .08 : .1 * (1 + Math.sin(flow * 2 + n)) / 2)})`;
                     ctx.beginPath(); ctx.arc(center + spread, y + random(n + 51) * 3, random(n + 21) * 1.1 + .3, 0, Math.PI * 2); ctx.fill();
                 }
             }
@@ -65,6 +69,10 @@
     addEventListener('resize', schedule, { passive: true });
     reduced.addEventListener('change', schedule);
     new MutationObserver(schedule).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
-    if (galaxy) new ResizeObserver(schedule).observe(galaxy);
+    if (galaxy) {
+        new ResizeObserver(schedule).observe(galaxy);
+        new IntersectionObserver(entries => { inView = entries[0].isIntersecting; if (inView) schedule(); }).observe(galaxy);
+        document.addEventListener('visibilitychange', schedule);
+    }
     schedule();
 })();
