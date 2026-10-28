@@ -14,6 +14,13 @@ if (commentSection) {
     const bindCommentFrame = () => {
         const frame = commentSection.querySelector('.utterances-frame');
         if (!frame) return false;
+        const endpoint = new URL(frame.src).origin;
+        const onReady = event => {
+            if (event.source !== frame.contentWindow || event.origin !== endpoint || event.data?.type !== 'resize') return;
+            window.removeEventListener('message', onReady);
+            syncComments();
+        };
+        window.addEventListener('message', onReady);
         frame.addEventListener('load', syncComments);
         syncComments();
         return true;
