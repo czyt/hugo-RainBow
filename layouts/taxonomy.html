@@ -27,7 +27,11 @@
     </div>
     <div class="tag-orbit-controls" aria-label="{{ i18n "rainbow_tag_view" }}">
         <button type="button" data-orbit-pause aria-pressed="false" data-pause="{{ i18n "rainbow_pause" }}" data-resume="{{ i18n "rainbow_resume" }}">{{ i18n "rainbow_pause" }}</button>
+        <button type="button" data-orbit-zoom="out" aria-label="{{ i18n "rainbow_zoom_out" }}" disabled>−</button>
+        <button type="button" data-orbit-zoom="reset" aria-label="{{ i18n "rainbow_zoom_reset" }}">100%</button>
+        <button type="button" data-orbit-zoom="in" aria-label="{{ i18n "rainbow_zoom_in" }}">+</button>
     </div>
+    <p class="tag-orbit-help">{{ i18n "rainbow_orbit_help" }}</p>
 </section>
 <ul class="terms-tags rainbow-label-tags" id="tag-labels">
     {{- $type := .Type }}

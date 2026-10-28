@@ -34,9 +34,6 @@
 {{- end }}
 
 {{- $groups := $pages.GroupByPublishDate "2006" }}
-<nav class="archive-years" aria-label="{{ i18n "rainbow_archive_years" | default "Jump to year" }}">
-  {{- range $groups }}{{ if ne .Key "0001" }}<a href="#{{ .Key }}">{{ .Key }} <span>{{ len .Pages }}</span></a>{{ end }}{{ end }}
-</nav>
 {{- with site.Taxonomies.tags }}
 <div class="archive-filter" hidden>
   <label for="archive-tag">{{ i18n "rainbow_archive_filter" | default "Filter by tag" }}</label>

@@ -69,6 +69,14 @@
   translation: "Pause rotation"
 - id: rainbow_resume
   translation: "Resume rotation"
+- id: rainbow_zoom_out
+  translation: "Zoom out"
+- id: rainbow_zoom_in
+  translation: "Zoom in"
+- id: rainbow_zoom_reset
+  translation: "Fit all tags"
+- id: rainbow_orbit_help
+  translation: "Tags follow the orbit · Zoom in and drag to explore"
 - id: rainbow_sphere_limit
   translation: "The sphere shows popular tags. Switch to Tags to see all."
 
@@ -219,9 +227,6 @@
 
 - id: rainbow_related_tags
   translation: "More posts with these tags"
-
-- id: rainbow_archive_years
-  translation: "Jump to year"
 
 - id: rainbow_orbit_prev
   translation: "Previous tags"

@@ -87,6 +87,7 @@
                 ctx.fillRect(Math.round(x / 3) * 3, Math.round(y / 3) * 3, 1.5, 1.5);
             }
             if (offset < 60) {
+                const headColor = dark ? color : '139, 76, 210';
                 const headX = riverX(width, 0), headY = 4 - offset;
                 const arrival = Math.min(1, elapsed / 650);
                 const eased = 1 - Math.pow(1 - arrival, 3);
@@ -95,11 +96,11 @@
                 if (arrival < 1) {
                     const tailX = x + (startX - headX) * .14, tailY = y + (startY - headY) * .14;
                     const streak = ctx.createLinearGradient(x, y, tailX, tailY);
-                    streak.addColorStop(0, `rgba(${color},.85)`); streak.addColorStop(1, `rgba(${color},0)`);
+                    streak.addColorStop(0, `rgba(${headColor},.85)`); streak.addColorStop(1, `rgba(${headColor},0)`);
                     ctx.strokeStyle = streak; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(tailX, tailY); ctx.stroke();
                 }
                 const glow = ctx.createRadialGradient(x, y, 0, x, y, 25);
-                glow.addColorStop(0, `rgba(${color},.95)`); glow.addColorStop(1, `rgba(${color},0)`);
+                glow.addColorStop(0, `rgba(${headColor},.95)`); glow.addColorStop(1, `rgba(${headColor},0)`);
                 ctx.fillStyle = glow; ctx.beginPath(); ctx.arc(x, y, 25, 0, Math.PI * 2); ctx.fill();
             }
         } else {

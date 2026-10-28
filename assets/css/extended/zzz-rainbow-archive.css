@@ -53,9 +53,3 @@
     .archive-entry::before, .related-tags::details-content { transition: none; }
 }
 .archive-orbits { position: absolute; inset: 0; width: 100%; height: 100%; opacity: .62; }
-.archive-years { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 24px; font: 13px var(--ui-font); }
-.archive-years a { display: inline-flex; align-items: center; gap: 5px; min-height: 44px; padding: 0 10px; border-radius: 8px; color: var(--secondary); font-variant-numeric: tabular-nums; }
-.archive-years a[hidden] { display: none; }
-.archive-years span { color: var(--secondary); font-size: 11px; }
-.archive-years a:focus-visible { outline: 2px solid var(--rainbow-accent); outline-offset: -2px; }
-@media (hover: hover) and (pointer: fine) { .archive-years a:hover { background: var(--ui-hover); color: var(--rainbow-accent); } }

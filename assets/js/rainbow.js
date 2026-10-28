@@ -451,8 +451,6 @@ if (archiveFilter) {
                 month.hidden = !month.querySelector('.archive-entry:not([hidden])');
             });
             year.hidden = !year.querySelector('.archive-entry:not([hidden])');
-            const yearLink = document.querySelector(`.archive-years a[href="#${year.querySelector('.archive-year-header').id}"]`);
-            if (yearLink) yearLink.hidden = year.hidden;
         });
         empty.hidden = count !== 0;
         status.textContent = status.dataset.template.replace('{count}', String(count));

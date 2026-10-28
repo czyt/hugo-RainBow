@@ -69,6 +69,14 @@
   translation: "暂停旋转"
 - id: rainbow_resume
   translation: "继续旋转"
+- id: rainbow_zoom_out
+  translation: "缩小星空"
+- id: rainbow_zoom_in
+  translation: "放大星空"
+- id: rainbow_zoom_reset
+  translation: "显示完整星空"
+- id: rainbow_orbit_help
+  translation: "标签随星轨旋转 · 放大后可拖动查看"
 - id: rainbow_sphere_limit
   translation: "球形视图展示热门标签，切换“标签”查看全部。"
 
@@ -219,9 +227,6 @@
 
 - id: rainbow_related_tags
   translation: "查看同标签文章"
-
-- id: rainbow_archive_years
-  translation: "跳转年份"
 
 - id: rainbow_orbit_prev
   translation: "上一组标签"

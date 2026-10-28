@@ -1,22 +1,26 @@
-/* Six readable satellites at a time; the full list remains one switch away. */
-.tag-sphere { height: min(78vw, 540px); min-height: 420px; cursor: default; touch-action: auto; border: 0; overflow: hidden; }
-.tag-sphere:active { cursor: default; }
-.tag-orbit-planet { position: absolute; left: 50%; top: 70px; width: clamp(80px, 17vw, 145px); aspect-ratio: 1; border-radius: 50%; transform: translate(-50%, -50%); background: radial-gradient(circle at 30% 25%, var(--entry), var(--rainbow-accent-bg) 48%, var(--rainbow-accent)); box-shadow: inset -14px -18px 35px rgba(30, 35, 65, .2); opacity: .75; pointer-events: none; }
+.main:has(.tag-sphere-panel) { max-width: 1200px; }
+.main:has(.tag-sphere-panel:not([hidden])) { min-height: 0; }
+.tag-sphere { height: min(62vh, 600px); min-height: 220px; cursor: grab; touch-action: pan-y; border: 0; overflow: hidden; }
+.tag-sphere.is-dragging { cursor: grabbing; }
+.tag-sphere.is-zoomed { touch-action: none; }
+.tag-orbit-field { position: absolute; left: 50%; top: 50%; transform-origin: center; }
+.tag-orbit-planet { position: absolute; left: 50%; top: 50%; width: clamp(80px, 17vw, 145px); aspect-ratio: 1; border-radius: 50%; transform: translate(-50%, -50%); background: radial-gradient(circle at 30% 25%, var(--entry), var(--rainbow-accent-bg) 48%, var(--rainbow-accent)); box-shadow: inset -14px -18px 35px rgba(30, 35, 65, .2); opacity: .75; pointer-events: none; }
 .tag-orbit-planet span { position: absolute; inset: 29% -45%; border: 1px solid var(--rainbow-accent); border-radius: 50%; transform: rotate(-22deg) rotateX(65deg); opacity: .65; }
-.tag-sphere::before, .tag-sphere::after { content: ''; position: absolute; left: 50%; top: 220px; width: 76%; height: 380px; border: 1px solid var(--glass-border); border-radius: 50%; transform: translate(-50%, -50%) rotate(-16deg); pointer-events: none; }
-.tag-sphere::after { width: 60%; height: 400px; transform: translate(-50%, -50%) rotate(32deg); opacity: .7; }
-.sphere-tag { max-width: min(180px, 40%); min-height: 44px; display: inline-flex; align-items: center; gap: 5px; font: 500 14px/1.3 var(--ui-font); color: var(--primary); background: var(--entry); border: 1px solid var(--glass-border); overflow: hidden; z-index: 2; }
-.sphere-tag .tag-name { overflow: hidden; text-overflow: ellipsis; }
-.sphere-tag::before { content: ''; flex: 0 0 5px; height: 5px; border-radius: 50%; background: hsl(var(--tag-hue) 45% 42%); }
+.sphere-tag { left: 0; top: 0; max-width: 180px; min-height: 32px; display: inline-flex; align-items: center; gap: 6px; padding: 2px 4px; font: 500 14px/1.3 var(--ui-font); color: var(--primary); background: transparent; border: 0; overflow: visible; z-index: 2; box-shadow: none; }
+.sphere-tag .tag-name { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.sphere-tag::before { content: ''; flex: 0 0 5px; height: 5px; border-radius: 50%; background: hsl(var(--tag-hue) 45% 42%); box-shadow: 0 0 8px 2px hsl(var(--tag-hue) 60% 65% / .5); }
 [data-theme="dark"] .sphere-tag { color: var(--primary); }
 [data-theme="dark"] .sphere-tag::before { background: hsl(var(--tag-hue) 60% 75%); }
-.sphere-tag sup { color: var(--secondary); padding: 0; }
+.sphere-tag sup { flex-shrink: 0; color: var(--secondary); padding: 0; }
+.sphere-tag:focus-visible { outline: 2px solid var(--rainbow-accent); outline-offset: 2px; background: var(--entry); }
+.sphere-tag:active { color: var(--rainbow-accent); }
+.tag-orbit-help { margin: 8px 0 0; text-align: center; color: var(--secondary); font: 12px/1.5 var(--ui-font); }
 .tag-orbit-controls { display: flex; justify-content: center; align-items: center; gap: 8px; color: var(--secondary); font: 13px var(--ui-font); }
 .tag-orbit-controls button { min-width: 44px; min-height: 44px; padding: 0 10px; border: 1px solid var(--glass-border); border-radius: 9px; background: var(--entry); color: var(--primary); font: inherit; cursor: pointer; }
 .tag-orbit-controls button:disabled { opacity: .45; cursor: default; }
 .tag-orbit-controls button:focus-visible { outline: 2px solid var(--rainbow-accent); outline-offset: 2px; }
 @media (hover: hover) and (pointer: fine) { .tag-orbit-controls button:not(:disabled):hover { background: var(--ui-hover); } }
-@media (max-width: 600px) { .tag-sphere { min-height: 390px; } .sphere-tag { font-size: 13px; max-width: 40%; padding: 6px 8px; } }
+@media (pointer: coarse) { .sphere-tag { min-height: 44px; } }
 
 /* The star river sits behind the real article links. */
 .rainbow-galaxy-list { position: relative; isolation: isolate; }
@@ -72,10 +76,6 @@
 .rainbow-about-chapter > * { max-width: 100%; }
 @media (max-width: 600px) { .rainbow-about-chapter { min-height: 45vh; } }
 
-/* Every label is a star: the name floats beside its point of light. */
-.sphere-tag, [data-theme="dark"] .sphere-tag { overflow: visible; border: 0; background: transparent; color: var(--primary); padding: 6px 4px; box-shadow: none; gap: 8px; }
-.sphere-tag::before { flex-basis: 5px; width: 5px; height: 5px; box-shadow: 0 0 8px 2px hsl(var(--tag-hue) 60% 65% / .5); }
-.sphere-tag .tag-name { overflow: hidden; text-overflow: ellipsis; }
 @media (hover: hover) and (pointer: fine) { .sphere-tag:hover { background: transparent; color: var(--rainbow-accent); } .sphere-tag:hover::before { box-shadow: 0 0 14px 4px hsl(var(--tag-hue) 70% 70% / .7); } }
 @media (min-width: 800px) {
   .rainbow-home .rainbow-galaxy-list article:nth-of-type(n) { margin-left: var(--river-left, 8%); text-align: var(--river-align, left); }
@@ -90,13 +90,6 @@
 .rainbow-home .rainbow-galaxy-list article::before { content: ''; position: absolute; left: var(--river-point, 0px); top: 14px; width: 6px; height: 6px; border-radius: 50%; background: var(--rainbow-accent); box-shadow: 0 0 10px var(--rainbow-accent); pointer-events: none; }
 @media (max-width: 760px) { .rainbow-home .rainbow-galaxy-list article:nth-of-type(n) { min-height: 150px; margin-bottom: 55px; padding: 12px 0; } }
 .tag-sphere::before, .tag-sphere::after { display: none; }
-.tag-star-track { position: absolute; transform: translate(-50%, -50%); border: 1px solid var(--glass-border); border-radius: 50%; pointer-events: none; }
-.tag-star-track::after { content: ''; position: absolute; left: 50%; top: 50%; width: 4px; height: 4px; border-radius: 50%; background: var(--rainbow-accent); box-shadow: 0 0 12px var(--rainbow-accent); }
-/* Dense orbits keep every star visible; its name appears on interaction. */
-.dense-orbit .sphere-tag, [data-theme="dark"] .dense-orbit .sphere-tag { width: 10px; height: 10px; min-height: 10px; max-width: none; padding: 0; overflow: visible; display: block; }
-.dense-orbit .sphere-tag::before { display: block; width: 5px; height: 5px; margin: 2px; }
-.dense-orbit .sphere-tag .tag-name, .dense-orbit .sphere-tag sup { position: absolute; visibility: hidden; pointer-events: none; }
-.dense-orbit .sphere-tag:is(:hover, :focus-visible) { z-index: 5; }
-.dense-orbit .sphere-tag:is(:hover, :focus-visible) .tag-name { visibility: visible; left: 14px; top: 50%; transform: translateY(-50%); max-width: 150px; padding: 5px 7px; border-radius: 5px; background: var(--entry); color: var(--primary); box-shadow: var(--ui-shadow); }
-.dense-orbit .sphere-tag:focus-visible { outline: 2px solid var(--rainbow-accent); outline-offset: 4px; }
-.dense-orbit .sphere-tag.near-right:is(:hover, :focus-visible) .tag-name { left: auto; right: 14px; }
+.tag-star-track { position: absolute; left: 50%; top: 50%; width: 78%; height: 72%; transform: translate(-50%, -50%); border: 1px solid var(--glass-border); border-radius: 50%; pointer-events: none; }
+.tag-star-track span { position: absolute; left: 50%; top: 50%; width: 5px; height: 5px; margin: -2.5px; border-radius: 50%; background: var(--rainbow-accent); box-shadow: 0 0 12px 2px var(--rainbow-accent); }
+.page-flight-dot[data-source="search"]::after { content: ''; position: absolute; top: 2px; right: 2px; width: 42px; height: 2px; transform: rotate(28deg); transform-origin: right center; background: linear-gradient(to left, var(--rainbow-accent), transparent); }

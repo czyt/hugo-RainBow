@@ -8,7 +8,7 @@ Includes terminal-style code blocks, a side table of contents, image zoom and Gi
 
 The starry backdrop and reading progress interactions are inspired by [sora-to-ki](https://github.com/timo9378/sora-to-ki), adapted to RainBow's light and dark palettes and long-form reading.
 
-The star field follows the theme palette on listing pages, and a progress line tracks article reading. Readers can adjust text size above the article; the choice is saved locally. Articles can reveal related posts by tag; archives offer year links, tag filters encoded in the URL and orbits that respond to the selected entry. The home page adds a depth star field and orbital planet; pointer navigation between pages is connected by a brief star flight. Keyboard navigation remains immediate. Reduced motion stops the stars and skips the flight.
+The star field follows the theme palette on listing pages, and a progress line tracks article reading. Readers can adjust text size above the article; the choice is saved locally. Articles can reveal related posts by tag; archives group posts by year, with tag filters encoded in the URL and orbits that respond to the selected entry. The home page adds a depth star field and orbital planet; pointer navigation between pages is connected by a brief star flight. Search results send a shooting star toward the article title. Keyboard navigation remains immediate. Reduced motion stops the stars and skips the flight.
 
 ## Local preview
 
@@ -119,7 +119,7 @@ TagLayout = "cloud" # cloud / labels
 TagEffects = true # Enable tag-cloud ambience
 ```
 
-Visitors can use the bear switch to alternate between the planetary tag orbit and the complete list; the browser remembers their choice. All tags float together in the same star field. Rotation can be paused and also stops on hover or keyboard focus. Reduced motion defaults to the list; `TagEffects = false` disables automatic rotation. Tag colors are stable per name.
+Visitors can use the bear switch to alternate between the planetary tag sky and the complete list; the browser remembers their choice. Tags scatter around one orbit, with more frequent tags nearer the center and less frequent ones toward the edges. Tags and the orbit's bright star share a continuous revolution, while names and counts stay upright and avoid other labels and the central planet. The sky fits the viewport without extending the page as tag counts grow. The initial overview shows all tags; zoom in and drag to explore, or use keyboard focus to bring a tag into view. Motion can be paused and also stops on hover or keyboard focus. Reduced motion defaults to the list; `TagEffects = false` disables automatic effects. Tag colors are stable per name.
 
 ## Footer customization
 
