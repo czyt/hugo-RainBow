@@ -77,3 +77,12 @@
 .sphere-tag::before { flex-basis: 5px; width: 5px; height: 5px; box-shadow: 0 0 8px 2px hsl(var(--tag-hue) 60% 65% / .5); }
 .sphere-tag .tag-name { overflow: hidden; text-overflow: ellipsis; }
 @media (hover: hover) and (pointer: fine) { .sphere-tag:hover { background: transparent; color: var(--rainbow-accent); } .sphere-tag:hover::before { box-shadow: 0 0 14px 4px hsl(var(--tag-hue) 70% 70% / .7); } }
+@media (min-width: 800px) {
+  .rainbow-home .rainbow-galaxy-list article:nth-of-type(n) { margin-left: var(--river-left, 8%); text-align: var(--river-align, left); }
+}
+.rainbow-about-chapter.will-reveal { opacity: .35; transform: translateY(26px); transition: opacity 800ms ease, transform 800ms cubic-bezier(.22, 1, .36, 1); }
+.rainbow-about-chapter.is-visible { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) { .rainbow-about-chapter.will-reveal { opacity: 1; transform: none; transition: none; } }
+.river-arriving article { animation: river-appear 650ms both cubic-bezier(.22, 1, .36, 1); animation-delay: var(--river-delay, 0ms); }
+@keyframes river-appear { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+@media (prefers-reduced-motion: reduce) { .river-arriving article { animation: none; } }

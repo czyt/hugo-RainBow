@@ -401,12 +401,12 @@ if (archiveFilter) {
             const highlighted = index === activeIndex;
             const spread = ((index * 89) % Math.max(visible.length, 1)) / Math.max(visible.length - 1, 1);
             const radius = extent * (.08 + spread * 1.05);
-            const start = ((index * 2.399963) % (Math.PI * 2)) + (orbitMotion.matches ? 0 : time * .000015 * (index % 2 ? 1 : -1));
+            const start = ((index * 2.399963) % (Math.PI * 2)) + (orbitMotion.matches ? 0 : time * .000045 * (index % 2 ? 1 : -1));
             const length = .3 + (index * 17 % 85) / 100;
             context.beginPath();
             context.ellipse(cx, cy, radius * 1.06, radius * .82, -.12, start, start + length);
             context.strokeStyle = highlighted ? accent : ink;
-            context.globalAlpha = highlighted ? .85 : .22 + (index % 4) * .035;
+            context.globalAlpha = highlighted ? .95 : .18 + (index % 4) * .045;
             context.lineWidth = highlighted ? 1.6 : .8;
             context.stroke();
             if (index % 3 === 0 || highlighted) {
