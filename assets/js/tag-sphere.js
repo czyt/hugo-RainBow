@@ -12,23 +12,39 @@
     let view = 'labels', hovering = false, focused = false, visible = true;
     let paused = motion.matches || panel.dataset.effects === 'false';
     let links = [];
+    let tracks = [], trackCount = -1;
     function render() {
         const width = stage.clientWidth;
         if (!width) return;
-        const columns = Math.max(2, Math.floor(width / 150));
-        const cellWidth = width / columns;
-        stage.style.setProperty('--tag-cell-width', `${cellWidth - 14}px`);
-        const rowHeight = 78;
-        const rows = Math.ceil(links.length / columns);
-        const height = Math.max(420, rows * rowHeight + 230);
-        stage.style.height = `${height}px`;
+        const perOrbit = width < 500 ? 4 : 8;
+        const orbitHeight = width < 500 ? 290 : 360;
+        const count = Math.ceil(links.length / perOrbit);
+        const radiusX = Math.max(30, width / 2 - Math.min(90, width * .23));
+        const radiusY = orbitHeight / 2 - 45;
+        stage.style.setProperty('--tag-cell-width', `${Math.min(160, width * .38)}px`);
+        stage.style.height = `${Math.max(420, count * orbitHeight)}px`;
+        if (trackCount !== count) {
+            tracks.forEach(track => track.remove());
+            tracks = Array.from({ length: count }, () => {
+                const track = document.createElement('div');
+                track.className = 'tag-star-track';
+                track.setAttribute('aria-hidden', 'true');
+                stage.insertBefore(track, stage.firstChild);
+                return track;
+            });
+            trackCount = count;
+        }
+        tracks.forEach((track, index) => {
+            track.style.cssText = `left:50%;top:${index * orbitHeight + orbitHeight / 2}px;width:${radiusX * 2}px;height:${radiusY * 2}px`;
+        });
+        const planet = stage.querySelector('.tag-orbit-planet');
+        planet.style.top = `${orbitHeight / 2}px`;
         links.forEach((link, index) => {
-            const row = Math.floor(index / columns), column = (index + row * 3) % columns;
-            const drift = motion.matches || panel.dataset.effects === 'false' ? 0 : Math.sin(phase + index * 1.7) * 9;
-            const x = (column + .5) * cellWidth + Math.sin(index * 2.3) * Math.min(20, cellWidth * .13);
-            const y = 165 + row * rowHeight + Math.sin(index * 3.1) * 15 + drift;
-            link.style.left = `${x}px`;
-            link.style.top = `${y}px`;
+            const group = Math.floor(index / perOrbit);
+            const inGroup = Math.min(perOrbit, links.length - group * perOrbit);
+            const angle = -Math.PI / 2 + (index % perOrbit) * Math.PI * 2 / inGroup + phase * (group % 2 ? -1 : 1);
+            link.style.left = `${width / 2 + Math.cos(angle) * radiusX}px`;
+            link.style.top = `${group * orbitHeight + orbitHeight / 2 + Math.sin(angle) * radiusY}px`;
             link.style.transform = 'translate(-50%, -50%)';
         });
     }
@@ -36,7 +52,7 @@
     function tick(time) {
         frame = 0;
         if (!running()) { lastTime = 0; return; }
-        if (lastTime) phase += Math.min(time - lastTime, 50) * .00004;
+        if (lastTime) phase += Math.min(time - lastTime, 50) * .00012;
         lastTime = time;
         render();
         frame = requestAnimationFrame(tick);

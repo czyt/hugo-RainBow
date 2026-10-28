@@ -86,3 +86,9 @@
 .river-arriving article { animation: river-appear 650ms both cubic-bezier(.22, 1, .36, 1); animation-delay: var(--river-delay, 0ms); }
 @keyframes river-appear { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 @media (prefers-reduced-motion: reduce) { .river-arriving article { animation: none; } }
+.rainbow-home .rainbow-galaxy-list article:nth-of-type(n) { position: relative; width: var(--river-width, 90%); min-height: 170px; margin: 0 0 65px var(--river-left, 5%); padding: 16px; text-align: var(--river-align, left); }
+.rainbow-home .rainbow-galaxy-list article::before { content: ''; position: absolute; left: var(--river-point, 0px); top: 14px; width: 6px; height: 6px; border-radius: 50%; background: var(--rainbow-accent); box-shadow: 0 0 10px var(--rainbow-accent); pointer-events: none; }
+@media (max-width: 760px) { .rainbow-home .rainbow-galaxy-list article:nth-of-type(n) { min-height: 150px; margin-bottom: 55px; padding: 12px 0; } }
+.tag-sphere::before, .tag-sphere::after { display: none; }
+.tag-star-track { position: absolute; transform: translate(-50%, -50%); border: 1px solid var(--glass-border); border-radius: 50%; pointer-events: none; }
+.tag-star-track::after { content: ''; position: absolute; left: 50%; top: 50%; width: 4px; height: 4px; border-radius: 50%; background: var(--rainbow-accent); box-shadow: 0 0 12px var(--rainbow-accent); }

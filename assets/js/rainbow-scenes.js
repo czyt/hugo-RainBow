@@ -23,16 +23,26 @@
     if (!ctx) return;
     let frame = 0, width = 0, height = 0, lastPaint = 0, inView = true, velocity = 0, lastScroll = scrollY;
     const started = performance.now();
+    let previousTime = 0;
+    const dust = galaxy ? Array.from({ length: 4800 }, (_, i) => {
+        const rand = n => { const v = Math.sin(n * 127.1 + 311.7) * 43758.5453; return v - Math.floor(v); };
+        return { u: Math.pow(rand(i + 1), 1.35), side: (rand(i + 10001) + rand(i + 20001) + rand(i + 30001) + rand(i + 40001) - 2) / 1.15, light: rand(i + 50001) };
+    }) : [];
+    const riverX = (width, y) => width < 760 ? 30 + 14 * Math.sin((y + 100) / 210) : width * (.5 + .23 * Math.sin((y + 100) / 210));
     const layoutPosts = () => {
         if (!galaxy) return;
         const width = galaxy.clientWidth;
         galaxy.querySelectorAll('article').forEach((entry, index) => {
             entry.style.setProperty('--river-delay', `${Math.min(index * 100 + 220, 950)}ms`);
-            if (innerWidth < 800) { entry.style.removeProperty('--river-left'); return; }
-            const center = .5 + .23 * Math.sin((entry.offsetTop + 100) / 440);
-            const left = center >= .5 ? Math.max(0, center - .4) : Math.min(.63, center + .04);
-            entry.style.setProperty('--river-left', `${left * 100}%`);
-            entry.style.setProperty('--river-align', center >= .5 ? 'right' : 'left');
+            const y = entry.offsetTop + 16;
+            const anchor = riverX(width, y);
+            const leftSide = width >= 760 && riverX(width, y + 160) > anchor;
+            const cardWidth = width < 760 ? Math.max(0, width - 75) : width * .37;
+            const left = width < 760 ? 62 : Math.max(0, Math.min(width - cardWidth, leftSide ? anchor - cardWidth - 24 : anchor + 24));
+            entry.style.setProperty('--river-left', `${left}px`);
+            entry.style.setProperty('--river-width', `${cardWidth}px`);
+            entry.style.setProperty('--river-align', leftSide ? 'right' : 'left');
+            entry.style.setProperty('--river-point', `${anchor - left}px`);
         });
     };
     const random = n => { const x = Math.sin(n * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); };
@@ -57,21 +67,26 @@
             const elapsed = reduced.matches ? 2000 : Math.max(0, time - started);
             const reveal = Math.min(1, Math.max(0, (elapsed - 250) / 900));
             const revealY = height * (1 - Math.pow(1 - reveal, 3));
-            const shift = reduced.matches ? 0 : (time * .025) % 3;
-            const start = Math.floor(offset / 3), end = Math.ceil((offset + height) / 3);
-            for (let i = start; i < end; i++) {
-                const y = i * 3 - offset - shift;
-                if (offset === 0 && y > revealY) continue;
-                const center = width * (.5 + .23 * Math.sin((i * 3 - shift + 100) / 440));
-                const flow = reduced.matches ? 0 : time * .00045;
-                for (let j = 0; j < 8; j++) {
-                    const n = i * 8 + j, spread = (random(n) - .5) * width * .075 + Math.sin(flow + n * .7) * 2;
-                    ctx.fillStyle = `rgba(${color},${.12 + random(n + 17) * .4 + (reduced.matches ? .08 : .1 * (1 + Math.sin(flow * 2 + n)) / 2)})`;
-                    ctx.beginPath(); ctx.arc(center + spread, y + random(n + 51) * 3, random(n + 21) * 1.1 + .3, 0, Math.PI * 2); ctx.fill();
-                }
+            const span = Math.max(1, galaxy.clientHeight);
+            const dt = reduced.matches || !previousTime ? 0 : Math.min(.1, Math.max(0, (time - previousTime) / 1000));
+            previousTime = time;
+            for (const particle of dust) {
+                particle.u += dt * (.006 + .02 * particle.u);
+                if (particle.u > 1) particle.u -= 1;
+                const documentY = particle.u * span;
+                const y = documentY - offset;
+                if (y < -5 || y > height + 5 || (offset === 0 && y > revealY)) continue;
+                const center = riverX(width, documentY);
+                const spread = (width < 760 ? 16 : 46) * Math.sqrt(particle.u) + 6;
+                const x = center + particle.side * spread;
+                const fade = Math.pow(1 - particle.u, 1.2);
+                const alpha = fade * (.25 + .55 * particle.light);
+                if (alpha < .03) continue;
+                ctx.fillStyle = `rgba(${color},${alpha})`;
+                ctx.fillRect(Math.round(x / 3) * 3, Math.round(y / 3) * 3, 1.5, 1.5);
             }
             if (offset < 60) {
-                const headX = width * (.5 + .23 * Math.sin(100 / 440));
+                const headX = riverX(width, 0);
                 const glow = ctx.createRadialGradient(headX, 4 - offset, 0, headX, 4 - offset, 22);
                 glow.addColorStop(0, `rgba(${color},.8)`); glow.addColorStop(1, `rgba(${color},0)`);
                 ctx.fillStyle = glow; ctx.beginPath(); ctx.arc(headX, 4 - offset, 22, 0, Math.PI * 2); ctx.fill();
@@ -101,7 +116,7 @@
         layoutPosts();
         if (!reduced.matches) galaxy.classList.add('river-arriving');
         new IntersectionObserver(entries => { inView = entries[0].isIntersecting; if (inView) schedule(); }).observe(galaxy);
-        document.addEventListener('visibilitychange', schedule);
+        document.addEventListener('visibilitychange', () => { previousTime = 0; schedule(); });
     }
     if (about) {
         document.addEventListener('visibilitychange', schedule);
