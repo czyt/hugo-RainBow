@@ -32,7 +32,9 @@
         stage.querySelector('.tag-orbit-planet').style.top = '50%';
         links.forEach((link, index) => {
             const angle = -Math.PI / 2 + index * Math.PI * 2 / Math.max(1, links.length) + phase;
-            link.style.left = `${width / 2 + Math.cos(angle) * radiusX}px`;
+            const x = width / 2 + Math.cos(angle) * radiusX;
+            link.classList.toggle('near-right', x > width * .7);
+            link.style.left = `${x}px`;
             link.style.top = `${height / 2 + Math.sin(angle) * radiusY}px`;
             link.style.transform = 'translate(-50%, -50%)';
         });
@@ -55,6 +57,7 @@
         links = items.map(item => {
             const link = item.querySelector('a').cloneNode(true);
             link.className = 'sphere-tag';
+            link.setAttribute('aria-label', link.textContent.trim().replace(/\s+/g, ' '));
             link.style.setProperty('--tag-hue', item.style.getPropertyValue('--tag-hue'));
             stage.appendChild(link);
             return link;
