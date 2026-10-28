@@ -33,7 +33,7 @@
         if (!galaxy) return;
         const width = galaxy.clientWidth;
         galaxy.querySelectorAll('article').forEach((entry, index) => {
-            entry.style.setProperty('--river-delay', `${Math.min(index * 100 + 220, 950)}ms`);
+            entry.style.setProperty('--river-delay', `${Math.min(index * 100 + 800, 1650)}ms`);
             const y = entry.offsetTop + 16;
             const anchor = riverX(width, y);
             const leftSide = width >= 760 && riverX(width, y + 160) > anchor;
@@ -65,7 +65,7 @@
             const offset = Math.max(0, Math.min(galaxy.clientHeight - height, -galaxy.getBoundingClientRect().top - 150));
             canvas.style.transform = `translateY(${offset}px)`;
             const elapsed = reduced.matches ? 2000 : Math.max(0, time - started);
-            const reveal = Math.min(1, Math.max(0, (elapsed - 250) / 900));
+            const reveal = Math.min(1, Math.max(0, (elapsed - 650) / 900));
             const revealY = height * (1 - Math.pow(1 - reveal, 3));
             const span = Math.max(1, galaxy.clientHeight);
             const dt = reduced.matches || !previousTime ? 0 : Math.min(.1, Math.max(0, (time - previousTime) / 1000));
@@ -86,10 +86,20 @@
                 ctx.fillRect(Math.round(x / 3) * 3, Math.round(y / 3) * 3, 1.5, 1.5);
             }
             if (offset < 60) {
-                const headX = riverX(width, 0);
-                const glow = ctx.createRadialGradient(headX, 4 - offset, 0, headX, 4 - offset, 22);
-                glow.addColorStop(0, `rgba(${color},.8)`); glow.addColorStop(1, `rgba(${color},0)`);
-                ctx.fillStyle = glow; ctx.beginPath(); ctx.arc(headX, 4 - offset, 22, 0, Math.PI * 2); ctx.fill();
+                const headX = riverX(width, 0), headY = 4 - offset;
+                const arrival = Math.min(1, elapsed / 650);
+                const eased = 1 - Math.pow(1 - arrival, 3);
+                const startX = Math.min(width - 15, headX + width * .38), startY = headY - Math.min(height * .3, 220);
+                const x = startX + (headX - startX) * eased, y = startY + (headY - startY) * eased;
+                if (arrival < 1) {
+                    const tailX = x + (startX - headX) * .14, tailY = y + (startY - headY) * .14;
+                    const streak = ctx.createLinearGradient(x, y, tailX, tailY);
+                    streak.addColorStop(0, `rgba(${color},.85)`); streak.addColorStop(1, `rgba(${color},0)`);
+                    ctx.strokeStyle = streak; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(tailX, tailY); ctx.stroke();
+                }
+                const glow = ctx.createRadialGradient(x, y, 0, x, y, 25);
+                glow.addColorStop(0, `rgba(${color},.95)`); glow.addColorStop(1, `rgba(${color},0)`);
+                ctx.fillStyle = glow; ctx.beginPath(); ctx.arc(x, y, 25, 0, Math.PI * 2); ctx.fill();
             }
         } else {
             const max = Math.max(1, document.documentElement.scrollHeight - innerHeight);
