@@ -22,7 +22,15 @@
 {{- $maxCount := 1 -}}
 {{- range .Data.Terms.ByCount -}}{{- $maxCount = math.Max $maxCount .Count -}}{{- end -}}
 <section class="tag-sphere-panel" hidden data-effects="{{ ne (.Param "TagEffects") false }}" data-default-view="{{ if $cloud }}cloud{{ else }}labels{{ end }}">
-    <div class="tag-sphere" id="tag-cloud" aria-label="{{ i18n "rainbow_tag_cloud" }}"></div>
+    <div class="tag-sphere" id="tag-cloud" aria-label="{{ i18n "rainbow_tag_cloud" }}">
+        <div class="tag-orbit-planet" aria-hidden="true"><span></span></div>
+    </div>
+    <div class="tag-orbit-controls" aria-label="{{ i18n "rainbow_tag_view" }}">
+        <button type="button" data-orbit-prev aria-label="{{ i18n "rainbow_orbit_prev" | default "Previous tags" }}">←</button>
+        <span data-orbit-page aria-live="polite"></span>
+        <button type="button" data-orbit-next aria-label="{{ i18n "rainbow_orbit_next" | default "Next tags" }}">→</button>
+        <button type="button" data-orbit-pause aria-pressed="false" data-pause="{{ i18n "rainbow_pause" }}" data-resume="{{ i18n "rainbow_resume" }}">{{ i18n "rainbow_pause" }}</button>
+    </div>
 </section>
 <ul class="terms-tags rainbow-label-tags" id="tag-labels">
     {{- $type := .Type }}

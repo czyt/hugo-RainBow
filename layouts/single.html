@@ -1,6 +1,10 @@
 {{- define "main" }}
 
-<article class="post-single">
+<article class="post-single{{ if or (eq .Layout "about") (and .File (eq .File.ContentBaseName "about")) }} rainbow-about{{ end }}">
+  {{- if or (eq .Layout "about") (and .File (eq .File.ContentBaseName "about")) }}
+  <canvas class="rainbow-about-sky" aria-hidden="true"></canvas>
+  <div class="rainbow-about-meter" aria-hidden="true"><span></span></div>
+  {{- end }}
   <header class="post-header">
     {{ partial "breadcrumbs.html" . }}
     <h1 class="post-title entry-hint-parent">

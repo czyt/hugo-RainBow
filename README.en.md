@@ -119,7 +119,7 @@ TagLayout = "cloud" # cloud / labels
 TagEffects = true # Enable tag-cloud ambience
 ```
 
-These settings determine the initial view. Visitors can use the small bear switch in the upper-right corner to alternate between the 3D tag sphere and the complete tag list; the browser remembers their choice. The sphere displays up to 60 popular tags and supports dragging and keyboard selection. Rotation stops on hover, keyboard focus or switching to the list. Reduced motion defaults to the list. There are no bottom controls or helper text; `TagEffects` configures the ambience. Both views use stable colors derived from tag names. The complete list and article header share compact labels with counts inside. Index counts are always visible; hover adds only subtle background feedback.
+Visitors can use the bear switch to alternate between the planetary tag orbit and the complete list; the browser remembers their choice. The orbit displays six tags per page, with previous and next controls for every tag. Rotation can be paused and also stops on hover or keyboard focus. Reduced motion defaults to the list; `TagEffects = false` disables automatic rotation. Tag colors are stable per name.
 
 ## Footer customization
 

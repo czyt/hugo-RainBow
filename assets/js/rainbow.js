@@ -387,21 +387,34 @@ if (archiveFilter) {
         const ink = style.getPropertyValue('--secondary').trim();
         const visible = entries.filter(entry => !entry.element.hidden);
         const activeIndex = visible.findIndex(entry => entry.element === active);
-        // Limit work on very large archives while always retaining the active orbit.
-        const indices = new Set(visible.slice(0, 48).map((_, index) => index));
+        // One arc per post, distributed across the full viewport like a long exposure.
+        const count = Math.min(visible.length, 220);
+        const indices = new Set(Array.from({ length: count }, (_, index) => index));
         if (activeIndex >= 0) indices.add(activeIndex);
+        const extent = Math.max(width, height);
+        const cx = width * (width < 700 ? .82 : .73), cy = height * .36;
         for (const index of indices) {
             const highlighted = index === activeIndex;
-            const lane = index % 12;
-            const radiusX = Math.max(width * .25, 180) + lane * 18;
-            const radiusY = Math.max(height * .22, 140) + lane * 14;
-            const angle = (index * 0.61) % (Math.PI * 2);
+            const spread = ((index * 89) % Math.max(visible.length, 1)) / Math.max(visible.length - 1, 1);
+            const radius = extent * (.06 + spread * .98);
+            const start = ((index * 2.399963) % (Math.PI * 2));
+            const length = .16 + (index * 17 % 53) / 100;
             context.beginPath();
-            context.ellipse(width * .84, height * .56, radiusX, radiusY, -.42, angle, angle + 1.1 + (index % 4) * .23);
+            context.ellipse(cx, cy, radius * 1.06, radius * .82, -.12, start, start + length);
             context.strokeStyle = highlighted ? accent : ink;
-            context.globalAlpha = highlighted ? .48 : .065;
-            context.lineWidth = highlighted ? 1.5 : 1;
+            context.globalAlpha = highlighted ? .62 : .10 + (index % 4) * .018;
+            context.lineWidth = highlighted ? 1.6 : .8;
             context.stroke();
+            if (index % 3 === 0 || highlighted) {
+                const a = start + length;
+                const rx = radius * 1.06, ry = radius * .82;
+                const dx = Math.cos(a) * rx, dy = Math.sin(a) * ry;
+                context.beginPath();
+                context.arc(cx + dx * Math.cos(-.12) - dy * Math.sin(-.12), cy + dx * Math.sin(-.12) + dy * Math.cos(-.12), highlighted ? 2.2 : 1, 0, Math.PI * 2);
+                context.fillStyle = highlighted ? accent : ink;
+                context.globalAlpha = highlighted ? .85 : .34;
+                context.fill();
+            }
         }
         context.globalAlpha = 1;
     };

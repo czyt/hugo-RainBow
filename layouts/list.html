@@ -51,6 +51,8 @@
 {{- partial "home_info.html" . }}
 {{- end }}
 
+<div class="rainbow-galaxy-list" data-galaxy-list>
+<canvas class="rainbow-galaxy" aria-hidden="true"></canvas>
 {{- $term := .Data.Term }}
 {{- range $index, $page := $paginator.Pages }}
 
@@ -92,6 +94,8 @@
   <a class="entry-link" aria-label="post link to {{ .Title | plainify }}" href="{{ .Permalink }}"></a>
 </article>
 {{- end }}
+
+</div>
 
 {{- if gt $paginator.TotalPages 1 }}
 <footer class="page-footer">

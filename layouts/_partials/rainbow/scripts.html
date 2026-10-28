@@ -25,3 +25,8 @@
 
 {{- $flight := resources.Get "js/page-flight.js" | minify | fingerprint -}}
 <script defer src="{{ $flight.RelPermalink }}" integrity="{{ $flight.Data.Integrity }}" crossorigin="anonymous"></script>
+
+{{- if or (and (ne .Kind "page") (ne .Layout "archives")) (and .IsPage (or (eq .Layout "about") (and .File (eq .File.ContentBaseName "about")))) -}}
+{{- $scenes := resources.Get "js/rainbow-scenes.js" | minify | fingerprint -}}
+<script defer src="{{ $scenes.RelPermalink }}" integrity="{{ $scenes.Data.Integrity }}" crossorigin="anonymous"></script>
+{{- end -}}

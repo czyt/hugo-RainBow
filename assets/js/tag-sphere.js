@@ -5,208 +5,89 @@
     if (!list || !panel || !toolbar) return;
     const stage = panel.querySelector('.tag-sphere');
     const viewSwitch = toolbar.querySelector('input');
+    const prev = panel.querySelector('[data-orbit-prev]');
+    const next = panel.querySelector('[data-orbit-next]');
+    const pageLabel = panel.querySelector('[data-orbit-page]');
+    const pause = panel.querySelector('[data-orbit-pause]');
     const motion = matchMedia('(prefers-reduced-motion: reduce)');
-    const canvas = document.createElement('canvas');
-    canvas.className = 'sphere-weather';
-    canvas.setAttribute('aria-hidden', 'true');
-    stage.appendChild(canvas);
-    const context = canvas.getContext('2d');
-    let effects = !motion.matches && panel.dataset.effects !== 'false';
-    let weatherWidth = 0, weatherHeight = 0, weatherTime = 0;
-    let lightningAt = 7000 + Math.random() * 6000;
-    let lightningStart = -1000;
-    let bolt = [];
-    const rain = Array.from({length: 36}, () => ({x:Math.random(), y:Math.random(), speed:.025 + Math.random() * .04, length:8 + Math.random() * 16}));
-    function drawWeather() {
-        if (!context) return;
-        context.clearRect(0, 0, weatherWidth, weatherHeight);
-        if (!effects) return;
-        const dark = document.documentElement.dataset.theme === 'dark';
-        const orbitRadius = Math.min(weatherWidth * .36, weatherHeight * .4);
-        for (let ring = 0; ring < 2; ring++) {
-            context.save();
-            context.translate(weatherWidth / 2, weatherHeight / 2);
-            context.rotate((ring ? -.6 : .5) + Math.sin(weatherTime * .00008) * .08);
-            context.strokeStyle = dark ? 'rgba(135,190,225,.12)' : 'rgba(80,120,165,.12)';
-            context.lineWidth = 1;
-            context.beginPath(); context.ellipse(0, 0, orbitRadius * 1.12, orbitRadius * .43, 0, 0, Math.PI * 2); context.stroke();
-            const phase = weatherTime * .00045 + ring * Math.PI;
-            const x = Math.cos(phase) * orbitRadius * 1.12, y = Math.sin(phase) * orbitRadius * .43;
-            context.fillStyle = dark ? '#afd9f5' : '#658caf';
-            context.shadowColor = '#83baff'; context.shadowBlur = 14;
-            context.beginPath(); context.arc(x, y, 2.2, 0, Math.PI * 2); context.fill();
-            context.restore();
-        }
-        context.lineWidth = 1;
-        context.strokeStyle = dark ? 'rgba(153,203,237,.22)' : 'rgba(56,107,145,.16)';
-        for (const drop of rain) {
-            const y = (drop.y * weatherHeight + weatherTime * drop.speed) % (weatherHeight + 40) - 20;
-            const x = drop.x * weatherWidth - y * .08;
-            context.beginPath(); context.moveTo(x, y); context.lineTo(x - 2, y + drop.length); context.stroke();
-        }
-        if (weatherTime >= lightningAt) {
-            lightningStart = weatherTime;
-            lightningAt = weatherTime + 9000 + Math.random() * 9000;
-            const x = weatherWidth * (.15 + Math.random() * .7);
-            bolt = Array.from({length: 7}, (_, i) => ({x:x + (Math.random() - .5) * 50, y:20 + i * weatherHeight * .055}));
-        }
-        const age = weatherTime - lightningStart;
-        if (age >= 0 && age < 420 && bolt.length) {
-            context.save();
-            context.globalAlpha = Math.sin(Math.PI * age / 420) * .6;
-            context.strokeStyle = dark ? '#bedfff' : '#5b85aa';
-            context.shadowColor = '#83baff'; context.shadowBlur = 10; context.lineWidth = 1.4;
-            context.beginPath(); bolt.forEach((p, i) => i ? context.lineTo(p.x, p.y) : context.moveTo(p.x, p.y)); context.stroke();
-            context.restore();
-        }
-    }
-    function setEffects(value) {
-        effects = Boolean(value && context);
-        stage.classList.toggle('has-atmosphere', effects);
-        canvas.hidden = !effects;
-        drawWeather();
-    }
     const items = Array.from(list.children).sort((a, b) => Number(b.dataset.count) - Number(a.dataset.count));
-    // Limit density in the sphere; the complete, alphabetic list always remains available.
-    const featured = items.slice(0, 60).sort((a, b) => a.textContent.localeCompare(b.textContent));
-    const points = featured.map((item, index) => {
-        const link = item.querySelector('a').cloneNode(true);
-        link.className = 'sphere-tag';
-        link.style.setProperty('--tag-hue', item.style.getPropertyValue('--tag-hue'));
-        link.style.setProperty('--tag-size', item.style.getPropertyValue('--tag-size'));
-        stage.appendChild(link);
-        const y = 1 - 2 * (index + .5) / featured.length;
-        const radial = Math.sqrt(1 - y * y);
-        const angle = index * Math.PI * (3 - Math.sqrt(5));
-        return { link, x: Math.cos(angle) * radial, y, z: Math.sin(angle) * radial };
-    });
-    let view = 'labels';
-    let paused = motion.matches;
-    let hovered = false;
-    let focused = null;
-    let pointer = null;
-    let moved = false;
-    let visible = true;
-    let yaw = 0;
-    let pitch = -.12;
-    let frame = 0;
-    let lastTime = 0;
-    let radius = 1;
-    let velocityYaw = 0, velocityPitch = 0;
+    const perPage = 6;
+    const pageCount = Math.max(1, Math.ceil(items.length / perPage));
+    let page = 0, phase = -Math.PI / 2, lastTime = 0, frame = 0;
+    let view = 'labels', hovering = false, focused = false, visible = true;
+    let paused = motion.matches || panel.dataset.effects === 'false';
+    let links = [];
     function render() {
-        const tilt = pitch + Math.sin(weatherTime * .00014) * .2;
-        const cy = Math.cos(yaw), sy = Math.sin(yaw), cp = Math.cos(tilt), sp = Math.sin(tilt);
-        for (const point of points) {
-            const x = point.x * cy + point.z * sy;
-            const z0 = point.z * cy - point.x * sy;
-            const y = point.y * cp - z0 * sp;
-            const z = z0 * cp + point.y * sp;
-            const depth = (z + 1) / 2;
-            const selected = focused === point.link;
-            const perspective = 3.8 / (3.8 - z);
-            const scale = selected ? 1.18 : (.52 + depth * .52) * perspective;
-            point.link.style.transform = `translate(-50%, -50%) translate3d(${selected ? 0 : x * radius * perspective}px, ${selected ? 0 : y * radius * perspective}px, 0) scale(${scale})`;
-            point.link.style.opacity = selected ? '1' : focused ? '.18' : String(.2 + Math.pow(depth, 1.4) * .8);
-            point.link.style.zIndex = selected ? '101' : String(Math.round(depth * 100));
-            point.link.classList.toggle('is-near', depth > .7);
-        }
+        const width = stage.clientWidth, height = stage.clientHeight;
+        if (!width || !height) return;
+        links.forEach((link, index) => {
+            const angle = phase + index * Math.PI * 2 / Math.max(links.length, 1);
+            const xRadius = Math.max(0, width / 2 - link.offsetWidth / 2 - 12);
+            const yRadius = Math.max(0, height / 2 - link.offsetHeight / 2 - 20);
+            const x = Math.cos(angle) * xRadius;
+            const y = Math.sin(angle) * yRadius;
+            link.style.transform = `translate(-50%, -50%) translate(${x}px, ${y}px)`;
+        });
     }
-    const spinning = () => view === 'cloud' && !paused && !focused && !pointer && visible && !document.hidden && (!hovered || Math.abs(velocityYaw) + Math.abs(velocityPitch) > .00002);
+    function running() { return view === 'cloud' && !paused && !motion.matches && !hovering && !focused && visible && !document.hidden; }
     function tick(time) {
         frame = 0;
-        if (!spinning()) { lastTime = 0; return; }
-        if (lastTime) {
-            const elapsed = Math.min(time - lastTime, 50);
-            yaw += elapsed * (velocityYaw + (hovered ? 0 : .00015));
-            pitch = Math.max(-1.25, Math.min(1.25, pitch + elapsed * velocityPitch));
-            const decay = Math.exp(-elapsed / 180);
-            velocityYaw *= decay; velocityPitch *= decay;
-            weatherTime += elapsed;
-        }
+        if (!running()) { lastTime = 0; return; }
+        if (lastTime) phase += Math.min(time - lastTime, 50) * .00004;
         lastTime = time;
         render();
-        drawWeather();
         frame = requestAnimationFrame(tick);
     }
     function schedule() {
-        if (!spinning()) {
-            cancelAnimationFrame(frame); frame = 0; lastTime = 0;
-        } else if (!frame) frame = requestAnimationFrame(tick);
+        if (!running()) { cancelAnimationFrame(frame); frame = 0; lastTime = 0; }
+        else if (!frame) frame = requestAnimationFrame(tick);
     }
-    function resize() {
-        weatherWidth = stage.clientWidth; weatherHeight = stage.clientHeight;
-        const dpr = Math.min(devicePixelRatio || 1, 1.5);
-        canvas.width = Math.round(weatherWidth * dpr); canvas.height = Math.round(weatherHeight * dpr);
-        context?.setTransform(dpr, 0, 0, dpr, 0, 0);
-        drawWeather();
-        radius = Math.max(40, Math.min(stage.clientWidth * .36, stage.clientHeight * .39));
+    function showPage(index) {
+        page = Math.max(0, Math.min(pageCount - 1, index));
+        links.forEach(link => link.remove());
+        links = items.slice(page * perPage, (page + 1) * perPage).map(item => {
+            const link = item.querySelector('a').cloneNode(true);
+            link.className = 'sphere-tag';
+            link.style.setProperty('--tag-hue', item.style.getPropertyValue('--tag-hue'));
+            stage.appendChild(link);
+            return link;
+        });
+        pageLabel.textContent = `${page + 1} / ${pageCount}`;
+        prev.disabled = page === 0;
+        next.disabled = page === pageCount - 1;
         render();
     }
-    function setView(next, remember = false) {
-        view = next === 'cloud' ? 'cloud' : 'labels';
+    function setView(nextView, remember = false) {
+        view = nextView === 'cloud' ? 'cloud' : 'labels';
         list.hidden = view === 'cloud';
         panel.hidden = view !== 'cloud';
         viewSwitch.checked = view === 'labels';
         if (remember) { try { localStorage.setItem('rainbow-tag-view', view); } catch {} }
-        resize(); schedule();
-    }
-    function setPaused(value) {
-        paused = value;
-        if (paused) { velocityYaw = 0; velocityPitch = 0; }
-        schedule();
-    }
-    viewSwitch.addEventListener('change', () => setView(viewSwitch.checked ? 'labels' : 'cloud', true));
-    stage.addEventListener('pointerenter', event => { if (event.pointerType === 'mouse') { hovered = true; schedule(); } });
-    stage.addEventListener('pointerleave', () => { hovered = false; schedule(); });
-    stage.addEventListener('focusin', event => { focused = event.target.matches(':focus-visible') ? event.target.closest('a') : null; render(); schedule(); });
-    stage.addEventListener('focusout', event => {
-        focused = stage.contains(event.relatedTarget) ? event.relatedTarget.closest('a') : null;
         render(); schedule();
-    });
-    stage.addEventListener('pointerdown', event => {
-        if (event.button !== 0 || pointer) return;
-        pointer = { id: event.pointerId, x: event.clientX, y: event.clientY, time: event.timeStamp };
-        velocityYaw = 0; velocityPitch = 0;
-        moved = false;
+    }
+    function syncPause() {
+        pause.textContent = paused ? pause.dataset.resume : pause.dataset.pause;
+        pause.setAttribute('aria-pressed', String(paused));
+        pause.disabled = motion.matches || panel.dataset.effects === 'false';
         schedule();
-    });
-    stage.addEventListener('pointermove', event => {
-        if (!pointer || pointer.id !== event.pointerId) return;
-        const dx = event.clientX - pointer.x, dy = event.clientY - pointer.y;
-        if (!moved && Math.hypot(dx, dy) < 4) return;
-        moved = true;
-        stage.setPointerCapture(event.pointerId);
-        const elapsed = Math.max(8, event.timeStamp - pointer.time);
-        velocityYaw = motion.matches ? 0 : Math.max(-.006, Math.min(.006, dx * .006 / elapsed));
-        velocityPitch = motion.matches ? 0 : Math.max(-.003, Math.min(.003, dy * .006 / elapsed));
-        pointer.time = event.timeStamp;
-        yaw += dx * .006;
-        pitch = Math.max(-1.25, Math.min(1.25, pitch + dy * .006));
-        pointer.x = event.clientX; pointer.y = event.clientY;
-        render();
-    });
-    const endDrag = event => {
-        if (!pointer || pointer.id !== event.pointerId) return;
-        if (stage.hasPointerCapture(event.pointerId)) stage.releasePointerCapture(event.pointerId);
-        if (event.type === 'pointercancel' || event.timeStamp - pointer.time > 100) { velocityYaw = 0; velocityPitch = 0; }
-        if (event.type === 'pointercancel') moved = false;
-        pointer = null; schedule();
-    };
-    window.addEventListener('pointerup', endDrag);
-    window.addEventListener('pointercancel', endDrag);
-    stage.addEventListener('click', event => { if (moved && event.detail !== 0) { event.preventDefault(); event.stopPropagation(); moved = false; } }, true);
+    }
+    prev.addEventListener('click', () => showPage(page - 1));
+    next.addEventListener('click', () => showPage(page + 1));
+    pause.addEventListener('click', () => { paused = !paused; syncPause(); });
+    viewSwitch.addEventListener('change', () => setView(viewSwitch.checked ? 'labels' : 'cloud', true));
+    stage.addEventListener('pointerenter', event => { if (event.pointerType === 'mouse') { hovering = true; schedule(); } });
+    stage.addEventListener('pointerleave', () => { hovering = false; schedule(); });
+    stage.addEventListener('focusin', () => { focused = true; schedule(); });
+    stage.addEventListener('focusout', event => { focused = stage.contains(event.relatedTarget); schedule(); });
     document.addEventListener('visibilitychange', schedule);
     new IntersectionObserver(entries => { visible = entries[0].isIntersecting; schedule(); }).observe(stage);
-    new ResizeObserver(resize).observe(stage);
-    motion.addEventListener('change', () => {
-        setPaused(motion.matches);
-        setEffects(!motion.matches && panel.dataset.effects !== 'false');
-        if (motion.matches) setView('labels');
-    });
+    new ResizeObserver(render).observe(stage);
+    document.fonts?.ready.then(render);
+    motion.addEventListener('change', () => { if (motion.matches) paused = true; syncPause(); });
     let initial = panel.dataset.defaultView;
     try { initial = localStorage.getItem('rainbow-tag-view') || initial; } catch {}
     toolbar.hidden = false;
-    setEffects(effects);
-    setPaused(paused);
+    showPage(0);
+    syncPause();
     setView(motion.matches ? 'labels' : initial);
 })();

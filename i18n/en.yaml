@@ -222,3 +222,9 @@
 
 - id: rainbow_archive_years
   translation: "Jump to year"
+
+- id: rainbow_orbit_prev
+  translation: "Previous tags"
+
+- id: rainbow_orbit_next
+  translation: "Next tags"
