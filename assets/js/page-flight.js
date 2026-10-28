@@ -54,12 +54,12 @@
             x = rect.left + (parseFloat(getComputedStyle(article).getPropertyValue('--river-point')) || 0);
             y = rect.top + 17;
         }
-        const duration = article || archive ? 520 : 180;
+        const duration = article || archive ? 760 : 180;
         const scene = article ? document.querySelector('.rainbow-galaxy-list') : archive ? document.querySelector('.archive-orbits') : null;
         if (scene) {
             const rect = scene.getBoundingClientRect();
             scene.style.transformOrigin = `${x - rect.left}px ${y - rect.top}px`;
-            extras.push(scene.animate([{ scale: '1', opacity: 1 }, { scale: '1.45', opacity: 0 }], { duration, easing: 'cubic-bezier(.4, 0, .2, 1)', fill: 'forwards' }));
+            extras.push(scene.animate([{ transform: 'rotate(0deg) scale(1)', opacity: 1 }, { transform: 'rotate(24deg) scale(1.8)', opacity: 0 }], { duration, easing: 'cubic-bezier(.4, 0, .2, 1)', fill: 'forwards' }));
             const main = archive && document.querySelector('main');
             if (main) extras.push(main.animate([{ opacity: 1 }, { opacity: 0 }], { duration, easing: 'ease-in', fill: 'forwards' }));
         }

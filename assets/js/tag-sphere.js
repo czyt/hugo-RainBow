@@ -12,39 +12,28 @@
     let view = 'labels', hovering = false, focused = false, visible = true;
     let paused = motion.matches || panel.dataset.effects === 'false';
     let links = [];
-    let tracks = [], trackCount = -1;
+    let track;
     function render() {
         const width = stage.clientWidth;
         if (!width) return;
-        const perOrbit = width < 500 ? 4 : 8;
-        const orbitHeight = width < 500 ? 290 : 360;
-        const count = Math.ceil(links.length / perOrbit);
-        const radiusX = Math.max(30, width / 2 - Math.min(90, width * .23));
-        const radiusY = orbitHeight / 2 - 45;
-        stage.style.setProperty('--tag-cell-width', `${Math.min(160, width * .38)}px`);
-        stage.style.height = `${Math.max(420, count * orbitHeight)}px`;
-        if (trackCount !== count) {
-            tracks.forEach(track => track.remove());
-            tracks = Array.from({ length: count }, () => {
-                const track = document.createElement('div');
-                track.className = 'tag-star-track';
-                track.setAttribute('aria-hidden', 'true');
-                stage.insertBefore(track, stage.firstChild);
-                return track;
-            });
-            trackCount = count;
+        const height = Math.max(420, Math.min(620, width * .8));
+        const dense = links.length > 18;
+        const radiusX = width / 2 - (dense ? 18 : Math.min(90, width * .23));
+        const radiusY = height / 2 - (dense ? 30 : 45);
+        stage.style.height = `${height}px`;
+        stage.classList.toggle('dense-orbit', dense);
+        if (!track) {
+            track = document.createElement('div');
+            track.className = 'tag-star-track';
+            track.setAttribute('aria-hidden', 'true');
+            stage.insertBefore(track, stage.firstChild);
         }
-        tracks.forEach((track, index) => {
-            track.style.cssText = `left:50%;top:${index * orbitHeight + orbitHeight / 2}px;width:${radiusX * 2}px;height:${radiusY * 2}px`;
-        });
-        const planet = stage.querySelector('.tag-orbit-planet');
-        planet.style.top = `${orbitHeight / 2}px`;
+        track.style.cssText = `left:50%;top:50%;width:${radiusX * 2}px;height:${radiusY * 2}px`;
+        stage.querySelector('.tag-orbit-planet').style.top = '50%';
         links.forEach((link, index) => {
-            const group = Math.floor(index / perOrbit);
-            const inGroup = Math.min(perOrbit, links.length - group * perOrbit);
-            const angle = -Math.PI / 2 + (index % perOrbit) * Math.PI * 2 / inGroup + phase * (group % 2 ? -1 : 1);
+            const angle = -Math.PI / 2 + index * Math.PI * 2 / Math.max(1, links.length) + phase;
             link.style.left = `${width / 2 + Math.cos(angle) * radiusX}px`;
-            link.style.top = `${group * orbitHeight + orbitHeight / 2 + Math.sin(angle) * radiusY}px`;
+            link.style.top = `${height / 2 + Math.sin(angle) * radiusY}px`;
             link.style.transform = 'translate(-50%, -50%)';
         });
     }
