@@ -9,6 +9,7 @@ body { isolation: isolate; }
     display: none;
 }
 .list .sky-backdrop { display: block; }
+.space-depth { position: absolute; inset: 0; width: 100%; height: 100%; }
 .sky-stars {
     position: absolute;
     inset: -260px -360px;
