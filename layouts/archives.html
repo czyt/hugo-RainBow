@@ -85,6 +85,7 @@
           </span>
           {{- end }}
         </h3>
+        {{- if .Summary }}<div class="archive-summary">{{ .Summary | plainify | htmlUnescape | truncate 105 }}</div>{{ end }}
         <div class="archive-meta">
           {{- if .Param "ShowReadingTime" }}{{ i18n "read_time" .ReadingTime }}{{ end -}}
         </div>

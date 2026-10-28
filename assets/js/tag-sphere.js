@@ -5,28 +5,31 @@
     if (!list || !panel || !toolbar) return;
     const stage = panel.querySelector('.tag-sphere');
     const viewSwitch = toolbar.querySelector('input');
-    const prev = panel.querySelector('[data-orbit-prev]');
-    const next = panel.querySelector('[data-orbit-next]');
-    const pageLabel = panel.querySelector('[data-orbit-page]');
     const pause = panel.querySelector('[data-orbit-pause]');
     const motion = matchMedia('(prefers-reduced-motion: reduce)');
     const items = Array.from(list.children).sort((a, b) => Number(b.dataset.count) - Number(a.dataset.count));
-    const perPage = 6;
-    const pageCount = Math.max(1, Math.ceil(items.length / perPage));
-    let page = 0, phase = -Math.PI / 2, lastTime = 0, frame = 0;
+    let phase = 0, lastTime = 0, frame = 0;
     let view = 'labels', hovering = false, focused = false, visible = true;
     let paused = motion.matches || panel.dataset.effects === 'false';
     let links = [];
     function render() {
-        const width = stage.clientWidth, height = stage.clientHeight;
-        if (!width || !height) return;
+        const width = stage.clientWidth;
+        if (!width) return;
+        const columns = Math.max(2, Math.floor(width / 150));
+        const cellWidth = width / columns;
+        stage.style.setProperty('--tag-cell-width', `${cellWidth - 14}px`);
+        const rowHeight = 72;
+        const rows = Math.ceil(links.length / columns);
+        const height = Math.max(420, rows * rowHeight + 230);
+        stage.style.height = `${height}px`;
         links.forEach((link, index) => {
-            const angle = phase + index * Math.PI * 2 / Math.max(links.length, 1);
-            const xRadius = Math.max(0, width / 2 - link.offsetWidth / 2 - 12);
-            const yRadius = Math.max(0, height / 2 - link.offsetHeight / 2 - 20);
-            const x = Math.cos(angle) * xRadius;
-            const y = Math.sin(angle) * yRadius;
-            link.style.transform = `translate(-50%, -50%) translate(${x}px, ${y}px)`;
+            const row = Math.floor(index / columns), column = index % columns;
+            const drift = motion.matches || panel.dataset.effects === 'false' ? 0 : Math.sin(phase + index * 1.7) * 7;
+            const x = (column + .5) * cellWidth + Math.sin(index * 2.3) * Math.min(12, cellWidth * .08);
+            const y = 155 + row * rowHeight + (column % 2) * 18 + drift;
+            link.style.left = `${x}px`;
+            link.style.top = `${y}px`;
+            link.style.transform = 'translate(-50%, -50%)';
         });
     }
     function running() { return view === 'cloud' && !paused && !motion.matches && !hovering && !focused && visible && !document.hidden; }
@@ -42,20 +45,14 @@
         if (!running()) { cancelAnimationFrame(frame); frame = 0; lastTime = 0; }
         else if (!frame) frame = requestAnimationFrame(tick);
     }
-    function showPage(index) {
-        page = Math.max(0, Math.min(pageCount - 1, index));
-        links.forEach(link => link.remove());
-        links = items.slice(page * perPage, (page + 1) * perPage).map(item => {
+    function createTags() {
+        links = items.map(item => {
             const link = item.querySelector('a').cloneNode(true);
             link.className = 'sphere-tag';
             link.style.setProperty('--tag-hue', item.style.getPropertyValue('--tag-hue'));
             stage.appendChild(link);
             return link;
         });
-        pageLabel.textContent = `${page + 1} / ${pageCount}`;
-        prev.disabled = page === 0;
-        next.disabled = page === pageCount - 1;
-        render();
     }
     function setView(nextView, remember = false) {
         view = nextView === 'cloud' ? 'cloud' : 'labels';
@@ -66,13 +63,12 @@
         render(); schedule();
     }
     function syncPause() {
+        panel.classList.toggle('orbit-paused', paused || motion.matches || panel.dataset.effects === 'false');
         pause.textContent = paused ? pause.dataset.resume : pause.dataset.pause;
         pause.setAttribute('aria-pressed', String(paused));
         pause.disabled = motion.matches || panel.dataset.effects === 'false';
         schedule();
     }
-    prev.addEventListener('click', () => showPage(page - 1));
-    next.addEventListener('click', () => showPage(page + 1));
     pause.addEventListener('click', () => { paused = !paused; syncPause(); });
     viewSwitch.addEventListener('change', () => setView(viewSwitch.checked ? 'labels' : 'cloud', true));
     stage.addEventListener('pointerenter', event => { if (event.pointerType === 'mouse') { hovering = true; schedule(); } });
@@ -87,7 +83,7 @@
     let initial = panel.dataset.defaultView;
     try { initial = localStorage.getItem('rainbow-tag-view') || initial; } catch {}
     toolbar.hidden = false;
-    showPage(0);
+    createTags();
     syncPause();
     setView(motion.matches ? 'labels' : initial);
 })();

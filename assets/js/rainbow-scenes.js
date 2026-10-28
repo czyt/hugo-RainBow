@@ -2,6 +2,21 @@
     const reduced = matchMedia('(prefers-reduced-motion: reduce)');
     const galaxy = document.querySelector('[data-galaxy-list]');
     const about = document.querySelector('.rainbow-about');
+    if (about) {
+        const content = about.querySelector('.post-content');
+        if (content) {
+            let chapter = null;
+            Array.from(content.children).forEach(node => {
+                if (/^H[12]$/.test(node.tagName)) {
+                    chapter = document.createElement('section');
+                    chapter.className = 'rainbow-about-chapter';
+                    content.insertBefore(chapter, node);
+                }
+                if (chapter) chapter.appendChild(node);
+            });
+            if (chapter) about.classList.add('has-journey');
+        }
+    }
     const canvas = galaxy?.querySelector('canvas') || about?.querySelector('canvas');
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
@@ -23,13 +38,13 @@
         if (galaxy) {
             const offset = Math.max(0, Math.min(rect.height - height, -galaxy.getBoundingClientRect().top - 150));
             canvas.style.transform = `translateY(${offset}px)`;
-            const start = Math.floor(offset / 9), end = Math.ceil((offset + height) / 9);
+            const start = Math.floor(offset / 3), end = Math.ceil((offset + height) / 3);
             for (let i = start; i < end; i++) {
-                const y = i * 9 - offset, center = width * (.5 + .3 * Math.sin(i * .035));
-                for (let j = 0; j < 4; j++) {
-                    const n = i * 4 + j, spread = (random(n) - .5) * width * .3;
-                    ctx.fillStyle = `rgba(${color},${.12 + random(n + 17) * .38})`;
-                    ctx.beginPath(); ctx.arc(center + spread, y + random(n + 51) * 9, random(n + 21) * 1.5 + .35, 0, Math.PI * 2); ctx.fill();
+                const y = i * 3 - offset, center = width * (.5 + .23 * Math.sin((i * 3 + 100) / 440));
+                for (let j = 0; j < 8; j++) {
+                    const n = i * 8 + j, spread = (random(n) - .5) * width * .075;
+                    ctx.fillStyle = `rgba(${color},${.12 + random(n + 17) * .55})`;
+                    ctx.beginPath(); ctx.arc(center + spread, y + random(n + 51) * 3, random(n + 21) * 1.1 + .3, 0, Math.PI * 2); ctx.fill();
                 }
             }
         } else {

@@ -396,13 +396,13 @@ if (archiveFilter) {
         for (const index of indices) {
             const highlighted = index === activeIndex;
             const spread = ((index * 89) % Math.max(visible.length, 1)) / Math.max(visible.length - 1, 1);
-            const radius = extent * (.06 + spread * .98);
+            const radius = extent * (.08 + spread * 1.05);
             const start = ((index * 2.399963) % (Math.PI * 2));
-            const length = .16 + (index * 17 % 53) / 100;
+            const length = .3 + (index * 17 % 85) / 100;
             context.beginPath();
             context.ellipse(cx, cy, radius * 1.06, radius * .82, -.12, start, start + length);
             context.strokeStyle = highlighted ? accent : ink;
-            context.globalAlpha = highlighted ? .62 : .10 + (index % 4) * .018;
+            context.globalAlpha = highlighted ? .85 : .22 + (index % 4) * .035;
             context.lineWidth = highlighted ? 1.6 : .8;
             context.stroke();
             if (index % 3 === 0 || highlighted) {

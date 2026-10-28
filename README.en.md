@@ -119,7 +119,7 @@ TagLayout = "cloud" # cloud / labels
 TagEffects = true # Enable tag-cloud ambience
 ```
 
-Visitors can use the bear switch to alternate between the planetary tag orbit and the complete list; the browser remembers their choice. The orbit displays six tags per page, with previous and next controls for every tag. Rotation can be paused and also stops on hover or keyboard focus. Reduced motion defaults to the list; `TagEffects = false` disables automatic rotation. Tag colors are stable per name.
+Visitors can use the bear switch to alternate between the planetary tag orbit and the complete list; the browser remembers their choice. All tags float together in the same star field. Rotation can be paused and also stops on hover or keyboard focus. Reduced motion defaults to the list; `TagEffects = false` disables automatic rotation. Tag colors are stable per name.
 
 ## Footer customization
 
