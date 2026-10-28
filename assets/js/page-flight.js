@@ -44,20 +44,39 @@
             sessionStorage.setItem(key, JSON.stringify({ path: url.pathname, x: event.clientX / innerWidth, y: event.clientY / innerHeight, time: Date.now() }));
         } catch { return; }
         event.preventDefault();
-        if (flight) { flight.animation.cancel(); flight.dot.remove(); clearTimeout(flight.timer); }
-        const dot = makeDot(event.clientX, event.clientY);
+        if (flight) { flight.animation.cancel(); flight.extras.forEach(a => a.cancel()); flight.dot.remove(); clearTimeout(flight.timer); }
+        const article = link.closest('.rainbow-galaxy-list article');
+        const archive = link.closest('.archive-entry');
+        const extras = [];
+        let x = event.clientX, y = event.clientY;
+        if (article) {
+            const rect = article.getBoundingClientRect();
+            x = rect.left + (parseFloat(getComputedStyle(article).getPropertyValue('--river-point')) || 0);
+            y = rect.top + 17;
+        }
+        const duration = article || archive ? 520 : 180;
+        const scene = article ? document.querySelector('.rainbow-galaxy-list') : archive ? document.querySelector('.archive-orbits') : null;
+        if (scene) {
+            const rect = scene.getBoundingClientRect();
+            scene.style.transformOrigin = `${x - rect.left}px ${y - rect.top}px`;
+            extras.push(scene.animate([{ scale: '1', opacity: 1 }, { scale: '1.45', opacity: 0 }], { duration, easing: 'cubic-bezier(.4, 0, .2, 1)', fill: 'forwards' }));
+            const main = archive && document.querySelector('main');
+            if (main) extras.push(main.animate([{ opacity: 1 }, { opacity: 0 }], { duration, easing: 'ease-in', fill: 'forwards' }));
+        }
+        const dot = makeDot(x, y);
         const animation = dot.animate([
             { opacity: 0, transform: 'translate(-50%, -50%) scale(.8)' },
             { opacity: 1, transform: 'translate(-50%, -50%) scale(1)' },
-            { opacity: 0, transform: 'translate(-50%, -50%) scale(.8)' }
-        ], { duration: 180, easing: 'cubic-bezier(0.23, 1, 0.32, 1)', fill: 'forwards' });
-        const timer = setTimeout(() => { location.href = url.href; }, 180);
-        flight = { dot, animation, timer };
+            { opacity: 0, transform: `translate(calc(-50% + ${innerWidth / 2 - x}px), calc(-50% + ${innerHeight / 2 - y}px)) scale(2)` }
+        ], { duration, easing: 'cubic-bezier(0.23, 1, 0.32, 1)', fill: 'forwards' });
+        const timer = setTimeout(() => { location.href = url.href; }, duration);
+        flight = { dot, animation, timer, extras };
     });
     window.addEventListener('pageshow', () => {
         if (!flight) return;
         clearTimeout(flight.timer);
         flight.animation.cancel();
+        flight.extras.forEach(a => a.cancel());
         flight.dot.remove();
         flight = null;
     });

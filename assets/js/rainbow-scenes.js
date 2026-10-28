@@ -89,7 +89,7 @@
                 const headX = riverX(width, 0), headY = 4 - offset;
                 const arrival = Math.min(1, elapsed / 650);
                 const eased = 1 - Math.pow(1 - arrival, 3);
-                const startX = Math.min(width - 15, headX + width * .38), startY = headY - Math.min(height * .3, 220);
+                const startX = Math.min(width - 15, headX + width * .38), startY = headY + Math.min(height * .22, 170);
                 const x = startX + (headX - startX) * eased, y = startY + (headY - startY) * eased;
                 if (arrival < 1) {
                     const tailX = x + (startX - headX) * .14, tailY = y + (startY - headY) * .14;
