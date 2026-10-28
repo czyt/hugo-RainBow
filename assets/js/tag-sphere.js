@@ -42,6 +42,7 @@
         frame = requestAnimationFrame(tick);
     }
     function schedule() {
+        panel.classList.toggle('orbit-paused', !running());
         if (!running()) { cancelAnimationFrame(frame); frame = 0; lastTime = 0; }
         else if (!frame) frame = requestAnimationFrame(tick);
     }

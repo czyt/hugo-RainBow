@@ -50,6 +50,7 @@
 
 /* A broad, segmented exposure around the archive's reading column. */
 .rainbow-archive .archive-orbits { opacity: 1; }
+.archive-summary { grid-column: 2; color: var(--secondary); font-size: 13px; line-height: 1.5; }
 @media (min-width: 900px) {
   .rainbow-archive .main { max-width: 1200px; }
   .rainbow-archive .main > :not(.archive-year) { max-width: 660px; }
