@@ -82,7 +82,8 @@
                 const fade = Math.pow(1 - particle.u, 1.2);
                 const alpha = fade * (.25 + .55 * particle.light);
                 if (alpha < .03) continue;
-                ctx.fillStyle = `rgba(${color},${alpha})`;
+                const hue = (particle.u * 300 + 15) % 360;
+                ctx.fillStyle = dark ? `rgba(${color},${alpha})` : `hsla(${hue}, 80%, 48%, ${Math.min(.85, alpha * 1.25)})`;
                 ctx.fillRect(Math.round(x / 3) * 3, Math.round(y / 3) * 3, 1.5, 1.5);
             }
             if (offset < 60) {
