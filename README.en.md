@@ -8,7 +8,7 @@ Includes terminal-style code blocks, a side table of contents, image zoom and Gi
 
 The starry backdrop and reading progress interactions are inspired by [sora-to-ki](https://github.com/timo9378/sora-to-ki), adapted to RainBow's light and dark palettes and long-form reading.
 
-The star field follows the theme palette on listing pages, and a progress line tracks article reading. Readers can adjust text size above the article; the choice is saved locally. Articles can reveal related posts by tag; archives group posts by year, with tag filters encoded in the URL and orbits that respond to the selected entry. The home page adds a depth star field and orbital planet; pointer navigation between pages is connected by a brief star flight. Search results send a shooting star toward the article title. Keyboard navigation remains immediate. Reduced motion stops the stars and skips the flight.
+The star field follows the theme palette on listing pages, and a progress line tracks article reading. Readers can adjust text size above the article; the choice is saved locally. Article tags offer hover previews of related posts; archives group posts by year, with tag filters encoded in the URL and orbits that respond to the selected entry. The home page adds a depth star field and orbital planet; pointer navigation between pages is connected by a brief star flight. Search results send a shooting star toward the article title. Keyboard navigation remains immediate. Reduced motion stops the stars and skips the flight.
 
 ## Local preview
 
@@ -179,7 +179,7 @@ The old duplicate copy-button initialization, unused visit counter, obsolete Mat
 
 Body links use a thin underline and the theme accent, with a small direction mark for external links. Navigation, tags, the table of contents and the footer do not use these body-link styles.
 
-Clickable tags appear below the article title and date. Each link opens the article list for that tag; tags are not repeated at the end. Neutral article tags show their counts inside the same fixed-size box. On desktop hover, counts fade in over 160ms and the background fills with a slight slide over 180ms. Keyboard focus reveals them immediately; touch keeps counts visible. Reduced motion is respected. Articles without tags do not render an empty tag area.
+Clickable tags appear below the article title and date. Each link opens its tag archive; hovering on desktop previews the five latest other articles with that tag, with a link to view all posts. The first preview waits 160ms, then fades and scales in over 160ms; adjacent previews open immediately. Move into the card to select an article, or dismiss it with Escape or an outside click. Keyboard focus opens the card immediately and Tab reaches its links; touch keeps normal tag navigation. Reduced motion uses only a fade. Without JavaScript or native popover support, tag links still work. Neutral tag labels retain their counts and fixed size. Articles without tags do not render an empty tag area.
 
 Blockquotes use indentation and muted text. The `blockquote` shortcode supports multiple paragraphs and source attribution. Lists retain native numbering and authored start values, with dots, circles or letters distinguishing nested levels; no number badges are added. Footnotes use bracketed references, a separator and target highlighting. Native fragment navigation supports browser history and keyboard focus. See `exampleSite/content/posts/typography.md` for examples.
 

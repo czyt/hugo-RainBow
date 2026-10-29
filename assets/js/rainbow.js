@@ -1,6 +1,9 @@
 import * as params from '@params';
 import Utterances from 'mods/utterances/js';
 import { initTreeToc } from './toc-tree.js';
+import { initTagPreviews } from './tag-previews.js';
+
+initTagPreviews();
 
 const root = document.documentElement;
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');

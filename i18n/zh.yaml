@@ -225,8 +225,11 @@
 - id: rainbow_archive_empty
   translation: "没有符合该标签的文章。"
 
-- id: rainbow_related_tags
-  translation: "查看同标签文章"
+- id: rainbow_tag_empty
+  translation: "这个标签下暂时没有其他文章。"
+
+- id: rainbow_tag_view_all
+  translation: "查看全部文章"
 
 - id: rainbow_orbit_prev
   translation: "上一组标签"

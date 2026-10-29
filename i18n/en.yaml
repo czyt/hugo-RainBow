@@ -225,8 +225,11 @@
 - id: rainbow_archive_empty
   translation: "No posts match this tag."
 
-- id: rainbow_related_tags
-  translation: "More posts with these tags"
+- id: rainbow_tag_empty
+  translation: "No other posts with this tag yet."
+
+- id: rainbow_tag_view_all
+  translation: "View all posts"
 
 - id: rainbow_orbit_prev
   translation: "Previous tags"

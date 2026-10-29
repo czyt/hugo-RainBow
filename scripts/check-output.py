@@ -25,7 +25,7 @@ assert archive.find('h2', **{'class': 'archive-year-header'}), 'Archive year gro
 assert not archive.find('nav', **{'class': 'archive-years'}), 'Duplicate archive year summary returned'
 assert all('data-archive-tags' in attrs for attrs in archive.find('div', **{'class': 'archive-entry'})), 'Archive tag data missing'
 reading = Page(root / 'posts/reading/index.html')
-assert reading.find('details', **{'class': 'related-tags'}), 'Related tag shelf missing'
+assert not reading.find('details', **{'class': 'related-tags'}), 'Removed related tag shelf returned'
 comments = reading.find('script', repo='example/comments')
 assert len(comments) == 1 and comments[0]['issue-term'] == 'pathname', 'Issue mapping changed'
 assert reading.find('main', id='main'), 'Skip-link target missing'
@@ -105,7 +105,19 @@ assert reading.find('ul', **{'class': 'post-tags post-header-tags rainbow-label-
 assert not reading.find('ul', **{'class': 'post-tags'}), 'Duplicate footer tags returned'
 assert any('/tags/' in a.get('href', '') for a in reading.find('a')), 'No tag archive destinations'
 assert reading.find('span', **{'class': 'tag-count'}), 'Article tag count structure missing'
-print('PASS: header-only article tags and label count structure')
+triggers = reading.find('a', **{'class': 'post-tag-link'})
+previews = reading.find('section', **{'class': 'tag-preview'})
+assert len(triggers) == len(previews) > 0, 'Each header tag needs a preview'
+assert len({a['id'] for a in previews}) == len(previews), 'Duplicate tag preview IDs'
+for trigger in triggers:
+    preview = reading.find('section', id=trigger['data-tag-preview'])
+    assert len(preview) == 1 and preview[0].get('popover') == 'auto', 'Missing native tag popover'
+    assert reading.find('span', id=preview[0]['aria-labelledby']), 'Unlabelled tag preview'
+assert reading.find('a', **{'class': 'tag-preview-post', 'href': '/posts/without-copy/'}), 'Same-tag article missing from preview'
+assert not reading.find('a', **{'class': 'tag-preview-post', 'href': '/posts/reading/'}), 'Preview includes the current article'
+assert reading.find('p', **{'class': 'tag-preview-empty'}), 'Single-article tag has no empty state'
+assert not typography.find('section', **{'class': 'tag-preview'}), 'Previews leaked into an article without tags'
+print('PASS: header tag destinations, native previews, related articles, current-article exclusion and empty state')
 
 external = typography.find('a', href='https://gohugo.io/')
 assert external and external[0].get('class') == 'prose-external', 'External prose link not classified'

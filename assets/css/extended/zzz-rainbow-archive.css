@@ -1,4 +1,4 @@
-/* The archive's rail and the related-post shelf share the reading palette. */
+/* Archive filters share the reading palette. */
 .archive-filter:not([hidden]) {
     display: flex;
     flex-wrap: wrap;
@@ -19,37 +19,13 @@
     font: inherit;
     cursor: pointer;
 }
-.archive-filter select:focus-visible,
-.related-tags a:focus-visible,
-.related-tags summary:focus-visible { outline: 2px solid var(--rainbow-accent); outline-offset: 3px; }
+.archive-filter select:focus-visible { outline: 2px solid var(--rainbow-accent); outline-offset: 3px; }
 .archive-filter-status { font-variant-numeric: tabular-nums; }
 .archive-empty { margin: 32px 0; color: var(--secondary); }
 .archive-year[hidden], .archive-month[hidden], .archive-entry[hidden], .archive-empty[hidden] { display: none; }
 .archive-entry::before { transition: background-color 160ms ease, border-color 160ms ease, box-shadow 160ms ease; }
 .archive-entry:focus-within::before { transition: none; }
-.related-tags {
-    margin: 16px 0 24px;
-    border-block: 1px solid var(--border);
-    font-family: var(--ui-font);
-}
-.related-tags summary {
-    width: fit-content;
-    min-height: 44px;
-    padding: 12px 0;
-    color: var(--secondary);
-    font-size: 13px;
-}
-.related-tags-content { padding: 0 0 16px; }
-.related-tags section + section { margin-top: 16px; }
-.related-tags h2 { font-size: 13px; font-weight: 600; color: var(--rainbow-accent); }
-.related-tags ul { margin: 4px 0 0; padding: 0; list-style: none; }
-.related-tags li { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 16px; padding: 5px 0; font-size: 14px; }
-.related-tags li a { color: var(--primary); }
-.related-tags time { color: var(--secondary); font-size: 12px; font-variant-numeric: tabular-nums; }
-@media (hover: hover) and (pointer: fine) {
-    .related-tags :is(summary, a):hover { color: var(--rainbow-accent); }
-}
 @media (prefers-reduced-motion: reduce) {
-    .archive-entry::before, .related-tags::details-content { transition: none; }
+    .archive-entry::before { transition: none; }
 }
 .archive-orbits { position: absolute; inset: 0; width: 100%; height: 100%; opacity: .62; }

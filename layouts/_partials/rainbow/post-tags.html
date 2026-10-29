@@ -1,0 +1,28 @@
+{{- $current := . }}
+{{- with .GetTerms (.Language.Params.Taxonomies.tag | default "tags") }}
+<ul class="post-tags post-header-tags rainbow-label-tags" aria-label="{{ i18n "rainbow_tags" }}">
+  {{- range $index, $term := . }}
+  {{- $related := where .Pages "RelPermalink" "ne" $current.RelPermalink }}
+  {{- $previewID := printf "tag-preview-%d" $index }}
+  <li style="--tag-hue: {{ mod (hash.FNV32a (.Data.Term | default .LinkTitle)) 360 }};">
+    <a class="post-tag-link" href="{{ .RelPermalink }}" data-tag-preview="{{ $previewID }}"><span class="tag-name">{{ .LinkTitle }}</span><span class="tag-count">{{ len .Pages }}</span></a>
+    <section class="tag-preview" id="{{ $previewID }}" popover="auto" aria-labelledby="{{ $previewID }}-title">
+      <header class="tag-preview-header">
+        <span class="tag-preview-name" id="{{ $previewID }}-title">{{ .LinkTitle }}</span>
+        <span class="tag-preview-total">{{ replace (i18n "rainbow_archive_count" | default "{count} posts") "{count}" (string (len .Pages)) }}</span>
+      </header>
+      {{- if $related }}
+      <ul class="tag-preview-posts">
+        {{- range first 5 $related.ByPublishDate.Reverse }}
+        <li><a class="tag-preview-post" href="{{ .RelPermalink }}"><span>{{ .LinkTitle }}</span><time datetime="{{ .PublishDate.Format "2006-01-02" }}">{{ .PublishDate.Format "2006-01-02" }}</time></a></li>
+        {{- end }}
+      </ul>
+      {{- else }}
+      <p class="tag-preview-empty">{{ i18n "rainbow_tag_empty" | default "No other posts with this tag yet." }}</p>
+      {{- end }}
+      <a class="tag-preview-all" href="{{ .RelPermalink }}"><span>{{ i18n "rainbow_tag_view_all" | default "View all posts" }}</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-5-5 5 5-5 5"/></svg></a>
+    </section>
+  </li>
+  {{- end }}
+</ul>
+{{- end }}
